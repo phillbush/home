@@ -1,0 +1,66 @@
+#!/bin/ksh
+
+set -o emacs
+
+# History options
+export HISTFILE="$HOME/var/history/ksh.hist"
+export HISTSIZE=1000
+
+# prompt
+promptcmd() {
+	_exit=$?
+	_dir=$(echo "$PWD" | sed "s,^$HOME,~,")
+	_tty=$(tty)
+	_tty=${_tty#/dev/}
+
+	printf "%s" "\[\e]0;$_tty: $_dir\a\]"           # set window title
+
+	echo                                            # blank line
+
+	[ "$_exit" -gt 0 ] && printf "%s" "\[\e[1;31m\] [$_exit]"
+	printf "%s" "\[\e[0m\]"
+	printf "%s" "\[\e[s\]"                          # save cursor position
+	printf "%s" "\[\e[$((COLUMNS - ${#_dir}))G\]"   # go to right
+	printf "%s" "$_dir"                             # print pwd
+	printf "%s" "\[\e[u\]"                          # restore cursor position
+	if [ $(id -u) -eq 0 ]
+	then
+		printf "%s" "\[\e[1;31m\]"
+	else
+		printf "%s" "\[\e[1m\]"
+	fi
+	printf "%s" " ❯ "
+	printf "%s" "\[\e[0m\]"
+}
+PS1='`promptcmd`'
+
+# Aliases
+alias :q=exit
+alias :Q=exit
+alias vim='vim -p'
+alias cp="cp -Riv"
+alias mv="mv -iv"
+alias rm='rm -riv'
+alias mkdir='mkdir -p'
+alias ls='ls -1Fh'   # append file indicator to entries, print human readable sizes
+alias lc='ls -C'     # columns
+alias ll='ls -l'     # Lists directory contents in a long format
+alias dir='ls -ld'   # Show information about a directory
+alias tree='tree -F'
+alias hex='hexdump -C'
+alias od='od -cAx'
+alias doas='doas '
+alias fuck='doas $(fc -ln -1)'
+
+# Completions
+# set -A sets an array;
+# an array complete_X contains completions for arguments of command X
+# an array complete_X_N contains completions for the Nth argument of command X
+set -A complete_doas_1 -- $(\ls `echo $PATH | sed 's/:/ /g'` 2>/dev/null | sed '/^$/{N;d;}' || true)
+set -A complete_make -- $((make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}' && ls) | sort -u)
+set -A complete_echo -- $(set | sed -n '/^[^]]*=/{s/^/$/;s/\([^=]*\)=.*/\1/;p;}')
+set -A complete_sysctl -- $(sysctl | sed 's/[ =].*//')
+if type skel >/dev/null
+then
+	set -A complete_skel_1 -- $(skel)
+fi
