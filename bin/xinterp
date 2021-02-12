@@ -1,0 +1,128 @@
+#!/bin/sh
+# xinterp: interpret desktop commands
+
+CACHEDIR="${CACHEDIR:-XDG_CACHE_HOME}"
+CACHEDIR="${CACHEDIR:-$HOME/local/.cache}"
+iconpath=${ICONPATH:-/usr/share/icons/hicolor/48x48}
+promptcache="${CACHEDIR}/xprompt.cache"
+menucache="${CACHEDIR}/pmenu.cache"
+
+usage() {
+	echo "usage: xinterp [prompt | menu]" >&2
+	exit 1
+}
+
+genprompt() {
+	echo "run	Run application"
+	run | sed 's/^/	/'
+
+	echo "mus	Play music"
+	mus help | sed 's/^/	/'
+
+	echo "scrot	Take screenshot"
+	scrot help | sed 's/^/	/'
+
+	echo "wm	Control windows"
+	wm help | sed 's/^/	/'
+
+	echo "man	Read manual"
+	xman | sed 's/^/	/'
+
+	echo "desk	Change desktop"
+	echo "	next	Cycle through desktops in monitor forwards"
+	echo "	prev	Cycle through desktops in monitor backwards"
+	echo "	last	Go to last desktop in monitor"
+
+	echo "term	Start terminal"
+
+	echo "open	Open file"
+
+	echo "exit	Exit X session"
+}
+
+genmenu() {
+	echo "IMG:$HOME/theme/icons/categories/applications.png"
+	run -i | sed 's/	/&run /; s/^/	/'
+
+	echo "IMG:$iconpath/apps/windowmanager.png"
+	printf "\tIMG:$iconpath/actions/window-close.png\twm close\n"
+	printf "\tIMG:$iconpath/actions/window-maximize.png\twm maximize\n"
+	printf "\tIMG:$iconpath/actions/window-minimize.png\twm minimize\n"
+	printf "\tIMG:$iconpath/actions/window-resize.png\twm resize\n"
+
+	echo "IMG:$iconpath/apps/scrot.png	scrot select"
+
+	echo "IMG:$iconpath/categories/music.png"
+	printf "\tIMG:$iconpath/actions/media-next.png\tmus next\n"
+	printf "\tIMG:$iconpath/actions/media-stop.png\tmus stop\n"
+	printf "\tIMG:$iconpath/actions/media-previous.png\tmus prev\n"
+	printf "\tIMG:$iconpath/actions/media-pause.png\tmus toggle\n"
+
+	echo "IMG:$iconpath/apps/terminal.png	term"
+
+	echo "IMG:$iconpath/places/user-desktop.png	exit"
+	printf "\tIMG:$iconpath/actions/go-last.png\tdesk last\n"
+	printf "\tIMG:$iconpath/actions/go-previous.png\tdesk prev\n"
+	printf "\tIMG:$iconpath/actions/go-next.png\tdesk next\n"
+}
+
+notify() {
+	cmd="$1"
+	head -10 | while read l
+	do
+		case "$cmd" in
+		'!'*)
+			echo $cmd | cut -c2-
+			;;
+		esac
+		cmd=""
+		echo "$l"
+	done | paste -s - >"$XNOTIFY_FIFO"
+}
+
+[ $# -gt 1 ] && usage
+
+[ $# -eq 1 ] && case $1 in
+prompt) genprompt >"$promptcache" ;;
+menu)   genmenu >"$menucache" ;;
+*)      usage ;;
+esac && exit 0
+
+while read -r cmd args
+do
+	case "$cmd" in
+	'#'*)
+		;;
+	'!'*)
+		cmd="$(echo $cmd | cut -c2-)"
+		$cmd $args
+		;;
+	run)
+		run $args
+		;;
+	mus)
+		mus $args
+		;;
+	scrot)
+		scrot $args
+		;;
+	wm)
+		wm $args
+		;;
+	man)
+		xman $args
+		;;
+	term)
+		drawterm $args
+		;;
+	open)
+		xopen "$args"
+		;;
+	desk)
+		desk $args
+		;;
+	exit)
+		pkill shod
+		;;
+	esac | notify $cmd &
+done
