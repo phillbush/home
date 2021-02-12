@@ -1,8 +1,29 @@
 # $HOME
 
 Welcome to my $HOME.
-All the relevant scripts, dotfiles, and theme stuff I use is here.
 See my desktop [in action](https://i.imgur.com/NzOqL9A.mp4).
+
+Some relevant scripts, dotfiles, and theme stuff I use is here.
+Most scripts I use, however are in other repositories here in Github.
+You can find more stuff in the following repositories:
+
+* [fmutils](https://github.com/phillbush/fmutils): File management scripts.
+* [xutils](https://github.com/phillbush/xutils): X11 scripts.
+* [wrappers](https://github.com/phillbush/wrappers): Misc scripts.
+* [pmenu](https://github.com/phillbush/pmenu): Pie menu.
+* [xprompt](https://github.com/phillbush/xprompt): X11 prompt.
+
+Except for the content in the `./theme/` directory,
+everything in this repo was created by me and is in public domain.
+I use the following themes:
+• The [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors)
+  cursor theme, licensed under the
+  [GPLv3 license](https://github.com/mdomlop/retrosmart-x11-cursors/blob/master/LICENSE).
+• The [ubo](http://pen-art.ru/icons-ubo-ru.html)
+  icon theme, licensed under the Artistic 2.0 license.
+• The [Input](https://input.fontbureau.com/)
+  font, which has a [license](https://input.fontbureau.com/license/) that does
+  not permit redistribution.  So I cannot distribute the font here.
 
 ## Directory Structure
 
