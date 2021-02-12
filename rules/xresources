@@ -98,25 +98,24 @@ xmenu.separator:        BLACK1
 xmenu.font:             monospace:size=9
 xmenu.alignment:        right
 
-XTerm*termName:         xterm-256color
-XTerm*forceBoxChars:    true
-XTerm*borderWidth:      3
-XTerm*internalBorder:   2
-XTerm*cjkWidth:         true
-XTerm*utf8:             2
-XTerm*vt100.locale:     true
-XTerm*vt100.faceName:   InputMonoNarrow-Regular
-XTerm*vt100.faceSize:   9
-XTerm*vt100.scaleHeigh: 1
-XTerm*.vt100.scrollBar: false
+xterm*termName:         xterm-256color
+xterm*forceBoxChars:    true
+xterm*borderWidth:      3
+xterm*internalBorder:   2
+xterm*utf8:             2
+xterm*vt100.locale:     true
+xterm*vt100.faceName:   InputMonoNarrow-Regular
+xterm*vt100.faceSize:   9
+xterm*vt100.scaleHeigh: 1
+xterm*vt100.scrollBar:  false
 ! some black magic to change what characters XTerm considers "word delimiters"
-XTerm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+xterm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! select word on two clicks
-XTerm*on2Clicks:        word
+xterm*on2Clicks:        word
 ! select whole line on three clicks
-XTerm*on3Clicks:        line
+xterm*on3Clicks:        line
 ! key/button bindings
-XTerm*VT100.Translations: #override \
+xterm*vt100.translations: #override \
 	Ctrl <Key> minus: smaller-vt-font() \n\
 	Ctrl <Key> plus: larger-vt-font() \n\
 	<Key>Delete: string(0x1b) string("[3~") \n\
