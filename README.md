@@ -16,12 +16,13 @@ You can find more stuff in the following repositories:
 Except for the content in the `./theme/` directory,
 everything in this repo was created by me and is in public domain.
 I use the following themes:
-• The [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors)
+
+* The [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors)
   cursor theme, licensed under the
   [GPLv3 license](https://github.com/mdomlop/retrosmart-x11-cursors/blob/master/LICENSE).
-• The [ubo](http://pen-art.ru/icons-ubo-ru.html)
+* The [ubo](http://pen-art.ru/icons-ubo-ru.html)
   icon theme, licensed under the Artistic 2.0 license.
-• The [Input](https://input.fontbureau.com/)
+* The [Input](https://input.fontbureau.com/)
   font, which has a [license](https://input.fontbureau.com/license/) that does
   not permit redistribution.  So I cannot distribute the font here.
 
