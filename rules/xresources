@@ -1,0 +1,124 @@
+#define FG         #FFFFFF
+#define BG         #000000
+#define BLACK0     #121212
+#define BLACK1     #555753
+#define WHITE0     #707880
+#define WHITE1     #C5C8C6
+#define DEL0       #cc0000
+#define DEL1       #ef2929
+#define ADD0       #4e9a06
+#define ADD1       #8ae234
+#define DIFF0      #c4a000
+#define DIFF1      #fce94f
+#define PRIMARY0   #3465a4
+#define PRIMARY1   #729fcf
+#define SECONDARY0 #059a9a
+#define SECONDARY1 #33e2e2
+#define LINK0      #75507b
+#define LINK1      #ad7fa8
+
+*selforeground: FG
+*selbackground: PRIMARY0
+*foreground:    FG
+*background:    BG
+*cursorColor:   FG
+*color0:        BLACK0
+*color8:        BLACK1
+*color1:        DEL0
+*color9:        DEL1
+*color2:        ADD0
+*color10:       ADD1
+*color3:        DIFF0
+*color11:       DIFF1
+*color4:        PRIMARY0
+*color12:       PRIMARY1
+*color5:        LINK0
+*color13:       LINK1
+*color6:        SECONDARY0
+*color14:       SECONDARY1
+*color7:        WHITE0
+*color15:       WHITE1
+
+XClock*update:      1
+XClock*geometry:    210x210+1020+12
+XClock*majorColor:  rgba:f0/f0/19/7b
+XClock*minorColor:  rgba:a0/c0/f0/c0
+XClock*hourColor:   rgba:c9/66/11/72
+XClock*minuteColor: rgba:00/82/9f/72
+XClock*secondColor: rgba:50/93/30/6f
+
+xdockbar.structure: 2,2
+xdockbar.bar0.geometry: 100%x30+0+0
+xdockbar.bar0.gravity:  N
+xdockbar.bar1.geometry: 100%x30+0+0
+xdockbar.bar1.gravity:  S
+
+xnotify.gravity:     N
+xnotify.geometry:    +0+7
+xnotify.borderWidth: 3
+xnotify.gap:         7
+xnotify.background:  BG
+xnotify.foreground:  FG
+xnotify.border:      PRIMARY0
+xnotify.alignment:   left
+xnotify.shrink:      true
+
+shod.borderWidth:   3
+shod.gapLeft:       7
+shod.gapRight:      7
+shod.gapTop:        7
+shod.gapBottom:     7
+shod.gapInner:      7
+shod.urgentBG:      #cc0000
+shod.focusedBG:     #3465a4
+shod.unfocusedBG:   #555753
+shod.urgentFG:      FG
+shod.focusedFG:     FG
+shod.unfocusedFG:   FG
+shod.dock:          theme/decoration/dock.xpm
+
+pmenu.selbackground: PRIMARY0
+
+xprompt.gravity:        C
+xprompt.geometry:       50%x50+0-200
+xprompt.font:           monospace:size=12
+xprompt.border:         PRIMARY0
+
+xmenu.borderWidth:      2
+xmenu.separatorWidth:   9
+xmenu.height:           23
+xmenu.width:            90
+xmenu.gap:              4
+xmenu.background:       BG
+xmenu.foreground:       FG
+xmenu.selbackground:    PRIMARY0
+xmenu.selforeground:    FG
+xmenu.border:           BLACK1
+xmenu.separator:        BLACK1
+xmenu.font:             monospace:size=9
+xmenu.alignment:        right
+
+XTerm*termName:         xterm-256color
+XTerm*forceBoxChars:    true
+XTerm*borderWidth:      3
+XTerm*internalBorder:   2
+XTerm*cjkWidth:         true
+XTerm*utf8:             2
+XTerm*vt100.locale:     true
+XTerm*vt100.faceName:   InputMonoNarrow-Regular
+XTerm*vt100.faceSize:   9
+XTerm*vt100.scaleHeigh: 1
+XTerm*.vt100.scrollBar: false
+! some black magic to change what characters XTerm considers "word delimiters"
+XTerm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+! select word on two clicks
+XTerm*on2Clicks:        word
+! select whole line on three clicks
+XTerm*on3Clicks:        line
+! key/button bindings
+XTerm*VT100.Translations: #override \
+	Ctrl <Key> minus: smaller-vt-font() \n\
+	Ctrl <Key> plus: larger-vt-font() \n\
+	<Key>Delete: string(0x1b) string("[3~") \n\
+	!<Key>KP_Delete: string(0x1b) string("[3~") \n\
+	Ctrl <Key> 0: set-vt-font(d)

@@ -1,0 +1,63 @@
+# lfrc - lf run commands file
+
+# options
+set shell sh
+set shellopts '-eu'
+set ifs "\n"
+set previewer preview
+set dirfirst
+set scrolloff 5
+set drawbox
+set incsearch
+set info size
+
+# commands
+cmd q :quit
+cmd Q :quit
+cmd open &$OPENER $fx
+cmd skel $skel $*
+cmd bulkrename !printf "%s\n" $fx | sed 's,.*/,,' | bulkrename
+cmd touch %touch "$@"
+cmd trash $printf "%s\n" $fx | tr '\n' '\0' | xargs -0 trash
+cmd untrash $printf "%s\n" $fx | tr '\n' '\0' | | xargs -0 untrash
+cmd extract %unpack $f
+cmd chmod %chmod $1 $fx
+cmd mkdir %mkdir "$@"
+cmd rename %{{
+	filename="$(echo $*)"
+	[ -e "$filename" ] && printf "file exists" || mv "$f" "$filename"
+}}
+
+# mappings
+map q
+map i
+map e
+map w
+map c
+map u
+map p
+map y
+map d
+map gh
+map gg
+map g top
+map X !$f           # execute current file (must be executable)
+map O :open $f      # open current file
+map E $$EDITOR $f
+map P $$PAGER $f
+map S $$SHELL
+map uy :clear
+map uv :unselect
+map cd push :cd<space>
+map yy copy
+map dd cut
+map pp paste
+map <c-z> $kill -STOP $PPID
+
+# favorites
+map cmd :cd ~/files/doc
+map cmt :cd ~/tmp
+map cmp :cd ~/proj
+map cmu :cd ~/usr
+map cms :cd ~/skel
+map cmw :cd ~/files/meme

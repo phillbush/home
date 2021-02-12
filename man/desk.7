@@ -51,7 +51,7 @@ alias fuck='doas $(fc -ln -1)'
 .SH X session
 I use a blank desktop with no bars, docks or panels.
 .PP
-The first thing done when logging in a X session is
+The first thing done when I log into an X session is
 to load the environment variables (by sourcing ~/.profile)
 and to load the X resources with
 .IR xrdb (1).
@@ -61,9 +61,9 @@ The cursor is made invisible after a brief period by
 .IR unclutter (1).
 Music is managed by the
 .IR mpd (1)
-music playing daemon.
+music player daemon.
 .PP
-There are two ways of interacting with the desktop:
+There are two ways to interact with the desktop:
 using the mouse (which displays a pmenu(1)),
 or using the keyboard (which displays a xprompt(1)).
 Both ways output a command to a interpreter called xinterp(1).
@@ -169,7 +169,7 @@ When typing anything on the root window, a prompt is displayed by
 .PP
 This
 .IR xprompt (1)
-instance reads options from.
+instance reads options from
 .B ~/var/cache/xprompt.cache ,
 and outputs instructions to
 .B $XINTERP_FIFO
