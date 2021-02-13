@@ -1,0 +1,9 @@
+#!/bin/sh
+# unhide: prompt for a window to be unhidden
+# depends on wmctrl, https://github.com/phillbush/xprompt and https://github.com/phillbush/lsc
+
+lsc -l |\
+grep '^......h'|\
+cut -f5- |\
+xprompt -dish "" "unhide window:" |\
+xargs -r wmctrl -b remove,hidden -ir
