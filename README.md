@@ -7,6 +7,10 @@ Some relevant scripts, dotfiles, and theme stuff I use is here.
 Most scripts I use, however are in other repositories here in Github.
 You can find more stuff in the following repositories:
 
+* [shod](https://github.com/phillbush/shod): The shod window manager.
+* [lsd](https://github.com/phillbush/lsd) and
+  [lsc](https://github.com/phillbush/lsc): List desktop/client, useful in scripts.
+* [focus](https://github.com/phillbush/focus): Change focus.
 * [fmutils](https://github.com/phillbush/fmutils): File management scripts.
 * [xutils](https://github.com/phillbush/xutils): X11 scripts.
 * [wrappers](https://github.com/phillbush/wrappers): Misc scripts.
