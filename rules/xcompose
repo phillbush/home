@@ -184,6 +184,12 @@
 <Multi_key> <parenright> <bar>      : "⎟"
 <Multi_key> <parenright> <l>        : "⎠"
 
+# Operations
+<Multi_key> <asterisk> <asterisk>: "∗"
+<Multi_key> <O> <plus>:            "⊕"
+<Multi_key> <O> <asterisk>:        "⊗"
+<Multi_key> <O> <period>:          "⊙"
+
 
 # Drawing                               {{{1
 

@@ -34,7 +34,7 @@ mod1 + shift + 0
 mod1 + control + {Tab, shift + Tab}
 	focusmon {next, prev};
 mod1 + {h,j,k,l}
-	focuswin -r {left,down,up,right}
+	focuswin {left,down,up,right}
 
 # Resize/move windows
 mod1 + {c, v, shift + c, shift + v}
