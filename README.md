@@ -1,8 +1,7 @@
 # $HOME
 
 Welcome to my $HOME.
-
-https://user-images.githubusercontent.com/63266536/108628904-10951e80-743c-11eb-9628-b502ee6e02c7.mp4
+See my desktop [in action](https://user-images.githubusercontent.com/63266536/108628904-10951e80-743c-11eb-9628-b502ee6e02c7.mp4).
 
 Some relevant scripts, dotfiles, and theme stuff I use is here.
 Most scripts I use, however are in other repositories here in Github.
