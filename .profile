@@ -90,6 +90,9 @@ export TERMCMD="xterm"
 export MOZ_ACCELERATED=1
 export MOZ_WEBRENDER=1
 
+# GTK
+export GTK_IM_MODULE="xim"
+
 # Language package managers
 export GOPATH="$HOME/usr/go"
 export PYTHONUSERBASE="$HOME/usr/python"

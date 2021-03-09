@@ -6,9 +6,9 @@ mod1 + t
 mod1 + shift + t
 	samedir
 
-# Xprompt (send key press to root window to open xprompt)
+# Xprompt
 mod1 + space
-	xdotool key -window $(lsw -r) BackSpace
+	<"${CACHEDIR}/xprompt.cache" xprompt -afi "exec:" >"$XINTERP_FIFO"
 
 # List hidden windows
 mod1 + m

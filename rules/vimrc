@@ -212,7 +212,7 @@ function! CFolding(lnum)
 endfunction
 
 " file type detections
-"filetype indent on
+filetype plugin indent on
 autocmd Bufenter *.scm,*.rkt set lisp expandtab
 autocmd Bufenter *.s set syntax=asm
 autocmd Bufenter *.txt set foldexpr=TxtFolding(v:lnum) foldmethod=expr

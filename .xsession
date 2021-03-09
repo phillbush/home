@@ -14,10 +14,7 @@ rm -f $XINTERP_FIFO
 mkfifo $XINTERP_FIFO
 
 # menu system
-pmenu -pr 3 -m 4 <"$CACHEDIR/pmenu.cache" >"$XINTERP_FIFO" &
-
-# prompt system
-<"${CACHEDIR}/xprompt.cache" xprompt -arfi "exec:" >"$XINTERP_FIFO" &
+xclickroot feed "$CACHEDIR/pmenu.cache" pmenu -t >"$XINTERP_FIFO" &
 
 # notification system
 export XNOTIFY_FIFO="$CACHEDIR/xnotify"
