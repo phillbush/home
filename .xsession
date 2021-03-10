@@ -66,4 +66,4 @@ notify &
 xcompmgr &
 
 # run window manager
-shod
+shod | sed -u 's/^\([0-9]*\)x\([0-9]*\)\([+-][0-9]*\)\([+-][0-9]*\)$/SEC:1	TAG:shod	\3 \4	\1 × \2/' >"$XNOTIFY_FIFO"

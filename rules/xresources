@@ -63,9 +63,11 @@ xnotify.border:      PRIMARY0
 xnotify.alignment:   left
 xnotify.shrink:      true
 
-shod.borderWidth:   3
+shod.decoration:    $HOME/theme/decoration/border.xpm
+shod.borderWidth:   7
+shod.cornerWidth:   24
 shod.gapOuter:      7
-shod.gapInner:      7
+shod.gapInner:      3
 shod.ignoreGaps:    true
 shod.ignoreBorders: true
 shod.urgent:        #cc0000
