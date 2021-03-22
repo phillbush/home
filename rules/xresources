@@ -63,16 +63,14 @@ xnotify.border:      PRIMARY0
 xnotify.alignment:   left
 xnotify.shrink:      true
 
-shod.decoration:    $HOME/theme/decoration/border.xpm
-shod.borderWidth:   7
-shod.cornerWidth:   24
-shod.gapOuter:      7
+shod.theme:         $HOME/theme/decoration/border.xpm
+shod.gapOuter:      3
 shod.gapInner:      3
 shod.ignoreGaps:    true
+shod.ignoreTitle:   true
 shod.ignoreBorders: true
-shod.urgent:        #cc0000
-shod.focused:       #3465a4
-shod.unfocused:     #555753
+shod.hideTitle:     false
+shod.mergeBorders:  false
 
 pmenu.selbackground: PRIMARY0
 
@@ -100,11 +98,11 @@ xterm*forceBoxChars:    true
 xterm*borderWidth:      3
 xterm*internalBorder:   2
 xterm*utf8:             2
-xterm*vt100.locale:     true
-xterm*vt100.faceName:   InputMonoNarrow-Regular
-xterm*vt100.faceSize:   9
-xterm*vt100.scaleHeigh: 1
-xterm*vt100.scrollBar:  false
+xterm*locale:           true
+xterm*faceName:         InputMonoNarrow-Regular
+xterm*faceSize:         9
+xterm*scaleHeigh:       1
+xterm*scrollBar:        false
 ! some black magic to change what characters XTerm considers "word delimiters"
 xterm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! select word on two clicks

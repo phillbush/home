@@ -189,6 +189,10 @@
 <Multi_key> <parenright> <l>        : "⎠"
 
 # Operations
+<Multi_key> <c> <bracketleft>:     "⌈"
+<Multi_key> <c> <bracketright>:    "⌉"
+<Multi_key> <f> <bracketleft>:     "⌊"
+<Multi_key> <f> <bracketright>:    "⌋"
 <Multi_key> <asterisk> <asterisk>: "∗"
 <Multi_key> <O> <plus>:            "⊕"
 <Multi_key> <O> <asterisk>:        "⊗"
