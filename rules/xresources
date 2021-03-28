@@ -1,43 +1,54 @@
-#define FG         #FFFFFF
-#define BG         #000000
-#define BLACK0     #121212
-#define BLACK1     #555753
-#define WHITE0     #707880
-#define WHITE1     #C5C8C6
-#define DEL0       #cc0000
-#define DEL1       #ef2929
-#define ADD0       #4e9a06
-#define ADD1       #8ae234
-#define DIFF0      #c4a000
-#define DIFF1      #fce94f
-#define PRIMARY0   #3465a4
-#define PRIMARY1   #729fcf
-#define SECONDARY0 #059a9a
-#define SECONDARY1 #33e2e2
-#define LINK0      #75507b
-#define LINK1      #ad7fa8
+#define FG              #FFFFFF
+#define BG              #000000
+#define SELFG           #FFFFFF
+#define SELBG           #3465a4
+#define BORDER          #3465a4
+#define SELBORDER       #3465a4
+#define CURSOR          #FFFFFF
+#define SEPARATOR       #555753
+#define DARK            #121212
+#define GRAYDARK        #555753
+#define GRAYLIGHT       #707880
+#define LIGHT           #C5C8C6
+#define RED             #cc0000
+#define REDLIGHT        #ef2929
+#define GREEN           #4e9a06
+#define GREENLIGHT      #8ae234
+#define YELLOW          #c4a000
+#define YELLOWLIGHT     #fce94f
+#define BLUE            #3465a4
+#define BLUELIGHT       #729fcf
+#define CYAN            #059a9a
+#define CYANLIGHT       #33e2e2
+#define LINK0           #75507b
+#define LINK1           #ad7fa8
 
-*selforeground: FG
-*selbackground: PRIMARY0
-*foreground:    FG
-*background:    BG
-*cursorColor:   FG
-*color0:        BLACK0
-*color8:        BLACK1
-*color1:        DEL0
-*color9:        DEL1
-*color2:        ADD0
-*color10:       ADD1
-*color3:        DIFF0
-*color11:       DIFF1
-*color4:        PRIMARY0
-*color12:       PRIMARY1
-*color5:        LINK0
+*foreground:          FG
+*background:          BG
+*selforeground:       SELFG
+*selbackground:       SELBG
+*grip:                GRAYDARK
+*cursorColor:         CURSOR
+*internalBorderColor: SEPARATOR
+*borderColor:         SEPARATOR
+*Label*background:    GRAYDARK
+
+*color0:        DARK
+*color10:       GREENLIGHT
+*color11:       YELLOWLIGHT
+*color12:       BLUELIGHT
 *color13:       LINK1
-*color6:        SECONDARY0
-*color14:       SECONDARY1
-*color7:        WHITE0
-*color15:       WHITE1
+*color14:       CYANLIGHT
+*color15:       LIGHT
+*color1:        RED
+*color2:        GREEN
+*color3:        YELLOW
+*color4:        BLUE
+*color5:        LINK0
+*color6:        CYAN
+*color7:        GRAYLIGHT
+*color8:        GRAYDARK
+*color9:        REDLIGHT
 
 XClock*update:      1
 XClock*geometry:    210x210+1020+12
@@ -59,25 +70,27 @@ xnotify.borderWidth: 3
 xnotify.gap:         7
 xnotify.background:  BG
 xnotify.foreground:  FG
-xnotify.border:      PRIMARY0
+xnotify.border:      SELBORDER
 xnotify.alignment:   left
 xnotify.shrink:      true
 
-shod.theme:         $HOME/theme/decoration/border.xpm
+shod.theme:         $HOME/theme/decoration.xpm
 shod.gapOuter:      3
 shod.gapInner:      3
+shod.groupHint:     true
 shod.ignoreGaps:    true
 shod.ignoreTitle:   true
 shod.ignoreBorders: true
-shod.hideTitle:     false
 shod.mergeBorders:  false
+shod.hideTitle:     false
+shod.tabClass:      true
 
-pmenu.selbackground: PRIMARY0
+pmenu.selbackground: SELBG
 
 xprompt.gravity:        C
 xprompt.geometry:       50%x50+0-200
 xprompt.font:           monospace:size=12
-xprompt.border:         PRIMARY0
+xprompt.border:         SELBORDER
 
 xmenu.borderWidth:      2
 xmenu.separatorWidth:   9
@@ -86,10 +99,10 @@ xmenu.width:            90
 xmenu.gap:              4
 xmenu.background:       BG
 xmenu.foreground:       FG
-xmenu.selbackground:    PRIMARY0
-xmenu.selforeground:    FG
-xmenu.border:           BLACK1
-xmenu.separator:        BLACK1
+xmenu.selbackground:    SELBG
+xmenu.selforeground:    SELFG
+xmenu.border:           BORDER
+xmenu.separator:        SEPARATOR
 xmenu.font:             monospace:size=9
 xmenu.alignment:        right
 
@@ -116,3 +129,81 @@ xterm*vt100.translations: #override \
 	<Key>Delete: string(0x1b) string("[3~") \n\
 	!<Key>KP_Delete: string(0x1b) string("[3~") \n\
 	Ctrl <Key> 0: set-vt-font(d)
+
+*Scrollbar.background:    GRAYDARK
+*Scrollbar.foreground:    WHITE
+*Scrollbar.thickness:     14
+*Scrollbar.minimumThumb:  20
+*Scrollbar.translations:  <Btn1Down>: StartScroll(Forward) \n\
+                          <Btn1Motion>: MoveThumb() NotifyThumb() \n\
+
+*cursor:                  left_ptr
+*rightcursor:             left_ptr
+*leftcursor:              left_ptr
+*uppercursor:             left_ptr
+*scrollDCursor:           left_ptr
+*scrollHCursor:           left_ptr
+*scrollLCursor:           left_ptr
+*scrollRCursor:           left_ptr
+*scrollUCursor:           left_ptr
+*scrollVCursor:           left_ptr
+*gripCursor:              left_ptr
+*betweenCursor:           left_ptr
+*verticalGripCursor:      left_ptr
+*verticalBetweenCursor:   left_ptr
+*horizontalGripCursor:    left_ptr
+*horizontalBetweenCursor: left_ptr
+
+xcalc*geometry:                        200x275
+xcalc.ti.bevel.background:             #111111
+xcalc.ti.bevel.screen.background:      #000000
+xcalc.ti.bevel.screen.DEG.background:  #000000
+xcalc.ti.bevel.screen.DEG.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.GRAD.background: #000000
+xcalc.ti.bevel.screen.GRAD.foreground: LightSeaGreen
+xcalc.ti.bevel.screen.RAD.background:  #000000
+xcalc.ti.bevel.screen.RAD.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.INV.background:  #000000
+xcalc.ti.bevel.screen.INV.foreground:  Red
+xcalc.ti.bevel.screen.LCD.background:  #000000
+xcalc.ti.bevel.screen.LCD.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.LCD.shadowWidth: 0
+xcalc.ti.bevel.screen.M.background:    #000000
+xcalc.ti.bevel.screen.M.foreground:    LightSeaGreen
+xcalc.ti.bevel.screen.P.background:    #000000
+xcalc.ti.bevel.screen.P.foreground:    Yellow
+xcalc.ti.Command.foreground:  White
+xcalc.ti.Command.background:  #777777
+xcalc.ti.button5.background:  Orange3
+xcalc.ti.button19.background: #611161
+xcalc.ti.button18.background: #611161
+xcalc.ti.button20.background: #611111
+!uncomment to change label on division button
+xcalc.ti.button20.label:      /
+xcalc.ti.button25.background: #722222
+xcalc.ti.button30.background: #833333
+xcalc.ti.button35.background: #944444
+xcalc.ti.button40.background: #a55555
+xcalc.ti.button22.background: #222262
+xcalc.ti.button23.background: #222262
+xcalc.ti.button24.background: #222272
+xcalc.ti.button27.background: #333373
+xcalc.ti.button28.background: #333373
+xcalc.ti.button29.background: #333373
+xcalc.ti.button32.background: #444484
+xcalc.ti.button33.background: #444484
+xcalc.ti.button34.background: #444484
+xcalc.ti.button37.background: #555595
+xcalc.ti.button38.background: #555595
+xcalc.ti.button39.background: #555595
+XCalc*Cursor:                 hand2
+XCalc*ShapeStyle:             rectangle
+
+NetHack*message*translations:	<KeyPress>: input()
+!
+! Example extra translations for the map window.
+NetHack*map*translations: #override \
+                          <Key>Left: input(h) \n\
+                          <Key>Right: input(l) \n\
+                          <Key>Up: input(k) \n\
+                          <Key>Down: input(j)

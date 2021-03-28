@@ -97,6 +97,9 @@ export GTK_IM_MODULE="xim"
 export GOPATH="$HOME/usr/go"
 export PYTHONUSERBASE="$HOME/usr/python"
 
+# Nethack
+export NETHACKOPTIONS="windowtype:X11,name:matador,!autopickup,color,lit_corridor,hilite_pet,hilite_pile,herecmd_menu,hitpointbar,menucolors,clicklook,extmenu,mouse_support,showexp"
+
 # no dbus
 export DBUS_SESSION_BUS_ADDRESS=no
 

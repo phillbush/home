@@ -23,18 +23,22 @@ mod1 + {1,2,3,4,5,6,7,8,9}
 	echo desk {0,1,2,3,4,5,6,7,8,9} >"$XINTERP_FIFO"
 mod1 + shift + {1,2,3,4,5,6,7,8,9}
 	echo desk +{0,1,2,3,4,5,6,7,8,9} >"$XINTERP_FIFO"
-mod1 + {Tab, shift + Tab}
+mod1 + {e, shift + e}
 	echo desk {next, prev} >"$XINTERP_FIFO"
+mod1 + {control + e, control + shift + e}
+	echo +desk {next, prev} >"$XINTERP_FIFO"
 mod1 + 0
 	echo desk last >"$XINTERP_FIFO"
 mod1 + shift + 0
 	echo desk +last >"$XINTERP_FIFO"
 
 # focus
+mod1 + {Tab, shift + Tab}
+	tab {next, prev};
+mod1 + {h,j,k,l}
+	frame {left,down,up,right}
 mod1 + control + {Tab, shift + Tab}
 	focusmon {next, prev};
-mod1 + {h,j,k,l}
-	focuswin {left,down,up,right}
 
 # Resize/move windows
 mod1 + {c, v, shift + c, shift + v}

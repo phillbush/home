@@ -4,6 +4,6 @@
 
 lsc -l |\
 grep '^......h'|\
-cut -f5- |\
+cut -f6- |\
 ifne xprompt -dish "" "unhide window:" |\
 xargs -r wmctrl -b remove,hidden -ir

@@ -34,8 +34,8 @@ sxhkd -c "$RULESDIR/keybindings" &
 
 # fonts
 #export FONTCONFIG_PATH="$HOME/theme/fonts:/etc/fonts"
-#xset +fp $HOME/theme/fonts
-#xset fp rehash
+xset +fp $HOME/theme/fonts
+xset fp rehash
 
 # make mouse invisible after a brief period
 unclutter &
@@ -51,7 +51,7 @@ synclient AccelFactor=0
 synclient HorizTwoFingerScroll=1
 
 # Set background
-feh --bg-fill --no-fehbg $HOME/theme/wp/pepe.jpg
+xsetroot -bg "$(xrdb -query|awk '/^\*background:/ {print $2}')" -fg "$(xrdb -query|awk '/^\*color0:/ {print $2}')" -mod 3 3
 
 # music daemon
 mpd >/dev/null 2>&1 && mpdnotify &
@@ -61,9 +61,6 @@ xinterp 0<>"$XINTERP_FIFO" &
 
 # check battery and temperature
 notify &
-
-# start compositing manager
-xcompmgr &
 
 # run window manager
 shod | sed -u 's/^\([0-9]*\)x\([0-9]*\)\([+-][0-9]*\)\([+-][0-9]*\)$/SEC:1	TAG:shod	\3 \4	\1 × \2/' >"$XNOTIFY_FIFO"
