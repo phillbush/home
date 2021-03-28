@@ -192,8 +192,6 @@ With the pie menu, I can launch applications, change the current
 desktop, draw a terminal on the screen, change the song, take a
 screenshot, and control the active window.
 
-![Using pmenu(1) to draw a terminal and close it](https://user-images.githubusercontent.com/63266536/107714261-df428300-6cc4-11eb-9221-1acfe8a4f383.gif)
-
 ### Using the keyboard
 
 After typing Alt+space, a prompt is displayed by xprompt(1).
@@ -206,8 +204,6 @@ following command:
 
 With the prompt, the user can type any instruction that xinterp(1)
 understands, for example, open man pages.
-
-![opening a man page with xprompt](https://user-images.githubusercontent.com/63266536/107714641-8e7f5a00-6cc5-11eb-9720-de72889b860d.gif)
 
 ### The Window Manager
 
