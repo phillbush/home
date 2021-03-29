@@ -83,7 +83,7 @@ shod.ignoreTitle:   true
 shod.ignoreBorders: true
 shod.mergeBorders:  false
 shod.hideTitle:     false
-shod.tabClass:      true
+shod.autoTab:       tilingMulti
 
 pmenu.selbackground: SELBG
 
