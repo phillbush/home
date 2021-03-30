@@ -112,7 +112,7 @@ My PS1 prompt has the following structure:
 * The right prompt is the cwd with the $HOME prefix replaced by a ~.
   The right prompt is padded at the right with a single space.
 
-![Prompt changing through a shell session](https://user-images.githubusercontent.com/63266536/107708355-422f1c80-6cbb-11eb-9ed5-ab93aa8a82e2.gif)
+![Prompt changing through a shell session](https://user-images.githubusercontent.com/63266536/112855585-53729380-9085-11eb-92fc-4b540f92ac9f.png)
 
 I use few aliases, most of them to force human-readable output.  The
 most useful alias is `fuck`, which rerun the previous command with
