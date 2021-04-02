@@ -75,7 +75,7 @@ export GIT_AUTHOR_EMAIL="phillbush@cock.li"
 #export XENVIRONMENT="$HOME/theme/xresources"
 export XCURSOR_PATH="$HOME/theme/cursor"
 export XCURSOR_THEME="retrosmart"
-export ICONPATH="$HOME/theme/icons"
+export ICONPATH="$HOME/theme/icons/retrosmart:$HOME/theme/icons/Haiku"
 export TROFFONTS="$HOME/theme/fonts"
 
 # XPrompt

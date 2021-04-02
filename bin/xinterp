@@ -40,30 +40,42 @@ genprompt() {
 	echo "exit	Exit X session"
 }
 
+menuentry() {
+	n="$1"
+	while [ "$n" -gt 0 ]
+	do
+		printf '\t'
+		n=$((n - 1))
+	done
+	printf 'IMG:%s' "$(echo "$2" | icon | iconcache)"
+	[ "$#" -eq 3 ] && printf '\t%s' "$3"
+	printf '\n'
+}
+
 genmenu() {
-	echo "IMG:$HOME/theme/icons/categories/applications.png"
+	menuentry 0 "applications-other"
 	run -i | sed 's/	/&run /; s/^/	/'
 
-	echo "IMG:$iconpath/apps/windowmanager.png"
-	printf "\tIMG:$iconpath/actions/window-close.png\twm close\n"
-	printf "\tIMG:$iconpath/actions/window-maximize.png\twm maximize\n"
-	printf "\tIMG:$iconpath/actions/window-minimize.png\twm minimize\n"
-	printf "\tIMG:$iconpath/actions/window-resize.png\twm resize\n"
+	menuentry 0 "preferences-system-windows"
+	menuentry 1 "window-close" "wm close"
+	menuentry 1 "view-fullscreen" "wm maximize"
+	menuentry 1 "view-restore" "wm minimize"
+	menuentry 1 "window-resize" "wm resize"
 
-	echo "IMG:$iconpath/apps/scrot.png	scrot select"
+	menuentry 0 "applets-screenshooter" "scrot select"
 
-	echo "IMG:$iconpath/categories/music.png"
-	printf "\tIMG:$iconpath/actions/media-next.png\tmus next\n"
-	printf "\tIMG:$iconpath/actions/media-stop.png\tmus stop\n"
-	printf "\tIMG:$iconpath/actions/media-previous.png\tmus prev\n"
-	printf "\tIMG:$iconpath/actions/media-pause.png\tmus toggle\n"
+	menuentry 0 "music"
+	menuentry 1 "media-seek-forward"   "mus next"
+	menuentry 1 "media-playback-stop"  "mus stop"
+	menuentry 1 "media-seek-backward"  "mus prev"
+	menuentry 1 "media-playback-pause" "mus toggle"
 
-	echo "IMG:$iconpath/apps/terminal.png	term"
+	menuentry 0 "terminal" "term"
 
-	echo "IMG:$iconpath/places/user-desktop.png	exit"
-	printf "\tIMG:$iconpath/actions/go-last.png\tdesk last\n"
-	printf "\tIMG:$iconpath/actions/go-previous.png\tdesk prev\n"
-	printf "\tIMG:$iconpath/actions/go-next.png\tdesk next\n"
+	menuentry 0 "user-desktop"
+	menuentry 1 "go-last"           "desk last"
+	menuentry 1 "go-previous"       "desk prev"
+	menuentry 1 "go-next"           "desk next"
 }
 
 notify() {
