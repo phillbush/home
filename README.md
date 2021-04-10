@@ -24,7 +24,7 @@ I use the following themes:
   which is distributed with the shod window manager.
 * `xsetroot -mod 3 3 -bg '#000000' -fg '#121212'` as my background.
 
-See Also.
+See Also:
 * [expenv](https://github.com/phillbush/expenv): Expand Environment Variables.
 * [shod](https://github.com/phillbush/shod): The shod window manager.
 * [lsd](https://github.com/phillbush/lsd) and
