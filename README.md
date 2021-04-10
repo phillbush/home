@@ -11,17 +11,13 @@ Read the file [home.pdf](home.pdf) for more information on my desktop.
 
 I use the following themes:
 * The [tango](https://en.wikipedia.org/wiki/Tango_Desktop_Project#Palette)
-  color scheme for terminal colors and window decoration.
-* The [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors)
-  cursor theme, licensed under the
-  [GPLv3 license](https://github.com/mdomlop/retrosmart-x11-cursors/blob/master/LICENSE).
-* The [ubo](http://pen-art.ru/icons-ubo-ru.html)
-  icon theme, licensed under the Artistic 2.0 license.
-* The [Input](https://input.fontbureau.com/)
-  font, which has a [license](https://input.fontbureau.com/license/) that does
-  not permit redistribution.  So I cannot distribute the font here.
-* The [default](theme/decoration.xpm) motif-like window decoration,
-  which is distributed with the shod window manager.
+  color scheme for terminal colors.
+* The [Retrosmart Icon theme](https://github.com/mdomlop/retrosmart-icon-theme).
+* The [Retrosmart X11 cursor theme](https://github.com/mdomlop/retrosmart-x11-cursors).
+* The Input Mono Narrow, from the [Input](https://input.fontbureau.com/)
+  family of fonts.
+* The default motif-like window decoration, which is distributed with
+  the shod window manager.
 * `xsetroot -mod 3 3 -bg '#000000' -fg '#121212'` as my background.
 
 See Also:
