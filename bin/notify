@@ -20,20 +20,23 @@ clock() {
 	date '+%y.%j/%m.%d/%V.%a %T'
 }
 
+powericon=$(echo "poweroff-cpu" | icon 128 s | iconcache 128)
+hearticon=$(echo "heart" | icon 128 s | iconcache 128)
+
 if [ $# -gt 0 ]
 then
 	printf "TAG:notify\t\
-IMG:$ICONPATH/system/health.png\t\
+IMG:%s\t\
 $(clock)\t\
 Battery: %s%% (%s)\t\
 Temperature: %s°C\
-" "$(bat)" "$(charge && echo charging || echo discharging)" "$(temp)"   >"$XNOTIFY_FIFO"
+" "$powericon" "$(bat)" "$(charge && echo charging || echo discharging)" "$(temp)"   >"$XNOTIFY_FIFO"
 	exit 0
 fi
 
 while true
 do
-	! charge && [ "$(bat)" -lt 20 ] && echo "SEC:0	TAG:power	IMG:$ICONPATH/system/power.png	Battery is low: $(bat)%"
-	[ "$(temp)" -gt 60 ] && echo "SEC:5	TAG:temp	IMG:$ICONPATH/system/health.png	Temperature is at $(temp)°C"
+	! charge && [ "$(bat)" -lt 20 ] && echo "SEC:0	TAG:power	IMG:$powericon	Battery is low: $(bat)%"
+	[ "$(temp)" -gt 60 ] && echo "SEC:5	TAG:temp	IMG:$hearticon	Temperature is at $(temp)°C"
 	sleep 60
 done >"$XNOTIFY_FIFO"

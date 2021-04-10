@@ -6,7 +6,7 @@ trap 'kill $(jobs -p)' EXIT
 . $HOME/.profile
 
 # Load resources
-expenv $HOME/rules/xresources | xrdb -
+expenv $HOME/rules/xresources | xrdb -I/usr/X11R6/share/X11/app-defaults -
 
 # set fifo for shell to read commands from (shell run at the end of this file)
 export XINTERP_FIFO="$CACHEDIR/xinterp"

@@ -34,8 +34,9 @@ getdesk() {
 }
 
 printdesk() {
+	icon=$(echo user-desktop | icon | iconcache 128)
 	lsd | awk -F '[-*: ]' '
-		BEGIN        { printf "SEC:1\tIMG:'$ICONPATH'/places/user-desktop.png\tTAG:desk\t" }
+		BEGIN        { printf "%s", "SEC:1\tIMG:'$icon'\tTAG:desk\t" }
 		NR > 1 && !n { printf " " }
 		/^\*/        { printf "●";  n = 0 }
 		/^ /         { printf "○";  n = 0 }

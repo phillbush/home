@@ -64,7 +64,7 @@ genmenu() {
 
 	menuentry 0 "applets-screenshooter" "scrot select"
 
-	menuentry 0 "music"
+	menuentry 0 "cd-audio"
 	menuentry 1 "media-seek-forward"   "mus next"
 	menuentry 1 "media-playback-stop"  "mus stop"
 	menuentry 1 "media-seek-backward"  "mus prev"

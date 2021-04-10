@@ -212,13 +212,13 @@ function! CFolding(lnum)
 endfunction
 
 " file type detections
-filetype plugin indent on
+filetype plugin on
 autocmd Bufenter *.scm,*.rkt set lisp expandtab
 autocmd Bufenter *.s set syntax=asm
 autocmd Bufenter *.txt set foldexpr=TxtFolding(v:lnum) foldmethod=expr
 autocmd Bufenter *.txt set formatoptions+=t
 autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
-autocmd FileType c,cpp,yacc,lex,awk set foldexpr=CFolding(v:lnum) foldmethod=expr
+autocmd FileType c,cpp,yacc,lex,awk,sh set foldexpr=CFolding(v:lnum) foldmethod=expr
 
 " Syntax highlighting
 syntax on

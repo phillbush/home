@@ -5,10 +5,13 @@ set shell sh
 set shellopts '-eu'
 set ifs "\n"
 set previewer preview
+set cleaner unpreview
 set dirfirst
 set scrolloff 5
 set drawbox
 set incsearch
+set noignorecase
+set noignoredia
 set info size
 
 # commands
@@ -27,6 +30,12 @@ cmd rename %{{
 	filename="$(echo $*)"
 	[ -e "$filename" ] && printf "file exists" || mv "$f" "$filename"
 }}
+
+# set window title
+cmd on-cd &{{ printf "\033]0;$(pwd | sed "s|$HOME|~|") - fm\007" > /dev/tty }}
+
+# also run at startup
+on-cd
 
 # mappings
 map q
