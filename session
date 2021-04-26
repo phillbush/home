@@ -1,10 +1,5 @@
 #!/bin/ksh
 
-# set IFS for this file
-OLDIFS="$IFS"
-IFS='
-'
-
 # check if command exists and set list of completions for it
 complete() {
 	if type skel >/dev/null
@@ -14,6 +9,37 @@ complete() {
 		shift 2
 		set -A "complete_${cmd}${num:+"_$num"}" "$@"
 	fi
+}
+
+# search through history
+hist() {
+	case "$1" in
+	-)
+		shift
+		fc -l 1 | fgrep "$1" || return 0
+		read -r n || return 0
+		case "$n" in
+		"")
+			return 0
+			;;
+		e*)
+			n="${n#"e"}"
+			fc $n
+			;;
+		*)
+			fc -s $n
+			;;
+		esac
+		;;
+	*)
+		fc -ln 1 | fgrep "$1" || return 0
+		;;
+	esac
+}
+
+# run previous non-doas command with doas
+fuck() {
+	doas $(fc -ln 1 | sed '/^[ 	]*doas /d' | sed '$!d')
 }
 
 # list entries in directory stack
@@ -121,6 +147,9 @@ CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 HISTFILE="$HOME/var/history/ksh.hist"
 HISTSIZE=1000
 
+# fc editor
+FCEDIT="${VISUAL:-${EDITOR:-"vi"}}"
+
 # options
 set -o emacs            # emacs mode for ^U and ^K keybindings, etc
 set -o braceexpand      # enable brace expansion
@@ -144,7 +173,6 @@ alias hex='hexdump -C'
 alias od='od -cAx'
 alias df='df -h'
 alias doas='doas '
-alias fuck='doas $(fc -ln -1)'
 
 # Completions
 complete skel 1 $(\ls -1 "$SKEL")
@@ -181,7 +209,3 @@ PS1='$(
 
 # print non-zero exit value
 trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
-
-# restore IFS
-IFS="$OLDIFS"
-unset OLDIFS

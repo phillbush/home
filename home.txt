@@ -1,12 +1,9 @@
                                  home
 
-§ Description
-
 This document describe my system and desktop, how I use it and how to
 set it up.  This document is written in the incipit format, and can be
 converted into troff with the incipit(1) script.  (Incipit is a markup
 language I created).
-
 
 § Hardware
 
@@ -261,6 +258,19 @@ Complete.
 The `complete` function sets the `complete_CMDNAME` variables only if
 a command named `CMDNAME` exists.
 
+Search through history.
+The `hist` function lists the command history grepping for the given
+argument.  However, if the first argument is a "-", `hist` lists the
+command history grepping for the second argument with number indices
+before each entry, and reads the user input for a number; and reruns
+the command with a given number (or the commands in a range, if two
+numbers are entered).  If the read input is prefixed with an `e`
+character, the command or commands are edited before run.
+
+Run previous non-doas command with doas.
+The most useful function is `fuck`, which rerun the previous command
+with «doas(1)».
+
 Directory stack.
 To navigate between directories, I use something like bash's directory
 stack (managed by the builtin commands `pushd` and `popd`).  The
@@ -303,14 +313,17 @@ directory.
 History.
 History is saved on `~/var/history/ksh.hist`.
 
+FC editor.
+The fc builtin command (used by the `hist` function) needs this variable
+to run the editor.  If not set, it uses «ed(1)» by default.
+
 Options.
 I use «ksh(1)» with emacs-like keybindings (for ^U and ^K, etc).
 I also enable brace expansion.
 
 Aliases.
 I use few aliases.  There are aliases to file management, list files,
-hexdump, commands with human-readable output.  The most useful alias
-is `fuck`, which rerun the previous command with «doas(1)».
+hexdump, commands with human-readable output.
 
 Completions.
 I set up the completion lists for tab-completing the arguments of some
@@ -339,113 +352,114 @@ status is printed, as bold and red, after the command exits.
 
 § X11 Session
 
-I use a blank desktop with no bars, docks or panels.
+I use a blank desktop with no bars, docks or panels.  My X11 session
+is set up by commands run from the `~/.xsession` script.  This script
+is an literal Rube Goldberg machine, full of pipes and background jobs.
+Several functions are defined in this file.  I'll explain them as they
+are called.  There are thre ways to interact with the desktop: with a
+desktop menu, by entering commands, or via keybindings.  All of them
+output a command to a interpreter function called `xinterp`.  Responses
+are output in a notification window managed by «xnotify(1)».  Each piece
+communicates with another by means of two named pipes, `$xnotifyfifo`
+and `$xinterpfifo`.
 
-The first thing done when I log into an X session is to load the
-environment variables (by sourcing `~/.profile`) and to load the X
-resources with «expenv(1)» and «xrdb(1)» (expenv is needed to expand
-environment variables in the resources file).  Key combinations are
-bound to commands by «sxhkd(1)».  The cursor is made invisible after
-a brief period by «unclutter(1)».  Music is managed by the «mpd(1)»
-music player daemon.
+Create temporary directory and named pipes.
+The first thing done when I log into an X session is to create the
+temporary directory and give it 0700 permission.  In this directory
+three files will exist:
+• xinterpfifo: The named pipe containing desktop commands that will be
+               read and interpreted by the `xinterp` function.
+• xnotifyfifo: The named pipe containing notification strings that will
+               be read and interpreted by «xnotify(1)».
+• coverfile: A png file of the cover of the currently playing song.
 
-There are two ways to interact with the desktop: with the mouse (using
-a «pmenu(1)»), or with the keyboard (using «xprompt(1)»).  Both ways
-output a command to a interpreter called «xinterp(1)».  Responses are
-output in a notification window managed by «xnotify(1)».  Each piece
-communicates with another by means of two named pipes, `$XNOTIFY_FIFO`
-and `$XINTERP_FIFO`.
+Kill background jobs on exit.
+I trap the EXIT special signal to call the function `atexit` when the
+script terminates.  This function will remove the temporary directory
+created previously and kill all the background jobs (there will be a
+lot of them).
 
-§§ Desktop Notification
+Load environment variables and xresources.
+I load the environment variables (by sourcing `~/.profile`) and load the
+X resources with «expenv(1)» and «xrdb(1)» (expenv is needed to expand
+environment variables in the resources file).
 
-The `$XNOTIFY_FIFO` environment variable contains the path to a named
-pipe read by a program called «xnotify(1)».  This program reads lines
-from its stdin and pops up a desktop notification for each read line.
-This named pipe is written by several scripts.
+Set icon variables.
+Several icons are used through this script, both in the pie menu, and
+in the notifications.  I use «icon(1)» and «iconcache(1)» to get the
+filename of several icons (and if necessary, cache their PNG version)
+and read those names into several variables; all of them beginning with
+"icon_".
 
-First, a script called notify is run in the background and checks the
-battery and computer temperature every minute.  If the battery is below
-20% or the temperature is above 60°C, a line is written into
-`$XNOTIFY_FIFO` and a notification is displayed for the user.
+Other stuff.
+• Load keymap: I use a custom key mapping for my keyboard.  The key map
+  is defined on `$RULESDIR/xkeymap` and interpreted by «xkbcomp(1)».
+• Set cursor: Nobody likes the default X-like cursor of X11. I set the
+  left pointing cursor as the default cursor for the root window.
+• Fonts: Load font directories.
+• Make mouse invisible after a brief period: I call «unclutter(1) to
+  make the cursor invisible after a brief period of time.
+• Thinkpad trackpoint: I run several commands to make the thinkpad
+  trackpoint work and to make a one-, two-, and three-finger tap on
+  the touchpad emulate the first, second, and third mouse button,
+  respectively.
+• Set background:  I use a black and gray grid-like background.
+• Music daemon: Music is managed by the «mpd(1)» music player daemon.
 
-The «xinterp(1)» script also writes into `$XNOTIFY_FIFO` depending on
-the instruction it reads (see next section below).  For example, when
-it receives an instruction to change the music, a notification
-containing the currently playing song is sent to `$XNOTIFY_FIFO`; when
-it receives an instruction to change the current desktop, a notification
-listing the desktops is sent to `$XNOTIFY_FIFO`.
+Desktop Notification.
+The `$xnotifyfifo` variable points to a named pipe read by a program
+called «xnotify(1)», which pops up a desktop notification for each read
+line.  This named pipe is written by the following functions.
+• The `notifycpu` function uses `tail -f` to check the battery and
+  CPU temperature, and writes a notification if one of them exceed
+  the predetermined values.
+• The `notifymus` function uses `mpc current --wait` to get the
+  currently playing song from «mpd(1)», generates its cover image, and
+  writes a notification for this song.
+• The `xinterp` function, which will be explained below, interpret
+  several instructions and writes notifications for some of them.
+  For example, when it receives an instruction to change the current
+  desktop, a notification listing the desktops is written.
+• The `wm` function, which will be explained below, run the window
+  manager and writes notifications for the geometry of the window being
+  moved or resized.
 
-§§ The Desktop Interpreter
+Desktop Interpreter.
+The `$xinterpfifo` variable points to a named pipe read by a function
+called `xinterp`.  This function reads instructions from its stdin and
+run a given command depending on the instruction.  Those instructions
+are generated by three functions, that will be explained below: `keys`,
+`prompt` and `menu`.  For example, when selecting Firefox on the menu,
+the command `run firefox` is sent to `xinterp`, which will open a new
+instance of a program or focus an already existing one.  `xinterp`
+understand several instructions, such as to launch an application, open
+a manual page with, change the current desktop, manipulate the current
+window, etc.  `xinterp` depends on a lot of programs and scripts
+scattered over `$PATH`.
 
-The `$XINTERP_FIFO` environment variable contains the path to a named
-pipe read by a script called xinterp(1).  This script reads instructions
-from its stdin and run a given command depending on the instruction.
-Those instructions are generated by «pmenu(1)» via mouse interaction
-(see the Using the Mouse section below) or by «xprompt(1)» via keyboard
-interaction (see the Using the Keyboard section below).
+Command system.
+Three functions generate instructions for `xinterp`.
+• The `keys` function uses «xbindecho(1)» to bind keys to instructions.
+  When a bound key is pressed, a instruction is output to `xinterp`.
+• The `prompt` function uses «xkeyecho(1)» to call «xprompt(1)» whenever
+  Alt+Space is pressed.  When pressed, this key combination displays a
+  prompt, which reads instructions to be output to `xinterp`.
+• The `menu` function uses «xbuttonecho(1)» to call «pmenu(1)» whenever
+  the root window is clicked with the right mouse button.  When such
+  click occurs, a pie menu is displayed, listing some graphical options
+  corresponding to a select subset of instructions to be output to
+  `xinterp`.
 
-For example, when selecting Firefox to be run using «pmenu(1)», the
-command `run firefox` is sent to `$XINTERP_FIFO`.  The `run` command
-opens a new instance of a program or focus an already existing one.
-
-«xinterp(1)» understand several instructions, such as to launch an
-application, open a manual page with «zathura(1)», change the current
-desktop, manipulate the current window, etc.
-
-§§ Using the mouse
-
-When right clicking on the root window (ie', the desktop), a pie menu is
-displayed by «pmenu(1)».
-
-This «pmenu(1)» instance reads menu options from `~/var/cache/pmenu.cache`,
-and outputs instructions to `$XINTERP_FIFO` to be interpreted by
-«xinterp(1)».  The cache file is generated by «xinterp(1)» with the
-following command:
-
-{
-	$ xinterp menu
-}
-
-With the pie menu, I can launch applications, change the current
-desktop, draw a terminal on the screen, change the song, take a
-screenshot, and control the active window.
-
-§§ Using the keyboard
-
-After typing Alt+space, a prompt is displayed by «xprompt(1)».
-This «xprompt(1)» instance reads options from `~/var/cache/xprompt.cache`,
-and outputs instructions to `$XINTERP_FIFO` to be interpreted by
-«xinterp(1)».  The cache file is generated by xinterp(1) with the
-following command:
-
-{
-	$ xinterp prompt
-}
-
-With the prompt, the user can type any instruction that «xinterp(1)»
-understands, for example, open man pages.
-
-
-§§ The Window Manager
-
-Windows are managed by the «shod(1)» window manager.  It is an hybrid
-(tiling and floating) tabbed window manager that is controlled solely by
-responding to client messages with EWMH hints and regular ICCCM events,
-and by using a given key modifier with the mouse pointer.
-
-Shod maintains one set of desktop for each monitor.  Each set of desktop
-works like GNOME activities: The X session begins with a single desktop;
-when a window is created, this desktop is populated, and a new empty
-desktop is created.  When an empty desktop is populated, a new empty one
-is created.
-
-Windows begin floating on the desktop and are spawned in a proper empty
-place.  The first window is spawned on the center of the monitor.  The
-next windows are arranged in empty spaces on the monitor.
-
-When a window is maximized, it is tiled.  Tiled windows are organized in
+Window Manager.
+The `wm` function calls the «shod(1)» window manager.  It is an hybrid
+(tiling and floating) tabbed window manager that is controlled solely
+by responding to client messages with EWMH hints and ICCCM events and
+by using a given key modifier with the mouse pointer.  Windows begin
+floating on the desktop and are spawned in a proper empty place.  When
+a window is maximized, it is tiled.  Tiled windows are organized in
 columns; each tiled window ocupies a row in a column.  This columnated
-behavior imitates the way acme(1) handle its columns and frames.
+behavior imitates the way «acme(1)» and «wmii(1)» handle their columns
+and frames.
 
 
 § Theme
@@ -477,5 +491,3 @@ I use the following themes.
 • Black background:
   I use a «xsetroot(1)» to set my background, with the options
   `-mod 3 3 -bg '#000000' -fg '#121212'`
-
-

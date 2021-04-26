@@ -18,9 +18,6 @@ wm() {
 # get desktop in given direction while cycling (prev, next, last)
 getdesk() {
 	case "$1" in
-	on|off)
-		return
-		;;
 	*[!0-9]*)
 		lsd | awk -F '[-*: ]+' -v DIR="$1" '
 			/^\*/ { curr = NR }
@@ -157,7 +154,7 @@ gettab() {
 # print desktop number and format it for xnotify(1)
 notifydesk() {
 	lsd | awk -F '[-*: ]' '
-		BEGIN        { printf "%s", "SEC:1\tIMG:'$deskicon'\tTAG:desk\t" }
+		BEGIN        { printf "%s", "SEC:1\tIMG:'$icon_deskicon'\tTAG:desk\t" }
 		NR > 1 && !n { printf " " }
 		/^\*/        { printf "●";  n = 0 }
 		/^ /         { printf "○";  n = 0 }
@@ -169,12 +166,12 @@ notifydesk() {
 # get sensorsd and apmd lines from syslog and format them for xnotify(1)
 notifycpu() {
 	tail -f /var/log/daemon |\
-	awk -v powericon="$powericon" -v hearticon="$hearticon" '
+	awk -v icon_powericon="$icon_powericon" -v icon_hearticon="$icon_hearticon" '
 		$5 ~ /^apmd.*:$/ && $0 ~ "external power status: not connected" && $(NF - 2) < 25 {
-			printf "SEC:0\tTAG:power\tIMG:%s\tBattery is low: %s\n", powericon, $(NF - 2)
+			printf "SEC:0\tTAG:power\tIMG:%s\tBattery is low: %s\n", icon_powericon, $(NF - 2)
 		}
 		$5 ~ /^sensorsd.*:$/ && $7 == "exceeds" {
-			printf "SEC:5\tTAG:temp\tIMG:%s\tTemperature is at %d°C\n", hearticon, $9
+			printf "SEC:5\tTAG:temp\tIMG:%s\tTemperature is at %d°C\n", icon_hearticon, $9
 		}
 		{
 			fflush()
@@ -211,9 +208,8 @@ genprompt() {
 	echo "wm	Control windows"
 	wm help | sed 's/^/	/'
 
-	xman >"$mancache"
 	echo "man	Read manual"
-	<"$mancache" sed 's/^/	/'
+	xman | sed 's/^/	/'
 
 	echo "desk	Change desktop"
 	echo "	next	Cycle through desktops in monitor forwards"
@@ -303,7 +299,7 @@ IMG:$icon_media
 	IMG:$icon_media_backward	mus prev
 	IMG:$icon_media_pause	mus toggle
 IMG:$icon_terminal	term draw
-IMG:$deskicon
+IMG:$icon_deskicon
 	IMG:$icon_golast	desk last
 	IMG:$icon_goprev	desk prev
 	IMG:$icon_gonext	desk next
@@ -433,7 +429,7 @@ xinterp() {
 }
 
 # create temporary directory and named pipes
-tmpdir=$(mktemp -d "/tmp/xsession.XXXXXXXXXX")
+tmpdir=$(mktemp -d "${TMPDIR:-"/tmp"}/xsession.XXXXXXXXXX")
 xinterpfifo="$tmpdir/xinterp.fifo"
 xnotifyfifo="$tmpdir/xnotify.fifo"
 coverfile="$tmpdir/cover.png"
@@ -449,9 +445,9 @@ expenv $HOME/rules/xresources | xrdb -
 
 # set icon variables
 {
-	read powericon;
-	read hearticon;
-	read deskicon;
+	read icon_powericon;
+	read icon_hearticon;
+	read icon_deskicon;
 	read icon_apps;
 	read icon_win;
 	read icon_winclose
@@ -524,15 +520,13 @@ xsetroot -bg "$(xrdb -query | awk '/^\*background:/ {print $2}')" -fg "$(xrdb -q
 # music daemon
 mpd
 
-# notification system
+# desktop notifications
 xnotify -s 10 <"$xnotifyfifo" &
-
-# command interpreter
-xinterp <"$xinterpfifo" >"$xnotifyfifo" &
-
-# notifications
 notifycpu >"$xnotifyfifo" &
 notifymus >"$xnotifyfifo" &
+
+# desktop interpreter
+xinterp <"$xinterpfifo" >"$xnotifyfifo" &
 
 # command system (menu, prompt, keybindings)
 keys   >"$xinterpfifo" &
