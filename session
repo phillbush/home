@@ -1,40 +1,131 @@
 #!/bin/ksh
 
-set -o emacs
+# set IFS for this file
+OLDIFS="$IFS"
+IFS='
+'
 
-# History options
-export HISTFILE="$HOME/var/history/ksh.hist"
-export HISTSIZE=1000
-
-# prompt
-promptcmd() {
-	_exit=$?
-	_dir=$(echo "$PWD" | sed "s,^$HOME,~,")
-	_tty=$(tty)
-	_tty=${_tty#/dev/}
-
-	printf "%s" "\[\e]0;$_tty: $_dir\a\]"           # set window title
-
-	echo                                            # blank line
-
-	[ "$_exit" -gt 0 ] && printf "%s" "\[\e[1;31m\] [$_exit]"
-	printf "%s" "\[\e[0m\]"
-	printf "%s" "\[\e[s\]"                          # save cursor position
-	printf "%s" "\[\e[$((COLUMNS - ${#_dir}))G\]"   # go to right
-	printf "%s" "$_dir"                             # print pwd
-	printf "%s" "\[\e[u\]"                          # restore cursor position
-	if [ $(id -u) -eq 0 ]
+# check if command exists and set list of completions for it
+complete() {
+	if type skel >/dev/null
 	then
-		printf "%s" "\[\e[1;31m\]"
-	else
-		printf "%s" "\[\e[1m\]"
+		typeset cmd="$1"
+		typeset num="$2"
+		shift 2
+		set -A "complete_${cmd}${num:+"_$num"}" "$@"
 	fi
-	printf "%s" " ❯ "
-	printf "%s" "\[\e[0m\]"
 }
-PS1='`promptcmd`'
 
-# Aliases
+# list entries in directory stack
+dirs() {
+	typeset i=0
+	typeset d="$PWD"
+	typeset n="${#DIRSTACK[@]}"
+	while (( i <= n ))
+	do
+		[ n -gt 0 ] && printf "%d\t" "$i"
+		case "$d/" in
+		("$HOME"/*)
+			printf "%s\n" "~${d#"${HOME}"}"
+			;;
+		(*)
+			printf "%s\n" "$d"
+			;;
+		esac
+		d="${DIRSTACK[$((i++))]}"
+	done
+}
+
+# change directory
+cd() {
+	if [ "$#" -eq 0 ]
+	then
+		set -- "$HOME"
+	elif [ "$#" -gt 1 ] && [ "$1" != "+" ]
+	then
+		echo "$0: cd: improper argument" >&2
+		return 1
+	fi
+	case "$1" in
+	+)
+		shift
+		case "$#" in
+		0)
+			set -A tmp -- "$PWD"
+			;;
+		*)
+			for i
+			do
+				typeset d="$( { command cd "$i" || { [ -e "$i" ] && command cd "$(dirname "$i")" ; } ; } >/dev/null 2>&1 && echo $PWD || echo "")"
+				[ -z "$d" ] && unset tmp && echo "$0: cd: $i: unknown file" >&2 && return 1
+				set -A tmp -- "${tmp[@]}" "$d"
+			done
+		esac
+		set -A DIRSTACK -- "${tmp[@]}" "${DIRSTACK[@]}"
+		unset tmp
+		dirs
+		return
+		;;
+	-)
+		;;
+	+*[!0-9]*|-*[!0-9]*)
+		return 1
+		;;
+	+*)             # rotate entries
+		typeset n=$(( ${1#"+"} - 1 ))
+		[ -z "${DIRSTACK[$n]}" ] && return
+		set -- "${DIRSTACK[$n]}"
+		unset DIRSTACK[$n]
+		set -A DIRSTACK -- "$PWD" "${DIRSTACK[@]}"
+		;;
+	-*)             # remove entry
+		typeset n=$(( ${1#"-"} - 1 ))
+		[ -z "${DIRSTACK[$n]}" ] && return
+		unset DIRSTACK[$n]
+		set -A DIRSTACK -- "${DIRSTACK[@]}"
+		dirs
+		return
+		;;
+	..|../*)        # regular dot-dot directory
+		;;
+	..*[!.]*)       # dot-dot plus name
+		set -- "${PWD%"${PWD##*"${1#".."}"}"}"
+		;;
+	..*)            # dot-dot-dot...
+		typeset n=${#1}
+		set -- "$PWD"
+		while (( n-- > 1 ))
+		do
+			case "$1" in
+			/) break ;;
+			*) set -- "$(dirname "$1")" ;;
+			esac
+		done
+		;;
+	esac
+	{
+		command cd "$1" || {
+			[ -e "$1" ] && command cd "$(dirname "$1")"
+		}
+	} >/dev/null 2>&1 || {
+		echo "$0: cd: $1: unknown file" >&2 && return 1
+	}
+	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
+	dirs
+}
+
+# colon separated list of directories used by the cd command
+CDPATH=".:$HOME:$HOME/proj:$HOME/files"
+
+# history options
+HISTFILE="$HOME/var/history/ksh.hist"
+HISTSIZE=1000
+
+# options
+set -o emacs            # emacs mode for ^U and ^K keybindings, etc
+set -o braceexpand      # enable brace expansion
+
+# aliases
 alias :q=exit
 alias :Q=exit
 alias vim='vim -p'
@@ -42,25 +133,55 @@ alias cp="cp -Riv"
 alias mv="mv -iv"
 alias rm='rm -riv'
 alias mkdir='mkdir -p'
-alias ls='ls -1Fh'   # append file indicator to entries, print human readable sizes
-alias lc='ls -C'     # columns
-alias ll='ls -l'     # Lists directory contents in a long format
-alias dir='ls -ld'   # Show information about a directory
+alias ls='ls -1Fh'      # append file indicator to entries, print human readable sizes
+alias lc='ls -C'        # columns
+alias ll='ls -l'        # Lists directory contents in a long format
+alias la='lc -A'
+alias lla='ll -A'
+alias dir='ll -d'       # Show information about a directory
 alias tree='tree -F'
 alias hex='hexdump -C'
 alias od='od -cAx'
+alias df='df -h'
 alias doas='doas '
 alias fuck='doas $(fc -ln -1)'
 
 # Completions
-# set -A sets an array;
-# an array complete_X contains completions for arguments of command X
-# an array complete_X_N contains completions for the Nth argument of command X
-set -A complete_doas_1 -- $(\ls `echo $PATH | sed 's/:/ /g'` 2>/dev/null | sed '/^$/{N;d;}' || true)
-set -A complete_make -- $((make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}' && ls) | sort -u)
-set -A complete_echo -- $(set | sed -n '/^[^]]*=/{s/^/$/;s/\([^=]*\)=.*/\1/;p;}')
-set -A complete_sysctl -- $(sysctl | sed 's/[ =].*//')
-if type skel >/dev/null
-then
-	set -A complete_skel_1 -- $(skel)
-fi
+complete skel 1 $(\ls -1 "$SKEL")
+complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
+complete sysctl "" $(sysctl | sed 's/[ =].*//')
+complete rcctl 1 disable enable get ls order set restart start stop
+complete rcctl 2 $(rcctl ls all)
+complete git 1 $(git --list-cmds=main)
+complete mpc 1 $(mpc help | awk '$1 == "mpc" { print $2 }')
+complete mpc 2 $(mpc lsplaylists | sort)
+
+# prompt
+PS1='$(
+	case "$PWD/" in
+	("$HOME"/*)
+		_dir="~${PWD#"${HOME}"}"
+		;;
+	(*)
+		_dir="$PWD"
+		;;
+	esac
+	_cols=$((COLUMNS - ${#_dir}))
+	_tty=$(tty)
+	_tty=${_tty#/dev/}
+	if [ $(id -u) -eq 0 ]
+	then
+		_color="1;31m"
+	else
+		_color="1m"
+	fi
+	printf "\\\\[\e]0;%s: %s\a\\\\]\n\\\\[\e[0m\\\\]\\\\[\e[s\\\\]\\\\[\e[%sG\\\\]%s\\\\[\e[u\\\\]\\\\[\e[%s\\\\] ❯ \\\\[\e[0m\\\\]"\
+	       "$_tty" "$_dir" "$_cols" "$_dir" "$_color"
+)'
+
+# print non-zero exit value
+trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
+
+# restore IFS
+IFS="$OLDIFS"
+unset OLDIFS

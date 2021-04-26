@@ -1,42 +1,35 @@
 #!/bin/sh
 # ~/.profile
 
-# set hierarchies where paths are searched
-HIER="$(echo $HOME/usr/* | /usr/bin/tr ' ' ':')"
-HIER="$HIER:/usr"
-HIER="$HIER:/usr/X11R6:/usr/games:/usr/local"
-HIER="$HIER:/usr/local/heirloom-doctools"
-HIER="$HIER:/usr/local/plan9"
-HIER="$HIER:/usr/local/jdk-11"
-PATH="/bin:/sbin"
-
-# set paths
-for dir in $(echo $HIER | /usr/bin/tr ':' ' ')
+# installation prefixes
+PATH="$PATH:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
+MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
+for dir in $HOME/usr/*
 do
-	/bin/test -d "$dir/bin"       && PATH="$PATH${PATH:+:}$dir/bin"
-	/bin/test -d "$dir/sbin"      && PATH="$PATH${PATH:+:}$dir/sbin"
-	/bin/test -d "$dir/man"       && MANPATH="$MANPATH${MANPATH:+:}$dir/man"
-	/bin/test -d "$dir/share/man" && MANPATH="$MANPATH${MANPATH:+:}$dir/share/man"
-	/bin/test -d "$dir/jar"       && JARPATH="$JARPATH${JARPATH:+:}$dir/jar"
+	/bin/test -d "$dir/bin"       && PATH="$dir/bin${PATH:+":"}$PATH"
+	/bin/test -d "$dir/man"       && MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
 done
 unset dir
-export PATH HOME TERM MANPATH JARPATH
+export PATH HOME TERM MANPATH
 
 # local installation directories
+export GOPATH="$HOME/usr/go"
+export PYTHONUSERBASE="$HOME/usr/python"
 export PREFIX="$HOME/usr/local"
 export MANPREFIX="$PREFIX/man"
 
-# ksh
+# ksh terminal session
 export ENV="$HOME/.session"
 
-# Locale
+# Locale and timezone
 export LANG=pt_BR.UTF-8
 export LC_CTYPE=en_US.UTF-8
 export LC_COLLATE=C
+export TZ="America/Sao_Paulo"
 
 # Directories
-#export MAIL=~/mail
-#export TMPDIR="$HOME/tmp"
+#export TMPDIR="/tmp"
+#export MAIL=$HOME/var/mail
 export SKEL="$HOME/skel"
 export TRASH="$HOME/trash"
 export APPPATH="$HOME/apps"
@@ -52,24 +45,24 @@ export MIMEFILE="$HOME/rules/mime"
 export XCOMPOSEFILE="$HOME/rules/xcompose"
 export EXINIT=":so $HOME/rules/exrc"
 export VIMINIT=":source $HOME/rules/vimrc"
+export IRCRC="$HOME/rules/ircrc"
 #export FONTCONFIG_FILE="$HOME/rules/fontconfig"
 
-# IRC
+# phillbush
 export IRCNAME="phillbush"
 export IRCNICK="phillbush"
-export IRCRC="$HOME/rules/ircrc"
-
-# Default programs
-export PAGER="less"
-export EDITOR="vim"
-export VISUAL="vim"
-
-# GIT
 export GIT_PAGER=cat
 export GIT_COMMITTER_NAME="phillbush"
 export GIT_COMMITTER_EMAIL="phillbush@cock.li"
 export GIT_AUTHOR_NAME="phillbush"
 export GIT_AUTHOR_EMAIL="phillbush@cock.li"
+
+# Default programs
+export PAGER="less"
+export EDITOR="vim"
+export VISUAL="vim"
+export OPENER="xopen"
+export TERMCMD="xterm"
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"
@@ -82,20 +75,12 @@ export TROFFONTS="$HOME/theme/fonts"
 export XPROMPTHISTFILE="$HOME/var/history/xprompt.hist"
 export XPROMPTHISTSIZE=100
 
-# default programs
-export OPENER="xopen"
-export TERMCMD="xterm"
-
 # Firefox
 export MOZ_ACCELERATED=1
 export MOZ_WEBRENDER=1
 
 # GTK
 export GTK_IM_MODULE="xim"
-
-# Language package managers
-export GOPATH="$HOME/usr/go"
-export PYTHONUSERBASE="$HOME/usr/python"
 
 # Nethack
 export NETHACKOPTIONS="windowtype:X11,name:matador,!autopickup,color,lit_corridor,hilite_pet,hilite_pile,herecmd_menu,hitpointbar,menucolors,clicklook,extmenu,mouse_support,showexp"

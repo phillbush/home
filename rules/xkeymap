@@ -1206,7 +1206,6 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     name[group1]="Portuguese (Brazil)";
 
     key <MDSW> {         [     Mode_switch ] };
-    key  <ESC> {         [          Escape ] };
     key <TLDE> {         [          Escape ] };
     key <AE01> {
         type= "FOUR_LEVEL",
@@ -1708,7 +1707,6 @@ xkb_geometry "pc(pc105)" {
             top=  1;
             left= 1;
             keys {
-                {  <ESC>, "NORM",   1 },
                 { <FK01>, "NORM",  20, color="white" },
                 { <FK02>, "NORM",   1, color="white" },
                 { <FK03>, "NORM",   1, color="white" },

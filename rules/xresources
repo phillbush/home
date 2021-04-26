@@ -154,7 +154,7 @@ xterm*vt100.translations: #override \
 *horizontalGripCursor:    left_ptr
 *horizontalBetweenCursor: left_ptr
 
-#include "XCalc-color"
+xcalc*customization: -color
 
 NetHack*message*translations:	<KeyPress>: input()
 !
