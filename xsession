@@ -338,7 +338,7 @@ xinterp() {
 			fi
 			;;
 		scrot)
-			scrot $args
+			scrot $args && printf 'IMG:%s Screenshot Taken\n' "$icon_scrot"
 			;;
 		man)
 			xman $args

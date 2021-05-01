@@ -108,6 +108,26 @@ disabling the xconsole window on the login screen.  I also add the line
 	EOF
 }
 
+Enable mic and camera.
+I did not use mic until covid happened.  Then I had to do audio calls
+every week.  I do not use camera, however.  But if necessary, recording
+can be enabled by writing to `/etc/sysctl.conf`.
+{
+	# echo kern.audio.record=1 >> /etc/sysctl.conf
+	# echo kern.video.record=1 >> /etc/sysctl.conf
+}
+
+Configure network.
+Read faq6.
+
+Install firmware packages and update the base system.
+Finally, I run «fw_update(1)» to install and update needed non-free
+firmware packages, and «syspatch(8)» to update the base system.
+{
+	# fw_update
+	# syspatch
+}
+
 
 § Home directory
 
@@ -236,8 +256,8 @@ Environment variables for themes, cursors, fonts, etc, come next.
 
 Other stuff.
 The remaining of the file contains variables specific to certain
-programs or toolkits, like «firefox(1)», «nethack(6)», «xprompt(1)»,
-«ls(1)», etc.
+programs or toolkits, like «less(1)», «firefox(1)», «nethack(6)»,
+«xprompt(1)», etc.
 
 Umask.
 At the end of `~/.profile`, I set the file mode creation mask.
@@ -255,8 +275,11 @@ for some commands in this file.  At the end of the file, the `$IFS` is
 restored to its old value, and the dummy variable is unset.
 
 Complete.
-The `complete` function sets the `complete_CMDNAME` variables only if
-a command named `CMDNAME` exists.
+The `complete` function sets `complete_X` variables only if a command
+named `CMDNAME` exists.  `set -A` sets an array.  An array called
+`complete_X` contains completions for arguments of the command X.  An
+array called `complete_X_N` contains completions for the Nth argument
+of the command X.
 
 Search through history.
 The `hist` function lists the command history grepping for the given
@@ -276,6 +299,17 @@ To navigate between directories, I use something like bash's directory
 stack (managed by the builtin commands `pushd` and `popd`).  The
 function `dirs` list the directories in that stack.  The way I use the
 stack differs from how pushd and popd work.
+
+Directory listing.
+The `dir` function is a wrapper around colortree(1).  This function can
+recursively list the entries of the current working directory (if no
+argument is given), or recursively search for a file (if the name of
+the file is given).  Some options can be passed before the argument:
+• `-a`: Also list/search files/directories beginning with a dot.
+• `-l`: List files/directories in long format.
+• `-1` to `-9`: Search recursively with depth 1 to 9.
+• `-0`: Search recursively with infinite depth.
+• `-`:  Synonym to `-0`.
 
 Change directory.
 I override the `cd` builtin command with a function.  The path given to

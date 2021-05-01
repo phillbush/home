@@ -62,6 +62,49 @@ dirs() {
 	done
 }
 
+# list entries in a directory or search for a file
+dir() {
+	typeset options="-L 1 -NFC --dirsfirst"
+	while [ "$#" -gt 0 ]
+	do
+		case "$1" in
+		-l)
+			options="$options -pug"
+			shift
+			;;
+		-a)
+			options="$options -a"
+			shift
+			;;
+		-*[!0-9]*)
+			return 1
+			;;
+		-|-0)
+			options=" ${options#"-L 1"}"
+			shift
+			;;
+		-*[0-9]*)
+			options="$options -L ${1#"-"}"
+			shift
+			;;
+		*)
+			break
+			;;
+		esac
+	done
+	case "$#" in
+	0)
+		colortree $options -h .
+		;;
+	1)
+		colortree $options -P "*$1*" --prune .
+		;;
+	*)
+		return 1
+		;;
+	esac
+}
+
 # change directory
 cd() {
 	if [ "$#" -eq 0 ]
@@ -167,12 +210,18 @@ alias lc='ls -C'        # columns
 alias ll='ls -l'        # Lists directory contents in a long format
 alias la='lc -A'
 alias lla='ll -A'
-alias dir='ll -d'       # Show information about a directory
 alias tree='tree -F'
 alias hex='hexdump -C'
 alias od='od -cAx'
 alias df='df -h'
+alias du='du -ch'
 alias doas='doas '
+alias l='less'
+alias v='vim'
+alias c='cd'
+alias d='dir'
+alias dira='dir -a'
+alias da='dir -a'
 
 # Completions
 complete skel 1 $(\ls -1 "$SKEL")
