@@ -120,6 +120,17 @@ can be enabled by writing to `/etc/sysctl.conf`.
 Configure network.
 Read faq6.
 
+Install programs.
+I use some programs available on the OpenBSD package repository.  The
+following command install them.
+{
+	# pkg_add calc colortree feh fmpegthumbnailer firefox-esr fzf \
+	          heirloom-doctools maim moreutils mpc mpd mpv mutt \
+	          newsboat pstree rlwrap sxhkd sxiv unclutter unrar \
+	          unzip vim wmctrl xdotool xfe xlennart xsel \
+	          zathura zathura-djvu zathura-pdf-poppler zathura-ps
+}
+
 Install firmware packages and update the base system.
 Finally, I run «fw_update(1)» to install and update needed non-free
 firmware packages, and «syspatch(8)» to update the base system.
@@ -390,7 +401,7 @@ I use a blank desktop with no bars, docks or panels.  My X11 session
 is set up by commands run from the `~/.xsession` script.  This script
 is an literal Rube Goldberg machine, full of pipes and background jobs.
 Several functions are defined in this file.  I'll explain them as they
-are called.  There are thre ways to interact with the desktop: with a
+are called.  There are three ways to interact with the desktop: with a
 desktop menu, by entering commands, or via keybindings.  All of them
 output a command to a interpreter function called `xinterp`.  Responses
 are output in a notification window managed by «xnotify(1)».  Each piece

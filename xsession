@@ -517,6 +517,15 @@ synclient HorizTwoFingerScroll=1
 # Set background
 xsetroot -bg "$(xrdb -query | awk '/^\*background:/ {print $2}')" -fg "$(xrdb -query | awk '/^\*color0:/ {print $2}')" -mod 3 3
 
+# compositor
+#picom -c -l -15 -t -15 \
+#      --shadow-radius 15 \
+#      --shadow-green 1.0 \
+#      --shadow-blue 1.0 \
+#      --no-dock-shadow \
+#      --no-dnd-shadow \
+#      --shadow-exclude '!focused' &
+
 # music daemon
 mpd
 

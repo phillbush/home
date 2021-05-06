@@ -213,12 +213,12 @@ endfunction
 
 " file type detections
 filetype plugin on
-autocmd Bufenter *.scm,*.rkt set lisp expandtab
 autocmd Bufenter *.s set syntax=asm
-autocmd Bufenter *.txt set foldexpr=TxtFolding(v:lnum) foldmethod=expr
-autocmd Bufenter *.txt set formatoptions+=t
-autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
 autocmd FileType c,cpp,yacc,lex,awk,sh set foldexpr=CFolding(v:lnum) foldmethod=expr
+autocmd FileType scheme set lisp expandtab
+autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
+autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t
+autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t | endif
 
 " Syntax highlighting
 syntax on

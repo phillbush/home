@@ -157,11 +157,10 @@ cd() {
 		;;
 	..|../*)        # regular dot-dot directory
 		;;
-	..*[!.]*)       # dot-dot plus name
-		set -- "${PWD%"${PWD##*"${1#".."}"}"}"
-		;;
-	..*)            # dot-dot-dot...
-		typeset n=${#1}
+	.+(.)?(/*))     # dot-dot-dot...
+		typeset pre=${1%%/*}
+		typeset pos=${1#*/}
+		typeset n=${#pre}
 		set -- "$PWD"
 		while (( n-- > 1 ))
 		do
@@ -170,6 +169,10 @@ cd() {
 			*) set -- "$(dirname "$1")" ;;
 			esac
 		done
+		set -- "$1/$pos"
+		;;
+	..*)            # dot-dot plus name
+		set -- "${PWD%"${PWD##*"${1#".."}"}"}"
 		;;
 	esac
 	{
@@ -200,6 +203,7 @@ set -o braceexpand      # enable brace expansion
 # aliases
 alias :q=exit
 alias :Q=exit
+alias scheme='rlwrap -q\" chibi-scheme'
 alias vim='vim -p'
 alias cp="cp -Riv"
 alias mv="mv -iv"
