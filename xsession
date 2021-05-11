@@ -67,22 +67,22 @@ getframe() {
 			if (geom[frameb] ~ /-[0-9]+$/)
 				b[Y] = - b[Y]
 			if (DIR == "right") {
-				if (b[Y] == s[Y])
+				if (b[Y] == s[Y] && b[X] > s[X])
 					return 1
 				if (a[X] < b[X])
 					return 1
 			} else if (DIR == "left") {
-				if (b[Y] == s[Y])
+				if (b[Y] == s[Y] && b[X] < s[X])
 					return 1
 				if (a[X] > b[X])
 					return 1
 			} else if (DIR == "down") {
-				if (b[X] == s[X])
+				if (b[X] == s[X] && b[Y] > s[Y])
 					return 1
 				if (a[Y] < b[Y])
 					return 1
 			} else if (DIR == "up") {
-				if (b[X] == s[X])
+				if (b[X] == s[X] && b[Y] < s[Y])
 					return 1
 				if (a[Y] > b[Y])
 					return 1
@@ -129,7 +129,7 @@ getframe() {
 	'
 }
 
-# get tab in given direction (prev, next)
+# get tab in given direction while cycling (prev, next)
 gettab() {
 	lsc -ls -g _SHOD_TAB_GROUP | awk -v DIR="$1" '
 		substr($1, 11, 1) == "f" {
@@ -247,8 +247,8 @@ keys() {
 		S:7     desk +6
 		S:8     desk +7
 		S:9     desk +8
-		S:Tab   tab prev
 		Tab     tab next
+		S:Tab   tab prev
 		h       focus left
 		j       focus down
 		k       focus up
@@ -515,16 +515,16 @@ synclient AccelFactor=0
 synclient HorizTwoFingerScroll=1
 
 # Set background
-xsetroot -bg "$(xrdb -query | awk '/^\*background:/ {print $2}')" -fg "$(xrdb -query | awk '/^\*color0:/ {print $2}')" -mod 3 3
+feh --no-fehbg --bg-tile "$HOME/theme/wallpaper.png"
 
 # compositor
-#picom -c -l -15 -t -15 \
-#      --shadow-radius 15 \
-#      --shadow-green 1.0 \
-#      --shadow-blue 1.0 \
-#      --no-dock-shadow \
-#      --no-dnd-shadow \
-#      --shadow-exclude '!focused' &
+picom -c -l -15 -t -15 \
+      --shadow-radius 15 \
+      --shadow-green 1.0 \
+      --shadow-blue 1.0 \
+      --no-dock-shadow \
+      --no-dnd-shadow \
+      --shadow-exclude '!focused' &
 
 # music daemon
 mpd

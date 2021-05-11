@@ -448,7 +448,8 @@ Other stuff.
   trackpoint work and to make a one-, two-, and three-finger tap on
   the touchpad emulate the first, second, and third mouse button,
   respectively.
-• Set background:  I use a black and gray grid-like background.
+• Set tiling wallpaper.
+• Run the picom compositor.
 • Music daemon: Music is managed by the «mpd(1)» music player daemon.
 
 Desktop Notification.

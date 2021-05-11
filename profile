@@ -15,6 +15,7 @@ export PATH HOME TERM MANPATH
 # local installation directories
 export GOPATH="$HOME/usr/go"
 export PYTHONUSERBASE="$HOME/usr/python"
+export CHIBI_MODULE_PATH="$HOME/usr/scheme/lib"
 export PREFIX="$HOME/usr/local"
 export MANPREFIX="$PREFIX/man"
 
@@ -36,7 +37,7 @@ export APPPATH="$HOME/apps"
 export RULESDIR="$HOME/rules"
 export MUSICDIR="$HOME/files/mus/"
 export CACHEDIR="$HOME/var/cache"
-export RLWRAP_HOME"$HOME/var/history"
+export RLWRAP_HOME="$HOME/var/history"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.data"

@@ -1,4 +1,5 @@
 rulesdir = ${HOME}/rules
+themedir = ${HOME}/theme
 
 .SUFFIXES: .txt .ms .ps .pdf
 
@@ -10,6 +11,7 @@ home.pdf: home.txt
 
 install:
 	install -D -m 644 rules/* ${rulesdir}/
+	install -D -m 644 wallpaper.png ${themedir}/wallpaper.png
 	install -D -m 644 profile ${HOME}/.profile
 	install -D -m 644 session ${HOME}/.session
 	install -D -m 644 xsession ${HOME}/.xsession

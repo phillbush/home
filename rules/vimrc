@@ -222,10 +222,12 @@ autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnu
 
 " Syntax highlighting
 syntax on
+autocmd FileType c,cpp,yacc,lex,awk,sh syntax match MyConstant /\<[A-Z_][A-Z0-9_][A-Z0-9_]\+\>/
 hi Comment      ctermfg=8       ctermbg=None    cterm=None
 hi PreProc      ctermfg=8       ctermbg=None    cterm=None
 hi String       ctermfg=7       ctermbg=None    cterm=Bold,Italic
 hi Title        ctermfg=7       ctermbg=None    cterm=Bold,Italic
+hi MyConstant   ctermfg=9       ctermbg=None    cterm=None
 hi Constant     ctermfg=9       ctermbg=None    cterm=None
 hi Special      ctermfg=15      ctermbg=None    cterm=None
 hi Identifier   ctermfg=15      ctermbg=None    cterm=None
