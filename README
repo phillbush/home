@@ -16,7 +16,7 @@ I use the following themes:
 • The Retrosmart X11 Cursor Theme.[3]
 • The Input Mono Narrow, from the Input family of fonts.[4]
 • The default motif-like window decoration, distributed with shod.
-• `xsetroot -mod 3 3 -bg '#000000' -fg '#121212'` as background.
+• wallpaper.png as background.
 
 Other relevant git repositories of mine.
 • expenv:       Expand environment variables.
