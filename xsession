@@ -205,8 +205,8 @@ genprompt() {
 	echo "scrot	Take screenshot"
 	scrot help | sed 's/^/	/'
 
-	echo "wm	Control windows"
-	wm help | sed 's/^/	/'
+	echo "win	Control windows"
+	win help | sed 's/^/	/'
 
 	echo "man	Read manual"
 	xman | sed 's/^/	/'
@@ -288,10 +288,10 @@ menu() {
 IMG:$icon_apps
 $(run -i | sed 's/	/&run /; s/^/	/')
 IMG:$icon_win
-	IMG:$icon_winclose	wm close
-	IMG:$icon_winfullscreen	wm maximize
-	IMG:$icon_winrestore	wm minimize
-	IMG:$icon_winresize	wm resize
+	IMG:$icon_winclose	win close
+	IMG:$icon_winfullscreen	win maximize
+	IMG:$icon_winrestore	win minimize
+	IMG:$icon_winresize	win resize
 IMG:$icon_scrot	scrot select
 IMG:$icon_media
 	IMG:$icon_media_forward	mus next
@@ -409,6 +409,9 @@ xinterp() {
 				;;
 			below)
 				wmctrl -r :ACTIVE: -b toggle,below
+				;;
+			minimize)
+				wmctrl -r :ACTIVE: -b toggle,hidden
 				;;
 			fullscreen)
 				wmctrl -r :ACTIVE: -b toggle,fullscreen

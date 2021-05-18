@@ -87,10 +87,8 @@ shod.autoTab:       tilingMulti
 
 pmenu.selbackground: SELBG
 
-xprompt.gravity:        C
-xprompt.geometry:       50%x50+0-200
+xprompt.geometry:       800x30
 xprompt.font:           monospace:size=12
-xprompt.border:         SELBORDER
 
 xmenu.borderWidth:      2
 xmenu.separatorWidth:   9

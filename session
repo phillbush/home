@@ -64,7 +64,7 @@ dirs() {
 
 # list entries in a directory or search for a file
 dir() {
-	typeset options="-L 1 -NFC --dirsfirst"
+	typeset options="-L 1 -hNFC --dirsfirst"
 	while [ "$#" -gt 0 ]
 	do
 		case "$1" in
@@ -72,8 +72,8 @@ dir() {
 			options="$options -pug"
 			shift
 			;;
-		-a)
-			options="$options -a"
+		-a|-d)
+			options="$options $1"
 			shift
 			;;
 		-*[!0-9]*)
@@ -94,7 +94,7 @@ dir() {
 	done
 	case "$#" in
 	0)
-		colortree $options -h .
+		colortree $options .
 		;;
 	1)
 		colortree $options -P "*$1*" --prune .
