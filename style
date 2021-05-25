@@ -17,9 +17,9 @@ Unfortunately, it is English (and not Latin) the lingua franca of
 Computer Science.  Every name and sentence should be written in
 English for the code to be understood by others.  They should be
 written, however, in a concise, agglutinative dialect of English.
-I name stuff using all-lower case (as in “histpath”), never camel
-case or other kind of string case; except for constants, which are
-in ALLCAPS, and type names, which are in PascalCase.
+I name stuff using all-lower case (as in “histpath”); except for
+constants, which are in ALLCAPS; and type names, which are in
+PascalCase.
 
 Variable names.
 I use the following general rule for naming variables: “The wider the
