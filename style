@@ -1,0 +1,557 @@
+                           Phill C Code Style
+
+This document describes my typographical conventions for writing C code.
+My C coding style is based on OpenBSD's Kernel Normal Form (KNF), which
+is documented at style(9).  Parts of this document were blatantly copied
+from the OpenBSD manual.
+
+This document is marked up with the incipit markup language.  Section
+headers begin with the section sign (§).  Code snippets inside a line
+occur between curly braces.  Code snippets that span lines also occur
+between curly braces, but on its own block indented with a tab.  Items
+in bullet lists are listed with the bullet sign (•).
+
+§ English code
+
+Unfortunately, it is English (and not Latin) the lingua franca of
+Computer Science.  Every name and sentence should be written in
+English for the code to be understood by others.  They should be
+written, however, in a concise, agglutinative dialect of English.
+I name stuff using all-lower case (as in “histpath”), never camel
+case or other kind of string case; except for constants, which are
+in ALLCAPS, and type names, which are in PascalCase.
+
+Variable names.
+I use the following general rule for naming variables: “The wider the
+scope of a variable, the longer its name; the narrower the scope of a
+variable, the shorter its name”. “n” is a valid name for a locally used
+numeric value.
+• Use common abbreviations, such as “max”, “min”, “addr”, etc.
+• If REALLY necessary to highlight that the variable is a pointer,
+  append its name with the letter “p”.
+• If REALLY necessary to highlight the discrete, quantitative nature of
+  an integer variable, give it the prefix “n”.  For example, “ntabs” is
+  a good name for a variable storing the number of tab characters (if
+  the variable is only used in a small function, or in a loop, “nt” is
+  a even better name).  This prefix is incompatible with “max” or “min”
+  (a maximal/minimal integer already is discrete and quantitative).
+• Consider using common single-letter names to local variables.  “i” is
+  a index, “n” a generic integer, “u” a generic unsigned, “s” a string,
+  “f” a file (and “fp” a file pointer), etc.
+• Semantically related variables should be named consistently.  For
+  example, if a global variable is named “maxaddr”, its relative should
+  be “minaddr” (not “addrmin” or “addrlowest”).
+
+Wrapper names.
+If a function exists for the sole purpose of calling another function,
+I give the caller the name of the callee prefixed by a lowercase letter.
+This letter is “e” if the caller handle errors for the callee.  See the
+example below.
+
+{
+	static void *
+	emalloc(size_t size)
+	{
+		void *p;
+	
+		if ((p = malloc(size)) == NULL)
+			err(1, "malloc");
+		return p;
+	}
+}
+
+Object-oriented names.
+I still don't have a style for naming function that operate on objects.
+Naming a function “savehist()” or “validsize()” sounds more natural.
+But if I name it “histsave()” I can sort it alphabetically along with
+other functions that operates on the history, like “histfree()” and
+“histread()”.
+
+Procedure names.
+Procedure names should reflect its side effect.  Its name usually
+contains a verb referring to this side effect, such as “read”, “save”,
+“free”, etc.  “savehist” is a good name for a procedure whose side
+effect is to save an entry in the history file.
+
+Function names.
+Function names should reflect the thing it returns.  Its name usually
+contains a noun or adjective referring to the meaning of the value it
+returns.  For example, if it returns a integer meaning whether a size
+is valid, it should be named “validsize()”;  if it returns an pointer
+to the next window, it should be named “nextwin()”. A getter can also
+be prefixed with “get”, as in “getnextwin()”.
+
+Constant names.
+Constant have the same naming rules as global variables, except that
+they are written in ALLCAPS.  I prefer to use enums for values that
+are grouped semantically, and #define otherwise.   Every magic number
+other than 0 and 1 should be given a constant name (or at least
+a comment); there are exceptions, such as 10 or 16 for a function
+requiring a base (such as strtol(3)).
+
+Type names.
+Types, such as new structs, are written in PascalCase (which is
+equivalent to camelCase, but with the first letter capitalized).
+If I use typedef to rename a structure, I do not give the struct
+name a fancy prefix; the struct names and typedef names reside in
+different namespaces, so they can be the same.  Struct fields names
+follow the same rule as global variables, and they should not be
+prefixed to indicate that they are fields.  The following is an
+example of how I DO NOT use structures.
+
+{
+	typedef struct _MyType {
+		struct _MyType *mt_prev, *mt_next;
+		int mt_data;
+	} MyType;
+}
+
+Label names.
+I name a label “error”, if it jumps to a error handling part of the code;
+“done” if it jumps to a returning part of the code; and (usually) “found”
+if it jumps out of a nested loop.
+
+
+§ Commented code
+
+Most of my comments are a single sentence long; in which case the
+sentence does not begins with upper case, and does not end with a
+punctuation.   All comments are written between {/* … */}, except
+when they are temporary (see section “§ Grepable Code” below).
+
+Function comment.
+A Function which interface isn't obvious can be introduced by a sentence
+comment on the line before its definition.  The sentence comment must be
+a verbal sentence in imperative mode without articles before the object;
+for example, “save entry in history file”.  The sentence should never be
+in third person and must not begin with the function name (“savehist()
+saves the entry in the history file”).  The comment before the main
+function should describe what the program does.
+
+{
+	/* save entry in history file */
+	static void
+	histsave(char *entry)
+	{
+		…
+	}
+}
+
+Variable comment.
+A variable whose value is not obvious can be explained by a sentence
+comment in the same line of its definition.  There should not be other
+variables in the same definition of a commented variable.  The sentence
+comment must be a verbless sentence in dictionary form without articles;
+for example, “path to history file”.  Comments for boolean flag-like
+variables should begin with “whether”.
+
+{
+	static int hflag;       /* whether to enable history */
+	static char *histfile;  /* path to history file */
+}
+
+Block comment.
+When a non-functional block of code needs a comment, I put the comment
+in the same line of the opening brace, after it.
+
+{
+	if (condition) {        /* comment */
+		STUFF;
+	} else {                /* comment */
+		STUFF;
+	}
+}
+
+Paragraph comments.
+When I think there is a need to write more than a single sentence to
+explain something, I usually rewrite it so it's easier to understand.
+But there are cases when I need big blocks of comment.  This usually
+occurs on large data structures and complex functions; in which case
+I write a block of comment INSIDE the function or structure, not above
+it.  Block of comments begin with a {/*} in a line, followed by lines
+prefixed with { *} and end with a {*/} in a final line.  Block of
+comments contain real sentences, beginning with uppercase letter and
+ending with punctiation.
+
+Modeline comment.
+No.  I do not use modeline comments such as {/* vim:set sw=8 */} or
+text folding marks.  It assumes that everyone else needs to use the
+editor I use.
+
+Lint comments.
+I comment FALLTHROUGH in cases that fall through if, and only if, the
+case statement that falll through contains any statement; otherwise,
+there is no such comment.  I also use the NOTREACHED comment for
+unreachable code.
+
+{
+	switch (value) {
+	case 0:
+	case 1:
+	case 2:
+		STUFF;
+		break;
+	case 3:
+		STUFF;
+		MORESTUFF;
+		/* FALLTHROUGH */
+	default:
+		OTHERSTUFF;
+		break;
+	}
+}
+
+
+§ Grepable code
+
+Code must be greapable (that is, able to be searched with grep(1)).
+
+Grepable comments.
+I use {/* … */} for comments, except for temporary comments, which I use
+{// …} for. Temporary comments are comments written to be removed later;
+they include commented out code, TODOs and XXXs.  Using a special syntax
+for temporary comments makes it easier to grep them and remove them.  To
+make temporary comments even more grepable, they occur at the beginning
+of the line but after any indenteation; the TODO and XXX keywords occur
+after the double comment slashes and a space, and before a colon.
+
+{
+	fp = fopen(argv[1], "r");
+	// TODO: handle error
+}
+
+Grepable functions.
+I declare functions with its type in one line, the function name and its
+parameters in the following line, and the opening brace in a third line.
+This allows a grep for the function declaration ({/^foobar(/}) to not
+intersect with a grep for uses of the function.
+
+{
+	static int
+	max(int x, int y)
+	{
+		return x > y ? x : y;
+	}
+}
+
+
+§ Sorted code
+
+Even when the syntax or the program do not require a block of elements
+to be listed in a certain order, I still sort them somehow.
+
+Order of stuff.
+The file has the following general layout (except when contradicted by
+the following paragraphs).
+• (1) #includes in the order described below.
+• (2) #defines.
+• (3) typedefs, structs, enums.
+• (4) Function prototypes for private non-static functions.
+• (5) Global variables.
+• (6) Function definitions for non-static functions in the same order as
+  prototypes.
+• (7) Function definitions for static functions sort by dependency.
+• (8) main().
+
+Order of inclusions.
+Header files for kernel ({<sys/*.h>}) and for network ({<net/.*h>})
+come first followed by a blank line.  libc headers come next, sorted
+alphabetically.  Library header files come next, also sorted
+alphabetically.  Local header files come next between double quotes,
+also sorted alphabetically.  All inclusions should occur at the
+beginning of the file; except for the inclusion of the configuration
+header ({config.h}, usually found in suckless code), which can appear
+later in the code.  The alphabetical order rule for each category of
+included files should be broken in the following cases:
+• When a header file depends on another.
+• When the include path has subdirectories, in which case the more
+  directory levels a path has, the last it comes.
+• When a included file is not a header (it does not end in {.h}),
+  which should appear last.
+
+{
+	#include <err.h>
+	#include <locale.h>
+	#include <signal.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <unistd.h>
+	#include <X11/Xlib.h>
+	#include <X11/Xatom.h>
+	#include <X11/Xproto.h>
+	#include <X11/Xresource.h>
+	#include <X11/Xutil.h>
+	#include <X11/cursorfont.h>
+	#include <X11/xpm.h>
+	#include <X11/extensions/Xinerama.h>
+	#include "shod.h"
+	#include "theme.xpm"
+}
+
+Order of fields.
+When declaring variables in structs, declare pointers to a high-level
+data object (such as *prev, *next, *left, *right) first.  Declare the
+other fields sorted by use, then by size (largest to smallest), then
+by alphabetical order.
+
+Order of options.
+Options should be sorted in the getopt(3) call and the switch statement,
+unless parts of the switch falls through.  Numerical arguments should be
+checked for accuracy.
+
+{
+	while ((ch = getopt(argc, argv, "abn:")) != -1) {
+		switch (ch) {
+		case 'a':
+			aflag = 1;
+			/* FALLTHROUGH */
+		case 'b':
+			bflag = 1;
+			break;
+		case 'n':
+			num = strtonum(optarg, 0, INT_MAX, &errstr);
+			if (errstr) {
+				warnx("number is %s: %s", errstr, optarg);
+				usage();
+			}
+			break;
+		default:
+			usage();
+			break;
+		}
+	}
+	argc -= optind;
+	argv += optind;
+}
+
+Order of declarations.
+When declaring variables in functions, I declare them sorted by size
+(largest to smallest), then in alphabetical order.  Multiple names per
+line are ok if, and only if, they are in the same semantic group (or
+are single-letter local variables) and the same type (there should not
+be a pointer and a non-pointer declared in the same line).
+
+
+§ Stylish code
+
+Some of my typographical conventions have no explanation other than
+style.  That includes indentation, spacing and brace style.  Trailing
+whitespace is an error, and should never exist in a code of mine.
+
+Indentation style.
+I indent with tabs.  If a line of a function is too shifted to the
+right, with several levels of indentation, making it hard to fit on
+the screen, it's a sign that the function is too complex and should
+be broken down.  To ease multiple indentation levels in a switch
+statement, I align the switch and its subordinate case labels in
+the same column.  Tabs should be used ONLY in indentation, at the
+beginning of lines; in strings I use {\t} instead.
+
+{
+	switch (ch) {
+	case 'a':
+		aflag = 1;
+		break;
+	case 'd':
+		dflag = 1;
+		break;
+	case 'f':
+		fflag = 1;
+		break;
+	default:
+		usage();
+		break;
+	}
+}
+
+Alignment style.
+While I use tabs for indentation, I use spaces for alignment.  This
+ensures everything will line up independent of the tab size.  Comments
+are vertically aligned.
+
+{
+	static int hflag;       /* whether to save history */
+	static int pflag;       /* whether to enable password mode */
+	static int fflag;       /* whether to enable file completion */
+}
+
+Spacing style.
+I use one space around binary and ternary operators (except {.} and
+{->}), but no space after or before unary operators.  Commas have a
+space after them.  I do not use spaces after open braces/parenthesis
+or before the closing ones.  I also use one space between a statement
+keyword (if, for, while, …) and the opening parenthesis.  Thre is also
+a space between the closing parenthesis and the opening brace.  There
+should be no space between the function name and the parameter/argument
+list (in function prototypes, function definitions, and function calls).
+
+{
+	if (condition) {
+		function(0);
+	}
+}
+
+Brace style.
+I put the opening brace of a function in the next line, and the opening
+brace of a statement in the same line.  I put the closing brace on its
+own line unless continuing a statement (if-else, do-while).  I normally
+do not use braces in single-statement blocks, except when the block is
+followed by a closing brace (so we have a cascade of closing braces).
+If any block in an if-else sequence needs braces, then all blocks should
+have braces as well, even single-statement blocks.  I also use braces
+for single statement if the inner statement needs braces.
+
+{
+	int
+	function(char *s, int n, int m)
+	{
+		for (i = 0; i < n; i++)
+			STUFF;
+
+		if (strcmp(s, STRING1) == 0) {
+			STUFF;
+		} else if (strcmp(s, STRING2) == 0) {
+			STUFF;
+			MORESTUFF;
+		} else {
+			STUFF;
+		}
+
+		for (;;) {
+			if (condition) {
+				STUFF;
+				MORESTUFF;
+			}
+		}
+
+		for (i = 0; i < n; i++) {
+			for (j = 0; j < m; j++) {
+				if (i == j) {
+					STUFF;
+				}
+			}
+		}
+	}
+}
+
+Typedef style.
+In general, I avoid to typedef a struct, especially structs whose
+fields are directly accessed.  It obfuscate the fact that it is a
+structure.  I also do not use typedef to create an alias to a type,
+for example {typedef unsigned long ulong}.
+
+Blank style.
+I put blank lines between function definitions.  In a function, I put
+blank lines after the block of local variable definitions and between
+logical blocks of code.   If the function has too many logical blocks
+of code, it is a sign that the function is too complex is should be
+broken down.
+
+Pointer style.
+I declare pointers with the asterisk close to the variable name, not
+to the type.  I do not mix pointer declaration with other declarations;
+I also do not mix pointer declarations with different levels of
+dereference.
+
+{
+	char **p, **q;
+	char *s, *t;
+	char c;
+}
+
+Declaration style.
+I declare local variables in the beginning of the function, right
+after its opening brace.  I also put a blank line after the block
+of declarations.  There should be less than 10 local variables (not
+counting the parameters) in a function.  More than it is a sign that
+the function is too complex and should be broken down.  However, I
+do not initialize variables in the declarations; I initialize them
+opportunistically before their first use.
+
+Parentheses style.
+I do not use parentheses unless they are required for precedence, the
+statement is confusing without them or the compiler generates a warning
+without them.
+
+Comparison style.
+I do not use {!} for tests unless it's a boolean.  That is, I use
+{if (*p == '\0')}, not {if (!*p)}.
+
+
+§ Modular code
+
+Static functions.
+Functions local to one source module should be static.  All non-static
+functions are prototyped somewhere.  Functions that are private to a
+source module (ie', functions not used elsewhere) are prototyped at the
+top of the first source module.  Functions that are used from other
+files are prototyped in the relevant header file.
+
+Static variables.
+Global variables not used outside translation unit should be declared
+static.
+
+
+§ Idiomatic code
+
+Returning.
+To avoid exiting/returning from a function in several places, I exit at
+the end of the function and use goto's to jump to the exit part of the
+function.
+
+Error.
+I use err(3) and warn(3) family of functions to handle errors.
+
+Exiting.
+I do not use EXIT_SUCCESS or EXIT_FAILURE.  I use 1 or 0 instead.
+
+Pointers.
+Pointers can help readability, refer to «Notes on Programming in C», by
+Rob Pike.
+
+Getopt.
+I use getopt(3) (and not arg.h) to parse options.  See the section
+«§ Sorted code» for more information on how I sort entries in getopt(3).
+
+Usage.
+I include a usage() function in all utilities.  Usage statements should
+take the same form as the synopsis in manual pages.  Options without
+operands come first, in alphabetical order inside a single set of
+braces, followed by options with operands, in alphabetical order, each
+in braces, followed by required arguments in the order they are
+specified, followed by optional arguments in the order they are
+specified.
+
+{
+	static void
+	usage(void)
+	{
+		(void)fprintf(stderr, "usage: xprompt [-adfips] [-h file] [-w windowid] [prompt]\n");
+		exit(1);
+	}
+}
+
+
+§ Editing code
+
+I use vim to write C.  It gives me two features I use the most: text
+folding and text highlighting.  For a visual example of how they work,
+see https://i.postimg.cc/t965Y03M/sample.png
+
+Text folding.
+The open brace at the beginning of the line in its own line for function
+definitions gives me a usefull feature I set in my editor: function
+bodies are folded.  This allows me to visually identify and navigate
+between functions.
+
+Text highlighting.
+I do not use rainbow highlighting with every type of keyword or
+identifier in a different collor.  I use five different styles
+of highlighting, four of each are shades of gray.
+• Comments and #defines in dark gray.
+• Keywords in light gray.
+• Strings in italic, bold, light gray.
+• Constants in red (I configured my editor to consider any ALLCAPS word
+  as a constant, as well as literal numbers).
+• Everything else in white.
