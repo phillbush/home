@@ -23,14 +23,14 @@ PascalCase.
 
 Variable names.
 I use the following general rule for naming variables: “The wider the
-scope of a variable, the longer its name; the narrower the scope of a
-variable, the shorter its name”. “n” is a valid name for a locally used
-numeric value.
+scope of a variable, the more descriptive its name; the narrower the
+scope of a variable, the shorter its name”. “n” is a valid name for a
+locally used numeric value.
 • Use common abbreviations, such as “max”, “min”, “addr”, etc.
-• If REALLY necessary to highlight that the variable is a pointer,
-  append its name with the letter “p”.
-• If REALLY necessary to highlight the discrete, quantitative nature of
-  an integer variable, give it the prefix “n”.  For example, “ntabs” is
+• If necessary to highlight that the variable is a pointer, append its
+  name with the letter “p”.
+• If necessary to highlight the discrete, quantitative nature of an
+  integer variable, give it the prefix “n”.  For example, “ntabs” is
   a good name for a variable storing the number of tab characters (if
   the variable is only used in a small function, or in a loop, “nt” is
   a even better name).  This prefix is incompatible with “max” or “min”
@@ -71,7 +71,7 @@ Procedure names.
 Procedure names should reflect its side effect.  Its name usually
 contains a verb referring to this side effect, such as “read”, “save”,
 “free”, etc.  “savehist” is a good name for a procedure whose side
-effect is to save an entry in the history file.
+effect is to save the history file.
 
 Function names.
 Function names should reflect the thing it returns.  Its name usually
@@ -82,7 +82,7 @@ to the next window, it should be named “nextwin()”. A getter can also
 be prefixed with “get”, as in “getnextwin()”.
 
 Constant names.
-Constant have the same naming rules as global variables, except that
+Constants have the same naming rules as global variables, except that
 they are written in ALLCAPS.  I prefer to use enums for values that
 are grouped semantically, and #define otherwise.   Every magic number
 other than 0 and 1 should be given a constant name (or at least
@@ -94,7 +94,7 @@ Types, such as new structs, are written in PascalCase (which is
 equivalent to camelCase, but with the first letter capitalized).
 If I use typedef to rename a structure, I do not give the struct
 name a fancy prefix; the struct names and typedef names reside in
-different namespaces, so they can be the same.  Struct fields names
+different namespaces, so they can be the same.  Struct field names
 follow the same rule as global variables, and they should not be
 prefixed to indicate that they are fields.  The following is an
 example of how I DO NOT use structures.
@@ -120,13 +120,14 @@ punctuation.   All comments are written between {/* … */}, except
 when they are temporary (see section “§ Grepable Code” below).
 
 Function comment.
-A Function which interface isn't obvious can be introduced by a sentence
-comment on the line before its definition.  The sentence comment must be
-a verbal sentence in imperative mode without articles before the object;
-for example, “save entry in history file”.  The sentence should never be
-in third person and must not begin with the function name (“savehist()
-saves the entry in the history file”).  The comment before the main
-function should describe what the program does.
+A function whose interface is not obvious can be introduced by a comment
+on the line before its definition. The comment must be a verbal sentence
+in imperative mode without articles before the object; for example,
+“save entry in history file”.  The sentence should never be in third
+person and must not begin with the function name (for example,
+“savehist() saves the entry in the history file” is an invalid comment).
+The comment before the main function should describe what the program
+does.
 
 {
 	/* save entry in history file */
@@ -165,24 +166,42 @@ in the same line of the opening brace, after it.
 Paragraph comments.
 When I think there is a need to write more than a single sentence to
 explain something, I usually rewrite it so it's easier to understand.
-But there are cases when I need big blocks of comment.  This usually
-occurs on large data structures and complex functions; in which case
-I write a block of comment INSIDE the function or structure, not above
-it.  Block of comments begin with a {/*} in a line, followed by lines
-prefixed with { *} and end with a {*/} in a final line.  Block of
+But there are cases when I need a comment several sentences long.  This
+usually occurs on large data structures and complex functions; in which
+case I write the comment INSIDE the function or structure, not above it.
+Those paragraph comments begin with a {/*} in a line, followed by lines
+prefixed with { *} and end with a {*/} in a final line.  Paragraph
 comments contain real sentences, beginning with uppercase letter and
 ending with punctiation.
 
+{
+	static int
+	function(char *s)
+	{
+		/*
+		 * Lorem ipsum dolor sit amet, consectetur adipiscing
+		 * elit, sed do eiusmod tempor incididunt ut labore et
+		 * dolore magna aliqua. Ut enim ad minim veniam, quis
+		 * nostrud exercitation ullamco laboris nisi ut aliquip
+		 * ex ea commodo consequat. Duis aute irure dolor in
+		 * reprehenderit in voluptate velit esse cillum dolore
+		 * eu fugiat nulla pariatur. Excepteur sint occaecat
+		 * cupidatat non proident, sunt in culpa qui officia
+		 * deserunt mollit anim id est laborum.
+		 */
+
+		 STUFF;
+	}
+}
+
 Modeline comment.
-No.  I do not use modeline comments such as {/* vim:set sw=8 */} or
-text folding marks.  It assumes that everyone else needs to use the
-editor I use.
+No.  I do not use modeline comments such as {/* vim:set sw=8 */} or text
+folding marks.  It assumes everyone else should use the editor I use.
 
 Lint comments.
-I comment FALLTHROUGH in cases that fall through if, and only if, the
-case statement that falll through contains any statement; otherwise,
-there is no such comment.  I also use the NOTREACHED comment for
-unreachable code.
+I comment FALLTHROUGH in cases that fall through if, and only if, they
+contain any statement; otherwise, there is no such comment.  I also use
+the NOTREACHED comment for unreachable code.
 
 {
 	switch (value) {
@@ -248,10 +267,8 @@ the following paragraphs).
 • (3) typedefs, structs, enums.
 • (4) Function prototypes for private non-static functions.
 • (5) Global variables.
-• (6) Function definitions for non-static functions in the same order as
-  prototypes.
-• (7) Function definitions for static functions sort by dependency.
-• (8) main().
+• (6) Function definitions.
+• (7) main().
 
 Order of inclusions.
 Header files for kernel ({<sys/*.h>}) and for network ({<net/.*h>})
@@ -290,10 +307,9 @@ included files should be broken in the following cases:
 }
 
 Order of fields.
-When declaring variables in structs, declare pointers to a high-level
-data object (such as *prev, *next, *left, *right) first.  Declare the
-other fields sorted by use, then by size (largest to smallest), then
-by alphabetical order.
+When declaring variables in structs, I declare pointers to a high-level
+data object (such as *prev, *next) first.  The other fields are sorted
+by use, then by size (largest to smallest), then by alphabetical order.
 
 Order of options.
 Options should be sorted in the getopt(3) call and the switch statement,
@@ -327,10 +343,22 @@ checked for accuracy.
 
 Order of declarations.
 When declaring variables in functions, I declare them sorted by size
-(largest to smallest), then in alphabetical order.  Multiple names per
-line are ok if, and only if, they are in the same semantic group (or
-are single-letter local variables) and the same type (there should not
-be a pointer and a non-pointer declared in the same line).
+(largest to smallest), then by dereference level (largest to smallest),
+then in alphabetical order.  Multiple names per line are ok if, and only
+if, they are in the same semantic group (or are single-letter local
+variables) and the same type (there should not be a pointer and a
+non-pointer declared in the same line).  As explained later, I do not
+initialize variables in the declaration.
+
+{
+	struct Foo *one, *two;
+	struct Foo three;
+	double four;
+	int *five;
+	int six, seven;
+	char *eight;
+	char nine, ten;
+}
 
 
 § Stylish code
@@ -367,8 +395,8 @@ beginning of lines; in strings I use {\t} instead.
 
 Alignment style.
 While I use tabs for indentation, I use spaces for alignment.  This
-ensures everything will line up independent of the tab size.  Comments
-are vertically aligned.
+ensures everything will line up independent of the tab size.  In
+particular, comments are vertically aligned.
 
 {
 	static int hflag;       /* whether to save history */
@@ -395,20 +423,17 @@ list (in function prototypes, function definitions, and function calls).
 Brace style.
 I put the opening brace of a function in the next line, and the opening
 brace of a statement in the same line.  I put the closing brace on its
-own line unless continuing a statement (if-else, do-while).  I normally
-do not use braces in single-statement blocks, except when the block is
-followed by a closing brace (so we have a cascade of closing braces).
-If any block in an if-else sequence needs braces, then all blocks should
-have braces as well, even single-statement blocks.  I also use braces
-for single statement if the inner statement needs braces.
+own line unless continuing a statement (if-else, do-while).  If any
+block in an if-else sequence needs braces, then all blocks should have
+braces as well, even single-statement blocks.  I also use braces for
+single statement if the inner statement needs braces.  I normally do not
+use braces in single-statement blocks, except when the block is followed
+by a closing brace (so we have a cascade of closing braces).
 
 {
-	int
+	static int
 	function(char *s, int n, int m)
 	{
-		for (i = 0; i < n; i++)
-			STUFF;
-
 		if (strcmp(s, STRING1) == 0) {
 			STUFF;
 		} else if (strcmp(s, STRING2) == 0) {
@@ -425,6 +450,9 @@ for single statement if the inner statement needs braces.
 			}
 		}
 
+		for (i = 0; i < n; i++)
+			STUFF;
+
 		for (i = 0; i < n; i++) {
 			for (j = 0; j < m; j++) {
 				if (i == j) {
@@ -436,10 +464,9 @@ for single statement if the inner statement needs braces.
 }
 
 Typedef style.
-In general, I avoid to typedef a struct, especially structs whose
-fields are directly accessed.  It obfuscate the fact that it is a
-structure.  I also do not use typedef to create an alias to a type,
-for example {typedef unsigned long ulong}.
+In general, I avoid to typedef a struct, especially structs whose fields
+are directly accessed.  It obfuscate the fact that it is a structure.  I
+also do not use typedef to create an alias to a type.
 
 Blank style.
 I put blank lines between function definitions.  In a function, I put
@@ -447,6 +474,32 @@ blank lines after the block of local variable definitions and between
 logical blocks of code.   If the function has too many logical blocks
 of code, it is a sign that the function is too complex is should be
 broken down.
+
+{
+	static void
+	procedure(struct Foo *bar)
+	{
+		int i, j;
+
+		STUFF;
+	}
+
+	static int
+	function(char *s)
+	{
+		double d;
+		int i, n;
+		char c;
+
+		CODE;
+		MORECODE;
+		EVENMORECODE;
+
+		STUFF;
+		MORESTUFF;
+		EVENMORESTUFF;
+	}
+}
 
 Pointer style.
 I declare pointers with the asterisk close to the variable name, not
@@ -463,11 +516,28 @@ dereference.
 Declaration style.
 I declare local variables in the beginning of the function, right
 after its opening brace.  I also put a blank line after the block
-of declarations.  There should be less than 10 local variables (not
+of declarations.  There should be 10 or less local variables (not
 counting the parameters) in a function.  More than it is a sign that
 the function is too complex and should be broken down.  However, I
 do not initialize variables in the declarations; I initialize them
-opportunistically before their first use.
+opportunistically at their first use.
+
+{
+	struct Foo *one, *two;
+	struct Foo three;
+	double four;
+	int *five;
+	int six, seven;
+	char *eight;
+	char nine, ten;
+
+	six = 0;
+	STUFF;
+	eight = myfunc();
+	MORESTUFF;
+	one = two = NULL;
+	OTHERSTUFF;
+}
 
 Parentheses style.
 I do not use parentheses unless they are required for precedence, the
@@ -540,10 +610,9 @@ folding and text highlighting.  For a visual example of how they work,
 see https://i.postimg.cc/t965Y03M/sample.png
 
 Text folding.
-The open brace at the beginning of the line in its own line for function
-definitions gives me a usefull feature I set in my editor: function
-bodies are folded.  This allows me to visually identify and navigate
-between functions.
+The opening brace alone in its own line for function definitions gives
+me a usefull feature I set in my editor: function bodies are folded.
+This allows me to visually identify and navigate between functions.
 
 Text highlighting.
 I do not use rainbow highlighting with every type of keyword or
