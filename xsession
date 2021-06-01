@@ -566,4 +566,4 @@ prompt >"$xinterpfifo" &
 menu   >"$xinterpfifo" &
 
 # window manager
-shod >"$xnotifyfifo"
+shod
