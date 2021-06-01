@@ -209,15 +209,16 @@ the NOTREACHED comment for unreachable code.
 	case 1:
 	case 2:
 		STUFF;
-		break;
+		return -1;
 	case 3:
 		STUFF;
 		MORESTUFF;
 		/* FALLTHROUGH */
 	default:
 		OTHERSTUFF;
-		break;
+		return 0;
 	}
+	return 0;               /* NOTREACHED */
 }
 
 

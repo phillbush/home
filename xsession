@@ -8,13 +8,6 @@ atexit() {
 	kill -TERM 0
 }
 
-# run window manager and format its output for xnotify(1)
-wm() {
-	# shod output the geometry of windows when they're resized/moved with mouse
-	shod | \
-	sed -u 's/^\([0-9]*\)x\([0-9]*\)\([+-][0-9]*\)\([+-][0-9]*\)$/SEC:1	TAG:shod	\3 \4	\1 × \2/'
-}
-
 # get desktop in given direction while cycling (prev, next, last)
 getdesk() {
 	case "$1" in
@@ -179,6 +172,15 @@ notifycpu() {
 	'
 }
 
+# pomodoro timer daemon
+pomodoro() {
+	pomod |\
+	while read -r cycle
+	do
+		printf 'TAG:pomo\tIMG:%s\t%s\n' "$icon_time" "$cycle"
+	done
+}
+
 # print current song and format it for xnotify(1)
 notifymus() {
 	while [ "$#" -gt 0 ] || mpc current --wait >/dev/null
@@ -201,6 +203,11 @@ genprompt() {
 
 	echo "mus	Play music"
 	mus help | sed 's/^/	/'
+
+	echo "pomo	Pomodoro timer"
+	echo "	start	Start new pomodoro"
+	echo "	stop	Stop current pomodoro"
+	echo "	info	Get information about current pomodoro cycle"
 
 	echo "scrot	Take screenshot"
 	scrot help | sed 's/^/	/'
@@ -259,8 +266,8 @@ keys() {
 		K       win resize 0 -10 0 0
 		L       win resize 10 0 0 0
 		c       win resize 0 0 -25 0
-		C       win resize 0 0 0 -25
-		v       win resize 0 0 +25 0
+		C       win resize 0 0 +25 0
+		v       win resize 0 0 0 -25
 		V       win resize 0 0 0 +25
 		S       win sticky
 		A       win above
@@ -338,7 +345,7 @@ xinterp() {
 			fi
 			;;
 		scrot)
-			scrot $args && printf 'IMG:%s Screenshot Taken\n' "$icon_scrot"
+			scrot $args && printf 'IMG:%s\tScreenshot Taken\n' "$icon_scrot"
 			;;
 		man)
 			xman $args
@@ -424,6 +431,16 @@ xinterp() {
 				;;
 			esac
 			;;
+		pomo)
+			case "$args" in
+			info)
+				printf 'TAG:pomo\tIMG:%s\t%s\n' "$icon_time" "$(pomo info)"
+				;;
+			*)
+				pomo "$args"
+				;;
+			esac
+			;;
 		exit)
 			pkill shod
 			;;
@@ -467,6 +484,7 @@ expenv $HOME/rules/xresources | xrdb -
 	read icon_golast
 	read icon_goprev
 	read icon_gonext
+	read icon_time
 } <<-EOF
 	$(
 	icon 128 s <<-_EOF | iconcache 128
@@ -489,6 +507,7 @@ expenv $HOME/rules/xresources | xrdb -
 		go-last
 		go-previous
 		go-next
+		time
 	_EOF
 	)
 EOF
@@ -536,6 +555,7 @@ mpd
 xnotify -s 10 <"$xnotifyfifo" &
 notifycpu >"$xnotifyfifo" &
 notifymus >"$xnotifyfifo" &
+pomodoro >"$xnotifyfifo" &
 
 # desktop interpreter
 xinterp <"$xinterpfifo" >"$xnotifyfifo" &
@@ -546,4 +566,4 @@ prompt >"$xinterpfifo" &
 menu   >"$xinterpfifo" &
 
 # window manager
-wm >"$xnotifyfifo"
+shod >"$xnotifyfifo"
