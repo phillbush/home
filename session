@@ -186,6 +186,12 @@ cd() {
 	dirs
 }
 
+# upload to 0x0.st
+0x0() {
+	[ "$#" -ne 1 ] && return
+	curl -F"file=@$1" https://0x0.st
+}
+
 # colon separated list of directories used by the cd command
 CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 
@@ -226,6 +232,7 @@ alias c='cd'
 alias d='dir'
 alias dira='dir -a'
 alias da='dir -a'
+alias setbg='feh --no-fehbg --bg-tile'
 
 # Completions
 complete skel 1 $(\ls -1 "$SKEL")

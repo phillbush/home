@@ -74,16 +74,16 @@ xnotify.border:      SELBORDER
 xnotify.alignment:   left
 xnotify.shrink:      true
 
-shod.theme:         $HOME/theme/decoration.xpm
-shod.gapOuter:      3
-shod.gapInner:      3
-shod.groupHint:     true
-shod.ignoreGaps:    true
-shod.ignoreTitle:   true
-shod.ignoreBorders: true
-shod.mergeBorders:  false
-shod.hideTitle:     false
-shod.autoTab:       tilingMulti
+shod.theme:               $HOME/theme/decoration.xpm
+shod.gapOuter:            3
+shod.gapInner:            3
+shod.groupHint:           true
+shod.ignoreGaps:          true
+shod.ignoreTitle:         true
+shod.ignoreBorders:       true
+shod.mergeBorders:        false
+shod.hideTitle:           false
+shod.class.XTerm.autoTab: tilingMulti
 
 pmenu.selbackground: SELBG
 

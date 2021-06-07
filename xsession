@@ -1,6 +1,7 @@
 #!/bin/sh
 
 MODIFIER=1
+NDESKS=10
 
 # commands to run when terminate the script
 atexit() {
@@ -12,27 +13,19 @@ atexit() {
 getdesk() {
 	case "$1" in
 	*[!0-9]*)
-		lsd | awk -F '[-*: ]+' -v DIR="$1" '
+		lsd | awk -v DIR="$1" -v NDESKS="$NDESKS" '
 			/^\*/ { curr = NR }
-		      	      { wins[NR] = $2 }
 			END   {
-				for (i = curr - 1; wins[i] && i > 0; i--)
-					;
-				first = i
-				for (i = curr; wins[i] && i <= NR; i++)
-					;
-				last = i - 1
-
 				if (DIR == "prev") {
-					if (wins[curr - 1])
+					if (curr > 1)
 						print curr - 2
 					else
-						print last
+						print NR - 1
 				} else if (DIR == "next") {
-					if (wins[curr])
+					if (curr + 1 < NDESKS)
 						print curr
 					else
-						print first
+						print 0
 				} else {
 					print last
 				}
@@ -130,11 +123,14 @@ gettab() {
 			next
 		}
 		substr($1, 11, 1) == "A" {
+			found = 1
 			sel = n
 			tabs[n++] = $6
 			next
 		}
 		END {
+			if (!found)
+				exit
 			if (DIR == "prev") {
 				print tabs[(n + sel - 1) % n]
 			} else {
@@ -146,12 +142,12 @@ gettab() {
 
 # print desktop number and format it for xnotify(1)
 notifydesk() {
-	lsd | awk -F '[-*: ]' '
+	lsd | awk -F '[-*: ]' -v NDESKS="$NDESKS" '
 		BEGIN        { printf "%s", "SEC:1\tIMG:'$icon_deskicon'\tTAG:desk\t" }
 		NR > 1 && !n { printf " " }
 		/^\*/        { printf "●";  n = 0 }
 		/^ /         { printf "○";  n = 0 }
-		$2 == 0      { printf "\t"; n = 1 }
+		NR == NDESKS { printf "\t"; n = 1 }
 		END          { print "" }
 	'
 }
