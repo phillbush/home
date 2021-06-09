@@ -214,7 +214,7 @@ endfunction
 " file type detections
 filetype plugin on
 autocmd Bufenter *.s set syntax=asm
-autocmd FileType c,cpp,yacc,lex,awk,sh set foldexpr=CFolding(v:lnum) foldmethod=expr
+autocmd FileType c,cpp,yacc,lex,awk,sh,go set foldexpr=CFolding(v:lnum) foldmethod=expr
 autocmd FileType scheme set lisp expandtab
 autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
 autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t
@@ -222,7 +222,7 @@ autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnu
 
 " Syntax highlighting
 syntax on
-autocmd FileType c,cpp,yacc,lex,awk,sh syntax match MyConstant /\<[A-Z_][A-Z0-9_][A-Z0-9_]\+\>/
+autocmd FileType c,cpp,yacc,lex,awk,sh,go syntax match MyConstant /\<[A-Z_][A-Z0-9_][A-Z0-9_]\+\>/
 hi Comment      ctermfg=8       ctermbg=None    cterm=None
 hi PreProc      ctermfg=8       ctermbg=None    cterm=None
 hi String       ctermfg=7       ctermbg=None    cterm=Bold,Italic

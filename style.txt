@@ -18,8 +18,8 @@ Computer Science.  Every name and sentence should be written in
 English for the code to be understood by others.  They should be
 written, however, in a concise, agglutinative dialect of English.
 I name stuff using all-lower case (as in “histpath”); except for
-constants, which are in ALLCAPS; and type names, which are in
-PascalCase.
+constants, which are in ALLCAPS_SNAKE_CASE; and type names, which
+are in PascalCase.
 
 Variable names.
 I use the following general rule for naming variables: “The wider the
@@ -83,10 +83,10 @@ be prefixed with “get”, as in “getnextwin()”.
 
 Constant names.
 Constants have the same naming rules as global variables, except that
-they are written in ALLCAPS.  I prefer to use enums for values that
-are grouped semantically, and #define otherwise.   Every magic number
-other than 0 and 1 should be given a constant name (or at least
-a comment); there are exceptions, such as 10 or 16 for a function
+they are written in ALLCAPS_SNAKE_CASE.  I prefer to use enums for
+values that are grouped semantically, and #define otherwise.   Every
+magic number other than 0 and 1 should be given a constant name (or at
+least a comment); there are exceptions, such as 10 or 16 for a function
 requiring a base (such as strtol(3)).
 
 Type names.
@@ -622,6 +622,7 @@ of highlighting, four of each are shades of gray.
 • Comments and #defines in dark gray.
 • Keywords in light gray.
 • Strings in italic, bold, light gray.
-• Constants in red (I configured my editor to consider any ALLCAPS word
-  as a constant, as well as literal numbers).
+• Constants in red (I configured my editor to consider any
+  ALLCAPS_SNAKE_CASE word as a constant, as well as literal
+  numbers).
 • Everything else in white.
