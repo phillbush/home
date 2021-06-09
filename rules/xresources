@@ -65,14 +65,16 @@ xdockbar.bar1.geometry: 100%x30+0+0
 xdockbar.bar1.gravity:  S
 
 xnotify.gravity:     N
-xnotify.geometry:    +0+7
+xnotify.geometry:    230x0
+xnotify.imageWidth:  64
 xnotify.borderWidth: 3
 xnotify.gap:         7
+xnotify.padding:     1
 xnotify.background:  BG
 xnotify.foreground:  FG
 xnotify.border:      SELBORDER
 xnotify.alignment:   left
-xnotify.shrink:      true
+xnotify.shrink:      false
 
 shod.theme:               $HOME/theme/decoration.xpm
 shod.gapOuter:            3
@@ -84,6 +86,8 @@ shod.ignoreBorders:       true
 shod.mergeBorders:        false
 shod.hideTitle:           false
 shod.class.XTerm.autoTab: tilingMulti
+shod.notification.gap:    3
+shod.notification.gravity: NE
 
 pmenu.selbackground: SELBG
 

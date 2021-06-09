@@ -548,7 +548,7 @@ picom -c -l -15 -t -15 \
 mpd
 
 # desktop notifications
-xnotify -s 10 <"$xnotifyfifo" &
+xnotify -ws 10 <"$xnotifyfifo" &
 notifycpu >"$xnotifyfifo" &
 notifymus >"$xnotifyfifo" &
 pomodoro >"$xnotifyfifo" &
