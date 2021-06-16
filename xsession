@@ -287,25 +287,21 @@ prompt() {
 
 # call pmenu and feed it some commands
 menu() {
-	pmenu -tp -m 4 -r 3 <<EOF
-IMG:$icon_apps
-$(run -i | sed 's/	/&run /; s/^/	/')
-IMG:$icon_win
-	IMG:$icon_winclose	win close
-	IMG:$icon_winfullscreen	win maximize
-	IMG:$icon_winrestore	win minimize
-	IMG:$icon_winresize	win resize
-IMG:$icon_scrot	scrot select
-IMG:$icon_media
-	IMG:$icon_media_forward	mus next
-	IMG:$icon_media_stop	mus stop
-	IMG:$icon_media_backward	mus prev
-	IMG:$icon_media_pause	mus toggle
-IMG:$icon_terminal	term draw
-IMG:$icon_deskicon
-	IMG:$icon_golast	desk last
-	IMG:$icon_goprev	desk prev
-	IMG:$icon_gonext	desk next
+	pmenu -p -m 4 -r 3 <<EOF
+IMG:$icon_apps	applications
+$(run -i | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
+IMG:$icon_win	minimized windows	\$ lsc -l | awk 'BEGIN {FS = "\t"} /^......h/ {print substr(\$7, 1, 16) "\twin minimize", \$6}'
+IMG:$icon_scrot	take screenshot	scrot select
+IMG:$icon_media	music
+	IMG:$icon_media_forward	next song	mus next
+	IMG:$icon_media_stop	stop song	mus stop
+	IMG:$icon_media_backward	previous song	mus prev
+	IMG:$icon_media_pause	play/pause	mus toggle
+IMG:$icon_terminal	draw terminal	term draw
+IMG:$icon_deskicon	desktop
+	IMG:$icon_golast	last desktop	desk last
+	IMG:$icon_goprev	previous desktop	desk prev
+	IMG:$icon_gonext	next desktop	desk next
 EOF
 }
 
@@ -384,9 +380,9 @@ xinterp() {
 			wmctrl -ia $(gettab $args)
 			;;
 		win)
-			case "$args" in
+			set -- $args
+			case "$1" in
 			resize*)
-				set -- $args
 				eval $(xdotool getactivewindow getwindowgeometry --shell)
 				xadd=$2
 				yadd=$3
@@ -399,31 +395,76 @@ xinterp() {
 				wmctrl -r :ACTIVE: -e 0,$X,$Y,$WIDTH,$HEIGHT
 				;;
 			redraw)
-				wmctrl -r :ACTIVE: -e "$(slop -f "0,%x,%y,%w,%h")"
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -e "$(slop -f "0,%x,%y,%w,%h")"
+				else
+					wmctrl -r :ACTIVE: -e "$(slop -f "0,%x,%y,%w,%h")"
+				fi
 				;;
 			close)
-				wmctrl -c :ACTIVE:
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ic "$2"
+				else
+					wmctrl -c :ACTIVE:
+				fi
 				;;
 			stick|sticky)
-				wmctrl -r :ACTIVE: -b toggle,sticky
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,sticky
+				else
+					wmctrl -r :ACTIVE: -b toggle,sticky
+				fi
 				;;
 			above)
-				wmctrl -r :ACTIVE: -b toggle,above
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,above
+				else
+					wmctrl -r :ACTIVE: -b toggle,above
+				fi
 				;;
 			below)
-				wmctrl -r :ACTIVE: -b toggle,below
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,below
+				else
+					wmctrl -r :ACTIVE: -b toggle,below
+				fi
 				;;
 			minimize)
-				wmctrl -r :ACTIVE: -b toggle,hidden
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,hidden
+				else
+					wmctrl -r :ACTIVE: -b toggle,hidden
+				fi
 				;;
 			fullscreen)
-				wmctrl -r :ACTIVE: -b toggle,fullscreen
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,fullscreen
+				else
+					wmctrl -r :ACTIVE: -b toggle,fullscreen
+				fi
 				;;
 			shade|shaded)
-				wmctrl -r :ACTIVE: -b toggle,shaded
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,shaded
+				else
+					wmctrl -r :ACTIVE: -b toggle,shaded
+				fi
 				;;
 			maximize)
-				wmctrl -r :ACTIVE: -b toggle,maximized_horz,maximized_vert
+				if [ "$#" -gt 1 ]
+				then
+					wmctrl -ir "$2" -b toggle,maximized_horz,maximized_vert
+				else
+					wmctrl -r :ACTIVE: -b toggle,maximized_horz,maximized_vert
+				fi
 				;;
 			esac
 			;;
