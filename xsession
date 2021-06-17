@@ -6,7 +6,7 @@ NDESKS=10
 # commands to run when terminate the script
 atexit() {
 	rm -rf "$tmpdir"
-	kill -TERM 0
+	kill -TERM $(jobs -p)
 }
 
 # get desktop in given direction while cycling (prev, next, last)
