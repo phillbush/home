@@ -1,12 +1,14 @@
 #!/bin/sh
 
+set -m
+
 MODIFIER=1
 NDESKS=10
 
 # commands to run when terminate the script
 atexit() {
 	rm -rf "$tmpdir"
-	kill -TERM $(jobs -p)
+	kill -TERM -- -$$ $(printf "-%s " $(jobs -p))
 }
 
 # get desktop in given direction while cycling (prev, next, last)
@@ -289,19 +291,17 @@ prompt() {
 menu() {
 	pmenu -p -m 4 -r 3 <<EOF
 IMG:$icon_apps	applications
-$(run -i | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
+$(run -i -a "$HOME/var/apps/utilities" | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
 IMG:$icon_win	minimized windows	\$ lsc -l | awk 'BEGIN {FS = "\t"} /^......h/ {print substr(\$7, 1, 16) "\twin minimize", \$6}'
 IMG:$icon_scrot	take screenshot	scrot select
 IMG:$icon_media	music
 	IMG:$icon_media_forward	next song	mus next
 	IMG:$icon_media_stop	stop song	mus stop
 	IMG:$icon_media_backward	previous song	mus prev
-	IMG:$icon_media_pause	play/pause	mus toggle
+	IMG:$icon_media_toggle	play/pause	mus toggle
 IMG:$icon_terminal	draw terminal	term draw
-IMG:$icon_deskicon	desktop
-	IMG:$icon_golast	last desktop	desk last
-	IMG:$icon_goprev	previous desktop	desk prev
-	IMG:$icon_gonext	next desktop	desk next
+IMG:$icon_games	games
+$(run -i -a "$HOME/var/apps/games" | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
 EOF
 }
 
@@ -502,11 +502,12 @@ expenv $HOME/rules/xresources | xrdb -
 
 # set icon variables
 {
-	read icon_powericon;
-	read icon_hearticon;
-	read icon_deskicon;
-	read icon_apps;
-	read icon_win;
+	read icon_powericon
+	read icon_hearticon
+	read icon_deskicon
+	read icon_apps
+	read icon_games
+	read icon_win
 	read icon_winclose
 	read icon_winfullscreen
 	read icon_winrestore
@@ -516,7 +517,7 @@ expenv $HOME/rules/xresources | xrdb -
 	read icon_media_forward
 	read icon_media_stop
 	read icon_media_backward
-	read icon_media_pause
+	read icon_media_toggle
 	read icon_terminal
 	read icon_golast
 	read icon_goprev
@@ -529,6 +530,7 @@ expenv $HOME/rules/xresources | xrdb -
 		heart
 		user-desktop
 		applications-other
+		applications-games
 		preferences-system-windows
 		window-close
 		view-fullscreen
@@ -539,7 +541,7 @@ expenv $HOME/rules/xresources | xrdb -
 		media-seek-forward
 		media-playback-stop
 		media-seek-backward
-		media-playback-pause
+		media-playback-toggle
 		terminal
 		go-last
 		go-previous
