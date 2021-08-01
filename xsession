@@ -291,7 +291,7 @@ prompt() {
 menu() {
 	pmenu -p -m 4 -r 3 <<EOF
 IMG:$icon_apps	applications
-$(run -i -a "$HOME/var/apps/utilities" | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
+$(run -i -a "$HOME/var/apps/utilities" | awk 'BEGIN{FS=OFS="\t"} {print "", $1, $2, "run "$3}')
 IMG:$icon_win	minimized windows	\$ lsc -l | awk 'BEGIN {FS = "\t"} /^......h/ {print substr(\$7, 1, 16) "\twin minimize", \$6}'
 IMG:$icon_scrot	take screenshot	scrot select
 IMG:$icon_media	music
@@ -301,7 +301,7 @@ IMG:$icon_media	music
 	IMG:$icon_media_toggle	play/pause	mus toggle
 IMG:$icon_terminal	draw terminal	term draw
 IMG:$icon_games	games
-$(run -i -a "$HOME/var/apps/games" | awk 'BEGIN{OFS="\t"} {print "", $1, $2, "run "$2}')
+$(run -i -a "$HOME/var/apps/games" | awk 'BEGIN{FS=OFS="\t"} {print "", $1, $2, "run "$3}')
 EOF
 }
 
@@ -498,7 +498,7 @@ trap 'atexit' EXIT
 
 # Load environment variables and xresources
 . $HOME/.profile
-expenv $HOME/rules/xresources | xrdb -
+expenv $HOME/rules/xresources | xrdb -merge -load -
 
 # set icon variables
 {
@@ -508,10 +508,6 @@ expenv $HOME/rules/xresources | xrdb -
 	read icon_apps
 	read icon_games
 	read icon_win
-	read icon_winclose
-	read icon_winfullscreen
-	read icon_winrestore
-	read icon_winresize
 	read icon_scrot
 	read icon_media
 	read icon_media_forward
@@ -519,35 +515,24 @@ expenv $HOME/rules/xresources | xrdb -
 	read icon_media_backward
 	read icon_media_toggle
 	read icon_terminal
-	read icon_golast
-	read icon_goprev
-	read icon_gonext
 	read icon_time
 } <<-EOF
 	$(
-	icon 128 s <<-_EOF | iconcache 128
-		poweroff-cpu
-		heart
-		user-desktop
-		applications-other
-		applications-games
-		preferences-system-windows
-		window-close
-		view-fullscreen
-		view-restore
-		window-resize
-		applets-screenshooter
-		cd-audio
-		media-seek-forward
-		media-playback-stop
-		media-seek-backward
-		media-playback-toggle
-		terminal
-		go-last
-		go-previous
-		go-next
-		time
-	_EOF
+	icon -s 128 \
+		battery-caution \
+		dialog-warning \
+		user-desktop \
+		applications-other \
+		applications-games \
+		preferences-system-windows \
+		screenshooter \
+		media-optical \
+		media-seek-forward \
+		media-playback-stop \
+		media-seek-backward \
+		media-playback-toggle \
+		terminal \
+		appointment-soon
 	)
 EOF
 

@@ -16,6 +16,7 @@ image/*djvu:            zathura
 
 # media
 application/octet-stream: mpv --no-terminal
+application/ogg:          mpv --no-terminal
 video/*:                  mpv --no-terminal
 audio/*:                  mpv --no-terminal
 

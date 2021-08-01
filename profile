@@ -6,11 +6,14 @@ PATH="$PATH:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/pl
 MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
 for dir in $HOME/usr/*
 do
-	/bin/test -d "$dir/bin"       && PATH="$dir/bin${PATH:+":"}$PATH"
-	/bin/test -d "$dir/man"       && MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
+	test -d "$dir/bin"       && PATH="$dir/bin${PATH:+":"}$PATH"
+	test -d "$dir/man"       && MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
 done
 unset dir
 export PATH HOME TERM MANPATH
+
+# hostname of my local machine, used in some scripts
+export LOCALHOST="thinkbsd"     # thinkpad + bsd
 
 # local installation directories
 export GOPATH="$HOME/usr/go"
@@ -38,6 +41,7 @@ export APPPATH="$HOME/var/apps/utilities:$HOME/var/apps/games"
 export CACHEDIR="$HOME/var/cache"
 export RLWRAP_HOME="$HOME/var/history"
 export TRASH="$HOME/var/trash"
+export CALENDAR_DIR="$HOME/proj"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.data"
@@ -45,9 +49,10 @@ export XDG_DATA_HOME="$HOME/.data"
 # Rule files
 export MIMEFILE="$HOME/rules/mime"
 export XCOMPOSEFILE="$HOME/rules/xcompose"
+export IRCSERVERSFILE="$HOME/rules/irc.servers"
+export IRCRC="$HOME/rules/ircrc"
 export EXINIT=":so $HOME/rules/exrc"
 export VIMINIT=":source $HOME/rules/vimrc"
-export IRCRC="$HOME/rules/ircrc"
 #export FONTCONFIG_FILE="$HOME/rules/fontconfig"
 
 # phillbush
@@ -63,14 +68,16 @@ export GIT_AUTHOR_EMAIL="phillbush@cock.li"
 export PAGER="less"
 export EDITOR="vim"
 export VISUAL="vim"
-export OPENER="xopen"
+export OPENER="open"
 export TERMCMD="xterm"
+export THUMBNAILER="thumbnail"
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"
 export XCURSOR_PATH="$HOME/theme/cursor"
 export XCURSOR_THEME="retrosmart"
 export ICONPATH="$HOME/theme/icons"
+export ICONSIZE=64
 export TROFFONTS="$HOME/theme/fonts"
 
 # Less

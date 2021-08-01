@@ -1,20 +1,44 @@
 #!/bin/ksh
+# ~/.session -- set up ksh terminal session
+
+# load global kshrc
+[[ -x /etc/ksh.kshrc ]] && . /etc/ksh.kshrc
 
 # check if command exists and set list of completions for it
 complete() {
-	if type skel >/dev/null
+	if type "$1" >/dev/null
 	then
 		typeset cmd="$1"
 		typeset num="$2"
 		shift 2
-		set -A "complete_${cmd}${num:+"_$num"}" "$@"
+		set -A "complete_${cmd}${num:+"_$num"}" -- "$@"
 	fi
 }
 
-# search through history
+# search history; rerun a command or grep for a command
 hist() {
+	# NAME
+	#      hist - list commands or search for commands in history
+	#
+	# SYNOPSIS
+	#      hist [arg...]
+	#      hist - [arg...]
+	#
+	# DESCRIPTION
+	#      In the first form, the hist function lists the commands
+	#      in the history that matches the given argument (or lists
+	#      all commands, if no argument is passed).
+	#
+	#      In the second form, the hist function also lists commands
+	#      as in the previous form, but inserts a number before each
+	#      command.  It then prompts the user for a number and rerun
+	#      the command listed after this number.  If the user enters
+	#      a number preceded with the character "e", the $EDITOR is
+	#      called to edit the command before rerun it.
+
 	case "$1" in
 	-)
+		# rerun a command
 		shift
 		fc -l 1 | fgrep "$1" || return 0
 		read -r n || return 0
@@ -32,14 +56,19 @@ hist() {
 		esac
 		;;
 	*)
+		# list history grepping for given argument
 		fc -ln 1 | fgrep "$1" || return 0
 		;;
 	esac
 }
 
-# run previous non-doas command with doas
+# run previous non-doas command with doas; or retry previous doas command
 fuck() {
-	doas $(fc -ln 1 | sed '/^[ 	]*doas /d' | sed '$!d')
+	typeset n=$(fc -l 1 | egrep -v '^[0-9]+[ ]*fuck' | tail -n 1 | cut -d'	' -f1)
+	fc -e "ed -s" "$n" <<-EOF
+		,v/^doas/s/^/doas /
+		w
+	EOF
 }
 
 # list entries in directory stack
@@ -62,21 +91,51 @@ dirs() {
 	done
 }
 
-# list entries in a directory or search for a file
+# list entries in cwd or search for file given as argument
 dir() {
+	# NAME
+	#      dir - recursively list files or search for files
+	#
+	# SYNOPSIS
+	#      dir [-0123456789adl] [file]
+	#
+	# DESCRIPTION
+	#      The dir function is a wrapper around colortree(1).  It
+	#      can recursively list the entries of the current working
+	#      directory, or recursively search for a file given as
+	#      argument.  If an argument is passed, dir searches for
+	#      a file with this name.
+	#
+	#      The options are as follows
+	#
+	#      -a      List all entries except for '.' and '..'.
+	#
+	#      -d      List directories only.
+	#
+	#      -l      List in long format.
+	#
+	#      -0      List in infinite depth.
+	#
+	#      -1 to -9
+	#              List in given depth.
+	#
+	#      A hyphen (-) is a synonym for the option -0
+
 	typeset options="-L 1 -hNFC --dirsfirst"
+	typeset usage="usage: dir [-0123456789adl] file"
 	while [ "$#" -gt 0 ]
 	do
 		case "$1" in
-		-l)
-			options="$options -pug"
-			shift
-			;;
 		-a|-d)
 			options="$options $1"
 			shift
 			;;
+		-l)
+			options="$options -pug"
+			shift
+			;;
 		-*[!0-9]*)
+			echo "$usage" >&2
 			return 1
 			;;
 		-|-0)
@@ -86,6 +145,14 @@ dir() {
 		-*[0-9]*)
 			options="$options -L ${1#"-"}"
 			shift
+			;;
+		--)
+			shift
+			break
+			;;
+		-*)
+			echo "$usage" >&2
+			return 1
 			;;
 		*)
 			break
@@ -100,6 +167,7 @@ dir() {
 		colortree $options -P "*$1*" --prune .
 		;;
 	*)
+		echo "$usage" >&2
 		return 1
 		;;
 	esac
@@ -107,6 +175,63 @@ dir() {
 
 # change directory
 cd() {
+	# NAME
+	#      cd - change directory and manage directory stack
+	#
+	# SYNOPSIS
+	#      cd path
+	#      cd ....[/path]
+	#      cd ..[word]
+	#      cd -[123456789]
+	#      cd -
+	#      cd + [path...]
+	#      cd +[123456789]
+	#
+	# DESCRIPTION
+	#      The cd function overwrides the cd builtin command with a
+	#      more powerful syntax.  The argument can be a directory or
+	#      a regular file (in which case it is considered the
+	#      directory which it resides in).  This function also sets
+	#      the completion for the make(1) command according to the
+	#      Makefile in the current directory.
+	#
+	#      In the first form, changes directory to the given path.
+	#
+	#      In the second format (the argument begins with a certain
+	#      number of dots), changes to a directory up in the
+	#      hierarchy.  For example, 'cd ..' goes to the parent
+	#      directory, 'cd ...' goes to the parent's parent
+	#      directory, 'cd .../foo' goes to the directory foo in the
+	#      parent's parent directory.
+	#
+	#      In the third form (the argument is two dots followed by a
+	#      word), changes to the first directory up in the hierarchy
+	#      containing a given word.  For example, if the current
+	#      directory is '/home/user/tmp/foo/bar', running 'cd ..tmp'
+	#      goes to '/home/user/tmp'.
+	#
+	#      In the fourth form (the argument is a hyphen before a
+	#      number), changes to the N-th directory on the stack and
+	#      removes it from the stack.  For example, 'cd -4' goes to
+	#      the fourth directory on the stack.
+	#
+	#      In the fifth form (the argument is a single hyphen), goes
+	#      to the previous directory.
+	#
+	#      In the sixth form (the first argument is a plus), adds
+	#      the current directory (or the directories passed as next
+	#      arguments) to the end of the directory stack.
+	#
+	#      In the seventh and final form (the argument is a plus
+	#      before a number), moves the N-th directory on the stack
+	#      to the beginning of the stack.  For example, 'cd +4'
+	#      moves the fourth directory on the stack to its beginning.
+	#
+	#      The directory stack is printed after each invocation.
+	#
+	# SEE ALSO
+	#      dirs
+
 	if [ "$#" -eq 0 ]
 	then
 		set -- "$HOME"
@@ -186,12 +311,6 @@ cd() {
 	dirs
 }
 
-# upload to 0x0.st
-0x0() {
-	[ "$#" -ne 1 ] && return
-	curl -F"file=@$1" https://0x0.st
-}
-
 # colon separated list of directories used by the cd command
 CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 
@@ -207,35 +326,35 @@ set -o emacs            # emacs mode for ^U and ^K keybindings, etc
 set -o braceexpand      # enable brace expansion
 
 # aliases
-alias :q=exit
-alias :Q=exit
-alias scheme='rlwrap -q\" chibi-scheme'
-alias vim='vim -p'
-alias cp="cp -Riv"
-alias mv="mv -iv"
-alias rm='rm -riv'
-alias mkdir='mkdir -p'
+alias :q=exit           # vi exit
+alias :Q=exit           # vi exit, wrong version
+alias vim='vim -p'      # vim; open each argument in a separate tab
+alias cp="cp -Riv"      # recursive, interactive, verbose cp
+alias mv="mv -iv"       # interactive, verbose mv
+alias rm='rm -riv'      # recursive, interactive, verbose rm
+alias mkdir='mkdir -p'  # create intermediate directories as required
 alias ls='ls -1Fh'      # append file indicator to entries, print human readable sizes
-alias lc='ls -C'        # columns
-alias ll='ls -l'        # Lists directory contents in a long format
-alias la='lc -A'
-alias lla='ll -A'
-alias tree='tree -F'
-alias hex='hexdump -C'
-alias od='od -cAx'
-alias df='df -h'
-alias du='du -ch'
-alias doas='doas '
-alias l='less'
-alias v='vim'
-alias c='cd'
-alias d='dir'
-alias dira='dir -a'
-alias da='dir -a'
-alias setbg='feh --no-fehbg --bg-tile'
+alias lc='ls -C'        # columnated ls
+alias ll='ls -l'        # long list ls
+alias la='lc -A'        # list all ls
+alias lla='ll -A'       # list all, long list ls
+alias hex='hexdump -C'  # sane hexdump
+alias od='od -cAx'      # sane od
+alias df='df -h'        # df with human readable sizes
+alias du='du -hc'       # du with human readable sizes and grand total
+alias doas='doas '      # this hack only works on bash; try to complete commands after doas
+alias dira='dir -a'     # list all dir (our colortree function, see above)
+alias da='dir -a'       # list all dir (our colortree function, see above)
+alias l='less'          # lazyman less
+alias v='vim'           # lazyman vim
+alias c='cd'            # lazyman cd
+alias d='dir'           # lazyman dir
+alias mkae='make'
+alias makemake='make'
+alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
 
-# Completions
-complete skel 1 $(\ls -1 "$SKEL")
+# completions
+complete skel 1 $(\ls -1 "$SKEL")       # skel is a template system I created
 complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 complete sysctl "" $(sysctl | sed 's/[ =].*//')
 complete rcctl 1 disable enable get ls order set restart start stop
@@ -243,29 +362,62 @@ complete rcctl 2 $(rcctl ls all)
 complete git 1 $(git --list-cmds=main)
 complete mpc 1 $(mpc help | awk '$1 == "mpc" { print $2 }')
 complete mpc 2 $(mpc lsplaylists | sort)
+complete kill 1 -9 -HUP -INFO -KILL -TERM
+complete ifconfig 1 $(ifconfig | grep '^[a-z]' | cut -d: -f1)
 
-# prompt
+# set prompt and window title
 PS1='$(
+	# set _host to the host name of the machine
+	_host="$(hostname)"
+
+	# set _cwd to $PWD, replacing $HOME with ~
 	case "$PWD/" in
 	("$HOME"/*)
-		_dir="~${PWD#"${HOME}"}"
+		_cwd="~${PWD#"${HOME}"}"
 		;;
 	(*)
-		_dir="$PWD"
+		_cwd="$PWD"
 		;;
 	esac
-	_cols=$((COLUMNS - ${#_dir}))
+
+	# set _rprompt to $_cwd; prefix it with "$_host:" if I am not on my laptop
+	case "$_host" in
+	("$LOCALHOST")
+		_rprompt="$_cwd"
+		;;
+	(*)
+		_rprompt="$_host:$_cwd"
+	esac
+
+	# set _cols to the number of chars in _rprompt
+	_cols=$((COLUMNS - ${#_rprompt}))
+
+	# set _tty to the name of tty, trim any /dev/ at the beginning
 	_tty=$(tty)
 	_tty=${_tty#/dev/}
+
+	# set _color to red if we are root, or to white if we are a normal user
 	if [ $(id -u) -eq 0 ]
 	then
 		_color="1;31m"
 	else
 		_color="1m"
 	fi
-	printf "\\\\[\e]0;%s: %s\a\\\\]\n\\\\[\e[0m\\\\]\\\\[\e[s\\\\]\\\\[\e[%sG\\\\]%s\\\\[\e[u\\\\]\\\\[\e[%s\\\\] ❯ \\\\[\e[0m\\\\]"\
-	       "$_tty" "$_dir" "$_cols" "$_dir" "$_color"
+
+	# set _title to "$_host:$_cwd - $_tty"
+	_title="$_rprompt - $_tty"
+
+	# return prompt
+	printf "\\\\[\e]0;%s\a\\\\]" "$_title"  # set window title
+	printf "\n"                             # print blank line before prompt
+	printf "\\\\[\e[0m\\\\]\\\\[\e[s\\\\]"  # clear formatting and save cursor position
+	printf "\\\\[\e[%sG\\\\]" "$_cols"      # go to column $_cols
+	printf "%s" "$_rprompt"                 # print right prompt
+	printf "\\\\[\e[u\\\\]"                 # go back to first column
+	printf "\\\\[\e[%s\\\\]" "$_color"      # set color to red if root, white otherwise
+	printf " ❯ "                            # set left prompt to a single ❯ char
+	printf "\\\\[\e[0m\\\\]"                # clear formatting
 )'
 
-# print non-zero exit value
+# print previous command's non-zero exit status, bold and red, after it exits
 trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR

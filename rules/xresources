@@ -23,15 +23,23 @@
 #define LINK0           #75507b
 #define LINK1           #ad7fa8
 
-*foreground:          FG
-*background:          BG
-*selforeground:       SELFG
-*selbackground:       SELBG
-*grip:                GRAYDARK
-*cursorColor:         CURSOR
-*internalBorderColor: SEPARATOR
-*borderColor:         SEPARATOR
-*Label*background:    GRAYDARK
+*foreground:              FG
+*background:              BG
+*selforeground:           SELFG
+*selbackground:           SELBG
+*grip:                    DARK
+*cursorColor:             CURSOR
+*internalBorderColor:     SEPARATOR
+*borderColor:             SEPARATOR
+*Label*background:        DARK
+*faceName:                InputMonoNarrow-Regular:size=9
+*faceSize:                9
+*Scrollbar.background:    DARK
+*Scrollbar.foreground:    GRAYLIGHT
+*Scrollbar.thickness:     14
+*Scrollbar.minimumThumb:  20
+*Scrollbar.translations:  <Btn1Down>: StartScroll(Forward) \n\
+                          <Btn1Motion>: MoveThumb() NotifyThumb() \n\
 
 *color0:        DARK
 *color10:       GREENLIGHT
@@ -114,8 +122,6 @@ xterm*borderWidth:      3
 xterm*internalBorder:   2
 xterm*utf8:             2
 xterm*locale:           true
-xterm*faceName:         InputMonoNarrow-Regular
-xterm*faceSize:         9
 xterm*scaleHeigh:       1
 xterm*scrollBar:        false
 ! some black magic to change what characters XTerm considers "word delimiters"
@@ -132,12 +138,6 @@ xterm*vt100.translations: #override \
 	!<Key>KP_Delete: string(0x1b) string("[3~") \n\
 	Ctrl <Key> 0: set-vt-font(d)
 
-*Scrollbar.background:    GRAYDARK
-*Scrollbar.foreground:    WHITE
-*Scrollbar.thickness:     14
-*Scrollbar.minimumThumb:  20
-*Scrollbar.translations:  <Btn1Down>: StartScroll(Forward) \n\
-                          <Btn1Motion>: MoveThumb() NotifyThumb() \n\
 
 *cursor:                  left_ptr
 *rightcursor:             left_ptr
@@ -156,7 +156,48 @@ xterm*vt100.translations: #override \
 *horizontalGripCursor:    left_ptr
 *horizontalBetweenCursor: left_ptr
 
-xcalc*customization: -color
+xcalc*geometry: 350x460
+xcalc.ti.background:                    BG
+xcalc.ti.bevel.background:              DARK
+xcalc.ti.bevel.screen.borderColor:      DARK
+xcalc.ti.bevel.screen.background:       DARK
+xcalc.ti.bevel.screen.DEC.background:   DARK
+xcalc.ti.bevel.screen.DEC.foreground:   FG
+xcalc.ti.bevel.screen.DEG.background:   DARK
+xcalc.ti.bevel.screen.DEG.foreground:   FG
+xcalc.ti.bevel.screen.GRAD.background:  DARK
+xcalc.ti.bevel.screen.GRAD.foreground:  FG
+xcalc.ti.bevel.screen.RAD.background:   DARK
+xcalc.ti.bevel.screen.RAD.foreground:   FG
+xcalc.ti.bevel.screen.INV.background:   DARK
+xcalc.ti.bevel.screen.INV.foreground:   FG
+xcalc.ti.bevel.screen.LCD.background:   DARK
+xcalc.ti.bevel.screen.LCD.foreground:   FG
+xcalc.ti.bevel.screen.LCD.shadowWidth:  0
+xcalc.ti.bevel.screen.M.background:     DARK
+xcalc.ti.bevel.screen.M.foreground:     FG
+xcalc.ti.bevel.screen.P.background:     DARK
+xcalc.ti.bevel.screen.P.foreground:     FG
+xcalc.ti.Command.foreground:            FG
+xcalc.ti.Command.background:            GRAYDARK
+xcalc.ti.button5.background:            BLUELIGHT
+xcalc.ti.button35.background:           REDLIGHT
+xcalc.ti.button40.background:           REDLIGHT
+xcalc.ti.button45.background:           REDLIGHT
+xcalc.ti.button50.background:           REDLIGHT
+xcalc.ti.button55.background:           REDLIGHT
+xcalc.ti.button37.background:           GRAYLIGHT
+xcalc.ti.button38.background:           GRAYLIGHT
+xcalc.ti.button39.background:           GRAYLIGHT
+xcalc.ti.button42.background:           GRAYLIGHT
+xcalc.ti.button43.background:           GRAYLIGHT
+xcalc.ti.button44.background:           GRAYLIGHT
+xcalc.ti.button47.background:           GRAYLIGHT
+xcalc.ti.button48.background:           GRAYLIGHT
+xcalc.ti.button49.background:           GRAYLIGHT
+xcalc.ti.button52.background:           GRAYLIGHT
+XCalc*Cursor:                           hand2
+XCalc*ShapeStyle:                       rectangle
 
 NetHack*message*translations:	<KeyPress>: input()
 !
