@@ -284,7 +284,10 @@ cd() {
 		;;
 	.+(.)?(/*))     # dot-dot-dot...
 		typeset pre=${1%%/*}
-		typeset pos=${1#*/}
+		case "$1" in
+		*/*) typeset pos=${1#*/} ;;
+		*)   typeset pos="" ;;
+		esac
 		typeset n=${#pre}
 		set -- "$PWD"
 		while (( n-- > 1 ))
