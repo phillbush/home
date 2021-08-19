@@ -313,7 +313,7 @@ cd() {
 	}
 	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 	dirs
-	cut -c 1-1000 README* 2>/dev/null | head -n 10 | tr -d '\0-\10\13-\37'
+	cut -c 1-1000 README* 2>/dev/null | head -n 10 | awk 'BEGIN{RS=""} NR == 3 {exit} {print ; if (NR == 1) print ""}' | tr -d '\0-\10\13-\37'
 	return 0
 }
 
