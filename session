@@ -121,7 +121,7 @@ dir() {
 	#
 	#      A hyphen (-) is a synonym for the option -0
 
-	typeset options="-L 1 -hNFC --dirsfirst"
+	typeset options="-L 1 -hNFC --dirsfirst --ignore-case"
 	typeset usage="usage: dir [-0123456789adl] file"
 	while [ "$#" -gt 0 ]
 	do
@@ -193,7 +193,8 @@ cd() {
 	#      a regular file (in which case it is considered the
 	#      directory which it resides in).  This function also sets
 	#      the completion for the make(1) command according to the
-	#      Makefile in the current directory.
+	#      Makefile in the current directory, and prints the first
+	#      few lines of a README, if it exists in the directory.
 	#
 	#      In the first form, changes directory to the given path.
 	#
@@ -312,6 +313,8 @@ cd() {
 	}
 	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 	dirs
+	cut -c 1-1000 README* 2>/dev/null | head -n 10 | vis -s
+	return 0
 }
 
 # colon separated list of directories used by the cd command
