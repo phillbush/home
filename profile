@@ -78,7 +78,7 @@ export XCURSOR_PATH="$HOME/theme/cursor"
 export XCURSOR_THEME="retrosmart"
 export ICONPATH="$HOME/theme/icons"
 export ICONSIZE=64
-export TROFFONTS="$HOME/theme/fonts"
+export TROFFONTS="$HOME/theme/fonts/LinuxLibertine"
 
 # Less
 export LESS='-Sr~ -z-5 '

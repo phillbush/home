@@ -313,7 +313,6 @@ cd() {
 	}
 	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 	dirs
-	cut -c 1-1000 README* 2>/dev/null | head -n 10 | awk 'BEGIN{RS=""} NR == 3 {exit} {print ; if (NR == 1) print ""}' | tr -d '\0-\10\13-\37'
 	return 0
 }
 
@@ -355,6 +354,7 @@ alias l='less'          # lazyman less
 alias v='vim'           # lazyman vim
 alias c='cd'            # lazyman cd
 alias d='dir'           # lazyman dir
+alias r='readme'        # lazyman readme
 alias mkae='make'
 alias makemake='make'
 alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
