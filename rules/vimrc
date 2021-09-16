@@ -223,7 +223,7 @@ autocmd Bufenter *.s set syntax=asm
 autocmd FileType c,cpp,yacc,lex,awk,sh,go set foldexpr=CFolding(v:lnum) foldmethod=expr
 autocmd FileType scheme set lisp expandtab
 autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
-autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t
+autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t comments=s1:/*,mb:*,ex:*/,:;,://,b:#,:%,:XCOMM,nb:>,nfb:--,nfb:•,nfb:·,fb:→,nb:│,nb:\|,nb:\"
 autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t | endif
 
 " Syntax highlighting

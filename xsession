@@ -11,137 +11,6 @@ atexit() {
 	kill -TERM -- -$$ $(printf "-%s " $(jobs -p))
 }
 
-# get desktop in given direction while cycling (prev, next, last)
-getdesk() {
-	case "$1" in
-	*[!0-9]*)
-		lsd | awk -v DIR="$1" -v NDESKS="$NDESKS" '
-			/^\*/ { curr = NR }
-			END   {
-				if (DIR == "prev") {
-					if (curr > 1)
-						print curr - 2
-					else
-						print NR - 1
-				} else if (DIR == "next") {
-					if (curr + 1 < NDESKS)
-						print curr
-					else
-						print 0
-				} else {
-					print last
-				}
-			}
-		'
-		;;
-	*)
-		echo $1
-		;;
-	esac
-}
-
-# get frame/window in given direction (prev, next)
-getframe() {
-	lsc -ls -g _SHOD_TAB_GROUP | awk -v DIR="$1" '
-		function cmp(framea, frameb,    a, b) {
-			split(geom[framea], a, /[-x+]/)
-			split(geom[frameb], b, /[-x+]/)
-			if (geom[framea] ~ /^[0-9]+x[0-9]+-/)
-				a[X] = - a[X]
-			if (geom[framea] ~ /-[0-9]+$/)
-				a[Y] = - a[Y]
-			if (geom[frameb] ~ /^[0-9]+x[0-9]+-/)
-				b[X] = - b[X]
-			if (geom[frameb] ~ /-[0-9]+$/)
-				b[Y] = - b[Y]
-			if (DIR == "right") {
-				if (b[Y] == s[Y] && b[X] > s[X])
-					return 1
-				if (a[X] < b[X])
-					return 1
-			} else if (DIR == "left") {
-				if (b[Y] == s[Y] && b[X] < s[X])
-					return 1
-				if (a[X] > b[X])
-					return 1
-			} else if (DIR == "down") {
-				if (b[X] == s[X] && b[Y] > s[Y])
-					return 1
-				if (a[Y] < b[Y])
-					return 1
-			} else if (DIR == "up") {
-				if (b[X] == s[X] && b[Y] < s[Y])
-					return 1
-				if (a[Y] > b[Y])
-					return 1
-			}
-			return 0
-		}
-		{
-			if (!geom[$4]) {
-				geom[$4] = $3
-				nframes[$2]++
-			}
-			frames[$2, nframes[$2]] = $4
-		}
-		substr($1, 11, 1) == "A" {
-			sel = $4
-			desk = $2
-			split(geom[sel], s, /[-x+]/)
-			if (geom[sel] ~ /^[0-9]+x[0-9]+-/)
-				s[X] = - s[X]
-			if (geom[sel] ~ /-[0-9]+$/)
-				s[Y] = - s[Y]
-		}
-		BEGIN {
-			W = 1
-			H = 2
-			X = 3
-			Y = 4
-		}
-		END {
-			if (DIR == "prev") {
-				print frames[desk, (nframes[desk] + sel - 1) % nframes[desk]]
-			} else if (DIR == "next") {
-				print frames[desk, (sel + 1) % nframes[desk]]
-			} else {
-				curr = sel
-				for (i = 1; i <= nframes[desk]; i++) {
-					if (sel != frames[desk, i] && cmp(curr, frames[desk, i])) {
-						curr = frames[desk, i]
-					}
-				}
-				print curr
-			}
-		}
-	'
-}
-
-# get tab in given direction while cycling (prev, next)
-gettab() {
-	lsc -ls -g _SHOD_TAB_GROUP | awk -v DIR="$1" '
-		substr($1, 11, 1) == "f" {
-			tabs[n++] = $6
-			next
-		}
-		substr($1, 11, 1) == "A" {
-			found = 1
-			sel = n
-			tabs[n++] = $6
-			next
-		}
-		END {
-			if (!found)
-				exit
-			if (DIR == "prev") {
-				print tabs[(n + sel - 1) % n]
-			} else {
-				print tabs[(sel + 1) % n]
-			}
-		}
-	'
-}
-
 # print desktop number and format it for xnotify(1)
 notifydesk() {
 	lsd | awk -F '[-*: ]' -v NDESKS="$NDESKS" '
@@ -233,36 +102,35 @@ keys() {
 	xbindecho $MODIFIER <<-EOF
 		t       term
 		T       term same
-		D       desk
-		1       desk 0
-		2       desk 1
-		3       desk 2
-		4       desk 3
-		5       desk 4
-		6       desk 5
-		7       desk 6
-		8       desk 7
-		9       desk 8
-		S:1     desk +0
-		S:2     desk +1
-		S:3     desk +2
-		S:4     desk +3
-		S:5     desk +4
-		S:6     desk +5
-		S:7     desk +6
-		S:8     desk +7
-		S:9     desk +8
+		1       desk 1
+		2       desk 2
+		3       desk 3
+		4       desk 4
+		5       desk 5
+		6       desk 6
+		7       desk 7
+		8       desk 8
+		9       desk 9
+		S:1     desk +1
+		S:2     desk +2
+		S:3     desk +3
+		S:4     desk +4
+		S:5     desk +5
+		S:6     desk +6
+		S:7     desk +7
+		S:8     desk +8
+		S:9     desk +9
 		Tab     tab next
 		S:Tab   tab prev
-		h       focus left
-		j       focus down
-		k       focus up
-		l       focus right
+		h       focus -L
+		j       focus -D
+		k       focus -U
+		l       focus -R
+		H       focus -l
+		J       focus -d
+		K       focus -u
+		L       focus -r
 		Q       win close
-		H       win resize -10 0 0 0
-		J       win resize 0 10 0 0
-		K       win resize 0 -10 0 0
-		L       win resize 10 0 0 0
 		c       win resize 0 0 -25 0
 		C       win resize 0 0 +25 0
 		v       win resize 0 0 0 -25
@@ -272,7 +140,6 @@ keys() {
 		B       win below
 		Z       win minimize
 		F       win fullscreen
-		N       win shade
 		W       win maximize
 		Escape  notify clear
 	EOF
@@ -354,117 +221,60 @@ xinterp() {
 			;;
 		desk)
 			case "$args" in
-			"")
-				showdesk=$(wmctrl -m | awk 'NR == 4 { print $NF }')
-				case "$showdesk" in
-				OFF) wmctrl -k on ;;
-				*) wmctrl -k off ;;
-				esac
-				;;
 			+*)
-				operation="-r :ACTIVE: -t"
-				wmctrl $operation $(getdesk ${args#"+"})
+				shodc sendto "${args#"+"}"
 				notifydesk
 				;;
 			*)
-				operation="-s"
-				wmctrl $operation $(getdesk ${args})
+				shodc goto "${args}"
 				notifydesk
 				;;
 			esac
 			;;
 		focus)
-			wmctrl -ia $(getframe $args)
+			shodc focus $args
 			;;
 		tab)
-			wmctrl -ia $(gettab $args)
+			case "$args" in
+			next)
+				shodc focus -cN
+				;;
+			prev)
+				shodc focus -cP
+				;;
+			esac
 			;;
 		win)
 			set -- $args
-			case "$1" in
+			oper="$1"
+			shift
+			case "$oper" in
 			resize*)
-				eval $(xdotool getactivewindow getwindowgeometry --shell)
-				xadd=$2
-				yadd=$3
-				wadd=$4
-				hadd=$5
-				X=$(( X + xadd ))
-				Y=$(( Y + yadd ))
-				WIDTH=$(( WIDTH + wadd ))
-				HEIGHT=$(( HEIGHT + hadd ))
-				wmctrl -r :ACTIVE: -e 0,$X,$Y,$WIDTH,$HEIGHT
+				shodc geom -X "$1" -Y "$2" -W "$3" -H "$4"
 				;;
 			redraw)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -e "$(slop -f "0,%x,%y,%w,%h")"
-				else
-					wmctrl -r :ACTIVE: -e "$(slop -f "0,%x,%y,%w,%h")"
-				fi
+				shodc geom $(slop -f "-x %x -y %y -w %w -h %h") $1
 				;;
 			close)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ic "$2"
-				else
-					wmctrl -c :ACTIVE:
-				fi
+				shodc close $1
 				;;
 			stick|sticky)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,sticky
-				else
-					wmctrl -r :ACTIVE: -b toggle,sticky
-				fi
+				shodc state -s $1
 				;;
 			above)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,above
-				else
-					wmctrl -r :ACTIVE: -b toggle,above
-				fi
+				shodc state -a $1
 				;;
 			below)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,below
-				else
-					wmctrl -r :ACTIVE: -b toggle,below
-				fi
+				shodc state -b $1
 				;;
 			minimize)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,hidden
-				else
-					wmctrl -r :ACTIVE: -b toggle,hidden
-				fi
+				shodc state -m $1
 				;;
 			fullscreen)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,fullscreen
-				else
-					wmctrl -r :ACTIVE: -b toggle,fullscreen
-				fi
-				;;
-			shade|shaded)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,shaded
-				else
-					wmctrl -r :ACTIVE: -b toggle,shaded
-				fi
+				shodc state -f $1
 				;;
 			maximize)
-				if [ "$#" -gt 1 ]
-				then
-					wmctrl -ir "$2" -b toggle,maximized_horz,maximized_vert
-				else
-					wmctrl -r :ACTIVE: -b toggle,maximized_horz,maximized_vert
-				fi
+				shodc state -M $1
 				;;
 			esac
 			;;
