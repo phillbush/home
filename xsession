@@ -123,12 +123,12 @@ keys() {
 		Tab     tab next
 		S:Tab   tab prev
 		h       focus -L
-		j       focus -D
-		k       focus -U
+		j       focus -B
+		k       focus -T
 		l       focus -R
 		H       focus -l
-		J       focus -d
-		K       focus -u
+		J       focus -b
+		K       focus -t
 		L       focus -r
 		Q       win close
 		c       win resize 0 0 -25 0
