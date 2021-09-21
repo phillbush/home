@@ -13,13 +13,12 @@ atexit() {
 
 # print desktop number and format it for xnotify(1)
 notifydesk() {
-	lsd | awk -F '[-*: ]' -v NDESKS="$NDESKS" '
-		BEGIN        { printf "%s", "SEC:1\tIMG:'$icon_deskicon'\tTAG:desk\t" }
-		NR > 1 && !n { printf " " }
-		/^\*/        { printf "●";  n = 0 }
-		/^ /         { printf "○";  n = 0 }
-		NR == NDESKS { printf "\t"; n = 1 }
-		END          { print "" }
+	shodc desks | awk -F '[-*: ]' -v NDESKS="$NDESKS" '
+		BEGIN  { printf "%s", "SEC:1\tIMG:'$icon_deskicon'\tTAG:desk\t" }
+		NR > 1 { printf " " }
+		/^\*/  { printf "●"; next }
+		       { printf "○" }
+		END    { print "" }
 	'
 }
 
@@ -159,7 +158,7 @@ menu() {
 	pmenu -p -m 4 -r 3 <<EOF
 IMG:$icon_apps	applications
 $(run -i -a "$HOME/var/apps/utilities" | awk 'BEGIN{FS=OFS="\t"} {print "", $1, $2, "run "$3}')
-IMG:$icon_win	minimized windows	\$ lsc -l | awk 'BEGIN {FS = "\t"} /^......h/ {print substr(\$7, 1, 16) "\twin minimize", \$6}'
+IMG:$icon_win	minimized windows	\$ shodc list -l | awk 'BEGIN {FS = "\t"} /^...m/ && \$4 == \$6 {print substr(\$7, 1, 16) "\twin minimize " \$6}'
 IMG:$icon_scrot	take screenshot	scrot select
 IMG:$icon_media	music
 	IMG:$icon_media_forward	next song	mus next
