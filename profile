@@ -6,8 +6,8 @@ PATH="$PATH:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/pl
 MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
 for dir in $HOME/usr/*
 do
-	test -d "$dir/bin"       && PATH="$dir/bin${PATH:+":"}$PATH"
-	test -d "$dir/man"       && MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
+	PATH="$dir/bin${PATH:+":"}$PATH"
+	MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
 done
 unset dir
 export PATH HOME TERM MANPATH
@@ -21,6 +21,7 @@ export PYTHONUSERBASE="$HOME/usr/python"
 export CHIBI_MODULE_PATH="$HOME/usr/scheme/lib"
 export PREFIX="$HOME/usr/local"
 export MANPREFIX="$PREFIX/man"
+export TMACPREFIX="$PREFIX/tmac"
 
 # ksh terminal session
 export ENV="$HOME/.session"
@@ -41,12 +42,14 @@ export APPPATH="$HOME/var/apps/utilities:$HOME/var/apps/games"
 export CACHEDIR="$HOME/var/cache"
 export RLWRAP_HOME="$HOME/var/history"
 export TRASH="$HOME/var/trash"
-export CALENDAR_DIR="$HOME/proj"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.data"
+export TROFFMACS="$HOME/usr/local/tmac/tmac."
 
-# Rule files
+# Files
+export CALENDAR="$HOME/proj/calendar"
+export TODO="$HOME/proj/TODO"
 export MIMEFILE="$HOME/rules/mime"
 export XCOMPOSEFILE="$HOME/rules/xcompose"
 export IRCSERVERSFILE="$HOME/rules/irc.servers"

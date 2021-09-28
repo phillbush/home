@@ -58,6 +58,10 @@
 *color8:        GRAYDARK
 *color9:        REDLIGHT
 
+xdockbar*background: BLUE
+
+XLogo*foreground: REDLIGHT
+
 XClock*update:      1
 XClock*geometry:    210x210+1020+12
 XClock*render:      1
@@ -118,13 +122,13 @@ xmenu.font:             monospace:size=9
 xmenu.alignment:        right
 
 xterm*termName:         xterm-256color
-xterm*forceBoxChars:    true
-xterm*borderWidth:      3
-xterm*internalBorder:   2
-xterm*utf8:             2
-xterm*locale:           true
-xterm*scaleHeigh:       1
 xterm*scrollBar:        false
+!xterm*forceBoxChars:    true
+!xterm*borderWidth:      3
+!xterm*internalBorder:   2
+!xterm*utf8:             2
+!xterm*locale:           true
+!xterm*scaleHeigh:       1
 ! some black magic to change what characters XTerm considers "word delimiters"
 xterm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! select word on two clicks

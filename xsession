@@ -249,7 +249,7 @@ xinterp() {
 			shift
 			case "$oper" in
 			resize*)
-				shodc geom -X "$1" -Y "$2" -W "$3" -H "$4"
+				shodc geom -r -x "$1" -y "$2" -w "$3" -h "$4"
 				;;
 			redraw)
 				shodc geom $(slop -f "-x %x -y %y -w %w -h %h") $1
