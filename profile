@@ -36,6 +36,7 @@ export TZ="America/Sao_Paulo"
 #export TMPDIR="/tmp"
 #export MAIL=$HOME/var/mail
 export SKEL="$HOME/skel"
+export PROJDIR="$HOME/proj"
 export RULESDIR="$HOME/rules"
 export MUSICDIR="$HOME/files/mus/"
 export APPPATH="$HOME/var/apps/utilities:$HOME/var/apps/games"

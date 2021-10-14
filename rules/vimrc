@@ -37,6 +37,9 @@ set incsearch                           " show where the pattern matches as it w
 set hlsearch                            " highlight the search matching text
 set smartcase                           " try to be smart about case when searching
 
+" list of directories to be searched for tags, names, etc
+set path=.,/usr/include,/usr/X11R6/include/,/usr/local/include/,,
+
 " statusline and ruler
 set laststatus=0                        " do not show statusline
 set showcmd                             " show a command as it is being typed

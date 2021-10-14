@@ -1,11 +1,5 @@
 #define FG              #FFFFFF
 #define BG              #000000
-#define SELFG           #FFFFFF
-#define SELBG           #3465a4
-#define BORDER          #3465a4
-#define SELBORDER       #3465a4
-#define CURSOR          #FFFFFF
-#define SEPARATOR       #555753
 #define DARK            #121212
 #define GRAYDARK        #555753
 #define GRAYLIGHT       #707880
@@ -20,8 +14,15 @@
 #define BLUELIGHT       #729fcf
 #define CYAN            #059a9a
 #define CYANLIGHT       #33e2e2
-#define LINK0           #75507b
-#define LINK1           #ad7fa8
+#define PURPLE          #75507b
+#define PURPLELIGHT     #ad7fa8
+
+#define SELFG           FG
+#define SELBG           BLUE
+#define BORDER          BLUE
+#define SELBORDER       BLUE
+#define CURSOR          FG
+#define SEPARATOR       GRAYDARK
 
 *foreground:              FG
 *background:              BG
@@ -45,14 +46,14 @@
 *color10:       GREENLIGHT
 *color11:       YELLOWLIGHT
 *color12:       BLUELIGHT
-*color13:       LINK1
+*color13:       PURPLELIGHT
 *color14:       CYANLIGHT
 *color15:       LIGHT
 *color1:        RED
 *color2:        GREEN
 *color3:        YELLOW
 *color4:        BLUE
-*color5:        LINK0
+*color5:        PURPLE
 *color6:        CYAN
 *color7:        GRAYLIGHT
 *color8:        GRAYDARK

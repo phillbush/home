@@ -398,5 +398,11 @@ keys   >"$xinterpfifo" &
 prompt >"$xinterpfifo" &
 menu   >"$xinterpfifo" &
 
+# dockapps
+wmwlmon &
+bubblemon &
+wmapm &
+wmclock &
+
 # window manager
 shod
