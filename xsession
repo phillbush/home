@@ -155,7 +155,7 @@ prompt() {
 
 # call pmenu and feed it some commands
 menu() {
-	pmenu -p -m 4 -r 3 <<EOF
+	pmenu -m 4 -r 3 <<EOF
 IMG:$icon_apps	applications
 $(run -i -a "$HOME/var/apps/utilities" | awk 'BEGIN{FS=OFS="\t"} {print "", $1, $2, "run "$3}')
 IMG:$icon_win	minimized windows	\$ shodc list -l | awk 'BEGIN {FS = "\t"} /^...m/ && \$4 == \$6 {print substr(\$7, 1, 16) "\twin minimize " \$6}'

@@ -321,7 +321,7 @@ CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 
 # history options
 HISTFILE="$HOME/var/history/ksh.hist"
-HISTSIZE=1000
+HISTSIZE=10000
 
 # fc editor
 FCEDIT="${VISUAL:-${EDITOR:-"vi"}}"

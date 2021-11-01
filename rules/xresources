@@ -1,9 +1,9 @@
 #define FG              #FFFFFF
 #define BG              #000000
-#define DARK            #121212
-#define GRAYDARK        #555753
-#define GRAYLIGHT       #707880
-#define LIGHT           #C5C8C6
+#define BLACK           #121212
+#define BLACKLIGHT      #555753
+#define WHITE           #707880
+#define WHITELIGHT      #C5C8C6
 #define RED             #cc0000
 #define REDLIGHT        #ef2929
 #define GREEN           #4e9a06
@@ -21,43 +21,44 @@
 #define SELBG           BLUE
 #define BORDER          BLUE
 #define SELBORDER       BLUE
+#define ACCENT          BLUE
 #define CURSOR          FG
-#define SEPARATOR       GRAYDARK
+#define SEPARATOR       BLACKLIGHT
 
 *foreground:              FG
 *background:              BG
 *selforeground:           SELFG
 *selbackground:           SELBG
-*grip:                    DARK
+*grip:                    BLACK
 *cursorColor:             CURSOR
 *internalBorderColor:     SEPARATOR
 *borderColor:             SEPARATOR
-*Label*background:        DARK
+*Label*background:        BLACK
 *faceName:                InputMonoNarrow-Regular:size=9
 *faceSize:                9
-*Scrollbar.background:    DARK
-*Scrollbar.foreground:    GRAYLIGHT
+*Scrollbar.background:    BLACK
+*Scrollbar.foreground:    WHITE
 *Scrollbar.thickness:     14
 *Scrollbar.minimumThumb:  20
 *Scrollbar.translations:  <Btn1Down>: StartScroll(Forward) \n\
                           <Btn1Motion>: MoveThumb() NotifyThumb() \n\
 
-*color0:        DARK
-*color10:       GREENLIGHT
-*color11:       YELLOWLIGHT
-*color12:       BLUELIGHT
-*color13:       PURPLELIGHT
-*color14:       CYANLIGHT
-*color15:       LIGHT
+*color0:        BLACK
 *color1:        RED
 *color2:        GREEN
 *color3:        YELLOW
 *color4:        BLUE
 *color5:        PURPLE
 *color6:        CYAN
-*color7:        GRAYLIGHT
-*color8:        GRAYDARK
+*color7:        WHITE
+*color8:        BLACKLIGHT
 *color9:        REDLIGHT
+*color10:       GREENLIGHT
+*color11:       YELLOWLIGHT
+*color12:       BLUELIGHT
+*color13:       PURPLELIGHT
+*color14:       CYANLIGHT
+*color15:       WHITELIGHT
 
 xdockbar*background: BLUE
 
@@ -164,44 +165,44 @@ xterm*vt100.translations: #override \
 
 xcalc*geometry: 350x460
 xcalc.ti.background:                    BG
-xcalc.ti.bevel.background:              DARK
-xcalc.ti.bevel.screen.borderColor:      DARK
-xcalc.ti.bevel.screen.background:       DARK
-xcalc.ti.bevel.screen.DEC.background:   DARK
+xcalc.ti.bevel.background:              BLACK
+xcalc.ti.bevel.screen.borderColor:      BLACK
+xcalc.ti.bevel.screen.background:       BLACK
+xcalc.ti.bevel.screen.DEC.background:   BLACK
 xcalc.ti.bevel.screen.DEC.foreground:   FG
-xcalc.ti.bevel.screen.DEG.background:   DARK
+xcalc.ti.bevel.screen.DEG.background:   BLACK
 xcalc.ti.bevel.screen.DEG.foreground:   FG
-xcalc.ti.bevel.screen.GRAD.background:  DARK
+xcalc.ti.bevel.screen.GRAD.background:  BLACK
 xcalc.ti.bevel.screen.GRAD.foreground:  FG
-xcalc.ti.bevel.screen.RAD.background:   DARK
+xcalc.ti.bevel.screen.RAD.background:   BLACK
 xcalc.ti.bevel.screen.RAD.foreground:   FG
-xcalc.ti.bevel.screen.INV.background:   DARK
+xcalc.ti.bevel.screen.INV.background:   BLACK
 xcalc.ti.bevel.screen.INV.foreground:   FG
-xcalc.ti.bevel.screen.LCD.background:   DARK
+xcalc.ti.bevel.screen.LCD.background:   BLACK
 xcalc.ti.bevel.screen.LCD.foreground:   FG
 xcalc.ti.bevel.screen.LCD.shadowWidth:  0
-xcalc.ti.bevel.screen.M.background:     DARK
+xcalc.ti.bevel.screen.M.background:     BLACK
 xcalc.ti.bevel.screen.M.foreground:     FG
-xcalc.ti.bevel.screen.P.background:     DARK
+xcalc.ti.bevel.screen.P.background:     BLACK
 xcalc.ti.bevel.screen.P.foreground:     FG
 xcalc.ti.Command.foreground:            FG
-xcalc.ti.Command.background:            GRAYDARK
+xcalc.ti.Command.background:            BLACKLIGHT
 xcalc.ti.button5.background:            BLUELIGHT
 xcalc.ti.button35.background:           REDLIGHT
 xcalc.ti.button40.background:           REDLIGHT
 xcalc.ti.button45.background:           REDLIGHT
 xcalc.ti.button50.background:           REDLIGHT
 xcalc.ti.button55.background:           REDLIGHT
-xcalc.ti.button37.background:           GRAYLIGHT
-xcalc.ti.button38.background:           GRAYLIGHT
-xcalc.ti.button39.background:           GRAYLIGHT
-xcalc.ti.button42.background:           GRAYLIGHT
-xcalc.ti.button43.background:           GRAYLIGHT
-xcalc.ti.button44.background:           GRAYLIGHT
-xcalc.ti.button47.background:           GRAYLIGHT
-xcalc.ti.button48.background:           GRAYLIGHT
-xcalc.ti.button49.background:           GRAYLIGHT
-xcalc.ti.button52.background:           GRAYLIGHT
+xcalc.ti.button37.background:           WHITE
+xcalc.ti.button38.background:           WHITE
+xcalc.ti.button39.background:           WHITE
+xcalc.ti.button42.background:           WHITE
+xcalc.ti.button43.background:           WHITE
+xcalc.ti.button44.background:           WHITE
+xcalc.ti.button47.background:           WHITE
+xcalc.ti.button48.background:           WHITE
+xcalc.ti.button49.background:           WHITE
+xcalc.ti.button52.background:           WHITE
 XCalc*Cursor:                           hand2
 XCalc*ShapeStyle:                       rectangle
 
