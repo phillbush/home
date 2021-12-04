@@ -135,6 +135,7 @@ keys() {
 		v       win resize 0 0 0 -25
 		V       win resize 0 0 0 +25
 		S       win sticky
+		N       win shade
 		A       win above
 		B       win below
 		Z       win minimize
@@ -257,8 +258,11 @@ xinterp() {
 			close)
 				shodc close $1
 				;;
-			stick|sticky)
+			shade|shaded)
 				shodc state -s $1
+				;;
+			stick|sticky)
+				shodc state -y $1
 				;;
 			above)
 				shodc state -a $1
@@ -304,6 +308,9 @@ mkfifo "$xinterpfifo" "$xnotifyfifo"
 
 # kill background jobs on exit
 trap 'atexit' EXIT
+
+# necessary for X 21.1.1
+xrandr --dpi 96
 
 # Load environment variables and xresources
 . $HOME/.profile

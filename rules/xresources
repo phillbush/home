@@ -125,6 +125,7 @@ xmenu.alignment:        right
 
 xterm*termName:         xterm-256color
 xterm*scrollBar:        false
+xterm*allowMouseOps:    true
 !xterm*forceBoxChars:    true
 !xterm*borderWidth:      3
 !xterm*internalBorder:   2

@@ -316,6 +316,69 @@ cd() {
 	return 0
 }
 
+# less-intrusive rm -i; a la gnu rm -I
+rm() {
+	while [ "$#" -gt 0 ]
+	do
+		case "$1" in
+		--)
+			shift
+			break
+			;;
+		-*)
+			set -A opts -- "${opts[@]}" "$1"
+			shift
+			;;
+		*)
+			break
+			;;
+		esac
+	done
+	case "$opts" in
+	*f*)
+		command rm "${opts[@]}" "$@"
+		;;
+	*)
+		if [ "$#" -gt 3 ]
+		then
+			printf "remove %s files? " "$#" >&2
+			read -r answer || return
+			case "$answer" in
+			[yY]*)
+				command rm "${opts[@]}" "$@"
+				;;
+			esac
+		else
+			for i in "$@"
+			do
+				if [ -d "$i" ]
+				then
+					printf "recursively remove %s/? " "${i%/}" >&2
+					read -r answer || return
+					case "$answer" in
+					[yY]*)
+						command rm "${opts[@]}" "$i"
+						;;
+					esac
+				else
+					printf "remove %s? " "$i" >&2
+					read -r answer || return
+					case "$answer" in
+					[yY]*)
+						command rm "${opts[@]}" "$i"
+						;;
+					esac
+				fi
+			done
+		fi
+		;;
+	esac
+	unset answer
+	unset opts
+	unset i
+	return $?
+}
+
 # colon separated list of directories used by the cd command
 CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 
@@ -336,7 +399,7 @@ alias :Q=exit           # vi exit, wrong version
 alias vim='vim -p'      # vim; open each argument in a separate tab
 alias cp="cp -Riv"      # recursive, interactive, verbose cp
 alias mv="mv -iv"       # interactive, verbose mv
-alias rm='rm -riv'      # recursive, interactive, verbose rm
+alias rm='rm -rv'       # recursive, verbose rm
 alias mkdir='mkdir -p'  # create intermediate directories as required
 alias ls='ls -1Fh'      # append file indicator to entries, print human readable sizes
 alias lc='ls -C'        # columnated ls

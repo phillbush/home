@@ -49,8 +49,8 @@ export XDG_DATA_HOME="$HOME/.data"
 export TROFFMACS="$HOME/usr/local/tmac/tmac."
 
 # Files
-export CALENDAR="$HOME/proj/calendar"
-export TODO="$HOME/proj/TODO"
+export CALENDAR="$HOME/proj/*/Calendar"
+export TODO="$HOME/proj/*/TODO"
 export MIMEFILE="$HOME/rules/mime"
 export XCOMPOSEFILE="$HOME/rules/xcompose"
 export IRCSERVERSFILE="$HOME/rules/irc.servers"
@@ -59,14 +59,14 @@ export EXINIT=":so $HOME/rules/exrc"
 export VIMINIT=":source $HOME/rules/vimrc"
 #export FONTCONFIG_FILE="$HOME/rules/fontconfig"
 
-# phillbush
-export IRCNAME="phillbush"
-export IRCNICK="phillbush"
+# seninha
+export IRCNAME="seninha"
+export IRCNICK="seninha"
 export GIT_PAGER=cat
-export GIT_COMMITTER_NAME="phillbush"
-export GIT_COMMITTER_EMAIL="phillbush@cock.li"
-export GIT_AUTHOR_NAME="phillbush"
-export GIT_AUTHOR_EMAIL="phillbush@cock.li"
+export GIT_COMMITTER_NAME="seninha"
+export GIT_COMMITTER_EMAIL="lucas@seninha.org"
+export GIT_AUTHOR_NAME="seninha"
+export GIT_AUTHOR_EMAIL="lucas@seninha.org"
 
 # Default programs
 export PAGER="less"
