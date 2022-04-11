@@ -80,6 +80,7 @@
 
 # Symbols                               {{{1
 
+<Multi_key> <0> <0>                     : "∞"
 <Multi_key> <less> <less>        	: "⟨"
 <Multi_key> <greater> <greater>  	: "⟩"
 <Multi_key> <o> <o>              	: "°"   degree # DEGREE SIGN
@@ -134,6 +135,8 @@
 <Multi_key> <parenleft> <C>          : "⊂"
 <Multi_key> <parenleft> <U>          : "∩"
 <Multi_key> <parenright> <U>         : "∪"
+<Multi_key> <Z> <parenright> <U>     : "⋃"
+<Multi_key> <Z> <parenleft> <U>      : "⋂"
 <Multi_key> <slash> <0>              : "∅"
 <Multi_key> <0> <slash>              : "∅"
 
@@ -146,12 +149,14 @@
 # Proof symbols
 <Multi_key> <colon> <equal>          : "≔"
 <Multi_key> <bar> <minus>            : "⊦"
+<Multi_key> <minus> <bar>            : "⊣"
 <Multi_key> <bar> <equal>            : "⊨"
 <Multi_key> <bar> <equal>            : "⊨"
 <Multi_key> <period> <colon>         : "∴"
 <Multi_key> <colon> <period>         : "∵"
 <Multi_key> <T> <A>                  : "⊤"
 <Multi_key> <C> <A>                  : "⊥"
+<Multi_key> <I> <greater>            : "▹"
 
 # Arrows
 <Multi_key> <bar> <greater>         : "↦"
@@ -194,9 +199,10 @@
 <Multi_key> <f> <bracketleft>:     "⌊"
 <Multi_key> <f> <bracketright>:    "⌋"
 <Multi_key> <asterisk> <asterisk>: "∗"
-<Multi_key> <O> <plus>:            "⊕"
-<Multi_key> <O> <asterisk>:        "⊗"
-<Multi_key> <O> <period>:          "⊙"
+<Multi_key> <0> <o>:               "∘"
+<Multi_key> <0> <plus>:            "⊕"
+<Multi_key> <0> <asterisk>:        "⊗"
+<Multi_key> <0> <period>:          "⊙"
 
 
 # Drawing                               {{{1
@@ -514,6 +520,8 @@
 <dead_circumflex> <c>            	: "ĉ"   U0109 # LATIN SMALL LETTER C WITH CIRCUMFLEX
 <dead_abovedot> <C>              	: "Ċ"   U010A # LATIN CAPITAL LETTER C WITH DOT ABOVE
 <dead_abovedot> <c>              	: "ċ"   U010B # LATIN SMALL LETTER C WITH DOT ABOVE
+<dead_diaeresis> <C>              	: "Ċ"   U010A # LATIN CAPITAL LETTER C WITH DOT ABOVE
+<dead_diaeresis> <c>              	: "ċ"   U010B # LATIN SMALL LETTER C WITH DOT ABOVE
 <dead_caron> <C>                 	: "Č"   U010C # LATIN CAPITAL LETTER C WITH CARON
 <dead_caron> <c>                 	: "č"   U010D # LATIN SMALL LETTER C WITH CARON
 <dead_caron> <D>                 	: "Ď"   U010E # LATIN CAPITAL LETTER D WITH CARON
@@ -538,6 +546,8 @@
 <dead_abovedot> <g>              	: "ġ"   U0121 # LATIN SMALL LETTER G WITH DOT ABOVE
 <dead_cedilla> <G>               	: "Ģ"   U0122 # LATIN CAPITAL LETTER G WITH CEDILLA
 <dead_cedilla> <g>               	: "ģ"   U0123 # LATIN SMALL LETTER G WITH CEDILLA
+<dead_diaeresis> <G>               	: "Ġ"   U0122 # LATIN CAPITAL LETTER G WITH CEDILLA
+<dead_diaeresis> <g>               	: "ġ"   U0123 # LATIN SMALL LETTER G WITH CEDILLA
 <dead_circumflex> <H>            	: "Ĥ"   U0124 # LATIN CAPITAL LETTER H WITH CIRCUMFLEX
 <dead_circumflex> <h>            	: "ĥ"   U0125 # LATIN SMALL LETTER H WITH CIRCUMFLEX
 <dead_stroke> <H>               	: "Ħ"   U0126 # LATIN CAPITAL LETTER H WITH STROKE

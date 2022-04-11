@@ -1,217 +1,396 @@
-#define FG              #FFFFFF
-#define BG              #000000
-#define BLACK           #121212
-#define BLACKLIGHT      #555753
-#define WHITE           #707880
-#define WHITELIGHT      #C5C8C6
-#define RED             #cc0000
-#define REDLIGHT        #ef2929
-#define GREEN           #4e9a06
-#define GREENLIGHT      #8ae234
-#define YELLOW          #c4a000
-#define YELLOWLIGHT     #fce94f
-#define BLUE            #3465a4
-#define BLUELIGHT       #729fcf
-#define CYAN            #059a9a
-#define CYANLIGHT       #33e2e2
-#define PURPLE          #75507b
-#define PURPLELIGHT     #ad7fa8
+!! definitions
+#define FG                              #FFFFFF
+#define BG                              #000000
+#define DARK                            #121212
+#define DARKLIGHT                       #555753
+#define LIGHT                           #707880
+#define LIGHTLIGHT                      #C5C8C6
+#define RED                             #cc0000
+#define REDLIGHT                        #ef2929
+#define GREEN                           #4e9a06
+#define GREENLIGHT                      #8ae234
+#define YELLOW                          #c4a000
+#define YELLOWLIGHT                     #fce94f
+#define BLUE                            #3465a4
+#define BLUELIGHT                       #729fcf
+#define CYAN                            #059a9a
+#define CYANLIGHT                       #33e2e2
+#define PURPLE                          #75507b
+#define PURPLELIGHT                     #ad7fa8
+#define BORDER                          #3465A4
+#define BORDERTOPSHADOW                 #729FCF
+#define BORDERBOTSHADOW                 #204A87
+#define WIDGET                          #555753
+#define WIDGETTOPSHADOW                 #888A85
+#define WIDGETBOTSHADOW                 #2E3436
+#define SELFG                           FG
+#define SELBG                           BLUE
+#define SELBORDER                       BLUE
+#define ACCENT                          BLUE
+#define CURSOR                          FG
+#define SEPARATOR                       WIDGETTOPSHADOW
+#define BUTTONWIDTH                     17
+#define BORDERWIDTH                     6
 
-#define SELFG           FG
-#define SELBG           BLUE
-#define BORDER          BLUE
-#define SELBORDER       BLUE
-#define ACCENT          BLUE
-#define CURSOR          FG
-#define SEPARATOR       BLACKLIGHT
+!! terminal colors
+*color0:                                DARK
+*color1:                                RED
+*color2:                                GREEN
+*color3:                                YELLOW
+*color4:                                BLUE
+*color5:                                PURPLE
+*color6:                                CYAN
+*color7:                                LIGHT
+*color8:                                DARKLIGHT
+*color9:                                REDLIGHT
+*color10:                               GREENLIGHT
+*color11:                               YELLOWLIGHT
+*color12:                               BLUELIGHT
+*color13:                               PURPLELIGHT
+*color14:                               CYANLIGHT
+*color15:                               LIGHTLIGHT
 
-*foreground:              FG
-*background:              BG
-*selforeground:           SELFG
-*selbackground:           SELBG
-*grip:                    BLACK
-*cursorColor:             CURSOR
-*internalBorderColor:     SEPARATOR
-*borderColor:             SEPARATOR
-*Label*background:        BLACK
-*faceName:                InputMonoNarrow-Regular:size=9
-*faceSize:                9
-*Scrollbar.background:    BLACK
-*Scrollbar.foreground:    WHITE
-*Scrollbar.thickness:     14
-*Scrollbar.minimumThumb:  20
-*Scrollbar.translations:  <Btn1Down>: StartScroll(Forward) \n\
-                          <Btn1Motion>: MoveThumb() NotifyThumb() \n\
+!! general
+*foreground:                            FG
+*background:                            BG
+*selforeground:                         SELFG
+*selbackground:                         SELBG
+*cursorColor:                           CURSOR
+*borderColor:                           SEPARATOR
+*faceName:                              InputMonoNarrow-Regular:size=9
+*faceSize:                              9
+*cursor:                                left_ptr
 
-*color0:        BLACK
-*color1:        RED
-*color2:        GREEN
-*color3:        YELLOW
-*color4:        BLUE
-*color5:        PURPLE
-*color6:        CYAN
-*color7:        WHITE
-*color8:        BLACKLIGHT
-*color9:        REDLIGHT
-*color10:       GREENLIGHT
-*color11:       YELLOWLIGHT
-*color12:       BLUELIGHT
-*color13:       PURPLELIGHT
-*color14:       CYANLIGHT
-*color15:       WHITELIGHT
+!! Athena widgets
+! Command:      Regular button (normally rectangular, but I set them as oval)
+! MenuButton:   Button that spawns a menu, similar to Command
+! Toggle:       Button that toggles
+! Radio:        Button that toggles
+! Grip:         Rectangle used to reposition objects (usually Paneds)
+! Paned:        Resizeable container box widget
+! Box:          Fixed-size container box widget?
+! Form:         Automatic-size container box widget?
+! Label:        String container
+! SimpleMenu:   Menu
+! ScrollBar:    Scroll bar
+*shadowWidth:                           2
+*shapeStyle:                            oval
+*Command.highlightThickness:            1
+*Command.background:                    DARK
+*MenuButton.background:                 DARK
+*Toggle.background:                     DARK
+*Radio.background:                      DARK
+*Grip.foreground:                       DARK
+*Grip.background:                       DARK
+*Grip.borderColor:                      SEPARATOR
+*Grip.height:                           5
+*Grip.width:                            5
+*Grip.borderWidth:                      1
+*Text.background:                       BG
+*Paned.cursor:                          left_ptr
+*Paned.betweenCursor:                   left_ptr
+*Paned.verticalGripCursor:              sb_v_double_arrow
+*Paned.verticalBetweenCursor:           sb_v_double_arrow
+*Paned.upperCursor:                     sb_v_double_arrow
+*Paned.lowerCursor:                     sb_v_double_arrow
+*Paned.horizontalGripCursor:            sb_h_double_arrow
+*Paned.horizontalBetweenCursor:         sb_h_double_arrow
+*Paned.rightCursor:                     sb_h_double_arrow
+*Paned.leftCursor:                      sb_h_double_arrow
+*Paned.internalBorderColor:             SEPARATOR
+*Paned.background:                      DARK
+*Box.background:                        DARK
+*Form.background:                       DARK
+*Label.background:                      DARK
+*Label.justify:                         right
+*Scrollbar.scrollBar:                   True
+*Scrollbar.scrollTtyOutput:             False
+*Scrollbar.scrollKey:                   True
+*Scrollbar.background:                  WIDGETBOTSHADOW
+*Scrollbar.foreground:                  WIDGETTOPSHADOW
+*Scrollbar.thickness:                   BUTTONWIDTH
+*Scrollbar.scrollDCursor:               left_ptr
+*Scrollbar.scrollHCursor:               left_ptr
+*Scrollbar.scrollLCursor:               left_ptr
+*Scrollbar.scrollRCursor:               left_ptr
+*Scrollbar.scrollUCursor:               left_ptr
+*Scrollbar.scrollVCursor:               left_ptr
+*Scrollbar.translations:                <Btn1Down>:     StartScroll(Forward) \n\
+                                        <Btn1Motion>:   MoveThumb() NotifyThumb() \n\
+                                        <Btn1Up>:       EndScroll()
 
-xdockbar*background: BLUE
+!! Use XFT on Motif widgets
+*renderTable:                           mono
+*renderTable.mono.fontName:             InputMonoNarrow
+*renderTable.mono.fontSize:             9
+*renderTable.mono.fontStyle:            Regular
+*renderTable.mono.fontType:             FONT_IS_XFT
 
+!! Motif widgets
+*shadowThickness:                       2
+*tearOffModel:                          TEAR_OFF_ENABLED
+*XmToggleButton.indicatorOn:            INDICATOR_CHECK_BOX
+*XmToggleButton.indicatorType:          ONE_OF_MANY_ROUND
+*XmToggleButtonGadget.indicatorOn:      INDICATOR_CHECK_BOX
+*XmToggleButtonGadget.indicatorType:    ONE_OF_MANY_ROUND
+*ApplicationShell*background:           WIDGET
+*ApplicationShell*bottomShadowColor:    WIDGETBOTSHADOW
+*ApplicationShell*topShadowColor:       WIDGETTOPSHADOW
+*XmMainWindow*background:               WIDGET
+*XmMainWindow*bottomShadowColor:        WIDGETBOTSHADOW
+*XmMainWindow*topShadowColor:           WIDGETTOPSHADOW
+*XmText.background:                     BG
+*XmText.foreground:                     FG
+*XmTextField.background:                BG
+*XmTextField.foreground:                FG
+*XmDrawingArea.background:              BG
+*XmDrawingArea.foreground:              FG
+*XmList.background:                     BG
+*XmList.foreground:                     FG
+*XmScrollBar*sliderMark:                round_mark
+*XmScrollBar*showArrows:                None
+
+!! Motif widgets
+! (the resources below were not tested, I may edit them later)
+*XmList.baseTranslations:       #augment \n\
+                                <Btn5Down>: ListNextPage() \n\
+                                <Btn4Down>: ListPrevPage()
+*XmScrollBar.baseTranslations:	#augment \n\
+                                <Btn4Down>: IncrementUpOrLeft(0) IncrementUpOrLeft(1) \n\
+                                <Btn5Down>: IncrementDownOrRight(0) IncrementDownOrRight(1)
+*XmSpinBox.accelerators:        #override \n\
+                                <Btn5Down>: SpinBPrior() \n\
+                                <Btn5Up>: SpinBDisarm() \n\
+                                <Btn4Down>: SpinBNext() \n\
+                                <Btn4Up>: SpinBDisarm() \n\
+                                <Key>osfUp: SpinBNext() \n\
+                                <Key>osfDown: SpinBPrior() \n\
+                                <KeyUp>osfUp: SpinBDisarm() \n\
+                                <KeyUp>osfDown: SpinBDisarm() \n\
+                                <Key>osfLeft: SpinBLeft() \n\
+                                <Key>osfRight: SpinBRight() \n\
+                                <KeyUp>osfLeft: SpinBDisarm() \n\
+                                <KeyUp>osfRight: SpinBDisarm() \n\
+                                <Key>osfBeginLine: SpinBFirst() \n\
+                                <Key>osfEndLine: SpinBLast()
+*XmText.baseTranslations:       #augment \n\
+                                Shift<Btn4Down>: page-left() \n\
+                                Shift<Btn5Down>: page-right() \n\
+                                <Btn5Down>:     scroll-one-line-up() scroll-one-line-up() scroll-one-line-up() \n\
+                                <Btn4Down>:     scroll-one-line-down() scroll-one-line-down() scroll-one-line-down()
+*XmText*Translations:           #override\n\
+                                Ctrl<Key>u:     delete-to-start-of-line()\n\
+                                Ctrl<Key>k:     delete-to-end-of-line()\n\
+                                Ctrl<Key>a:     beginning-of-line()\n\
+                                Ctrl<Key>e:     end-of-line()\n\
+                                Ctrl<Key>p:     process-up()\n\
+                                Ctrl<Key>b:     backward-character()\n\
+                                Ctrl<Key>n:     process-down()\n\
+                                Ctrl<Key>f:     forward-character()\n\
+                                Ctrl<Key>w:     delete-previous-word()
+*XmTextField*Translations:      #override\n\
+                                <Key>Home:      beginning-of-line()\n\
+                                <Key>End:       end-of-line()\n\
+                                Ctrl<Key>u:     delete-to-start-of-line()\n\
+                                Ctrl<Key>k:     delete-to-end-of-line()\n\
+                                Ctrl<Key>a:     beginning-of-line()\n\
+                                Ctrl<Key>e:     end-of-line()\n\
+                                Ctrl<Key>b:     backward-character()\n\
+                                Ctrl<Key>f:     forward-character()\n\
+                                Ctrl<Key>w:     delete-previous-word()
+
+!! XLogo
 XLogo*foreground: REDLIGHT
 
-XClock*update:      1
-XClock*geometry:    210x210+1020+12
-XClock*render:      1
-XClock*majorColor:  rgba:f0/f0/19/7b
-XClock*minorColor:  rgba:a0/c0/f0/c0
-XClock*hourColor:   rgba:c9/66/11/72
-XClock*minuteColor: rgba:00/82/9f/72
-XClock*secondColor: rgba:50/93/30/6f
+!! xterm resources (I use "xterm" (name) rather than "XTerm" (class) here)
+! locale:               (string) "True" to use $LOCALE, "UTF-8" to force UTF-8, etc
+! termName:             (string) Set $TERM according to terminfo(3) and termcap(3)
+! visualBell:           (Bool) whether to flash the terminal on Bell
+! rightScrollBar:       (Bool) whether to show scrollbar on the right
+! allowMouseOps:        (Bool) whether to enable mouse control sequences (disabled by OpenBSD for security, enabled by me for convenience)
+! forceBoxChars:        (Bool) if true xterm ignore font and draw line-drawing characters by itself
+! internalBorder:       (Cardinal) pixels between characters and window border
+! charClass:            some black magic to change what characters XTerm considers "word delimiters"
+! eightBitInput:        (Bool) AFIU, whether to enter Extended ASCII chars with Alt+Key presses (set to False for Alt+Backspace to not enter ÿ)
+! on2Clicks:            What to sellect on double clicks (set to "word" to mimic Browser)
+! on3Clicks:            What to sellect on triple clicks (set to "line" to mimic Browser)
+! translations:         (Translations) XTerm actions
+xterm*locale:                           UTF-8
+xterm*termName:                         xterm-256color
+xterm*visualBell:                       False
+xterm*rightScrollBar:                   True
+xterm*allowMouseOps:                    True
+xterm*forceBoxChars:                    True
+xterm*internalBorder:                   5
+xterm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+xterm*eightBitInput:                    False
+xterm*on2Clicks:                        word
+xterm*on3Clicks:                        line
+xterm.vt100.translations:               #override \
+                                        Ctrl<Key>minus: smaller-vt-font() \n\
+                                        Ctrl<Key>plus:  larger-vt-font() \n\
+                                        <Key>Delete:    string(0x1b) string("[3~") \n\
+                                        Ctrl<Key>0:     set-vt-font(d)
 
-xdockbar.structure: 2,2
-xdockbar.bar0.geometry: 100%x30+0+0
-xdockbar.bar0.gravity:  N
-xdockbar.bar1.geometry: 100%x30+0+0
-xdockbar.bar1.gravity:  S
-
-xnotify.gravity:     N
-xnotify.geometry:    230x0
-xnotify.imageWidth:  64
-xnotify.borderWidth: 3
-xnotify.gap:         7
-xnotify.padding:     1
-xnotify.background:  BG
-xnotify.foreground:  FG
-xnotify.border:      SELBORDER
-xnotify.alignment:   left
-xnotify.shrink:      false
-
-shod.theme:               $HOME/theme/decoration.xpm
-shod.gapOuter:            3
-shod.gapInner:            3
-shod.groupHint:           true
-shod.ignoreGaps:          true
-shod.ignoreTitle:         true
-shod.ignoreBorders:       true
-shod.mergeBorders:        false
-shod.hideTitle:           false
-shod.class.XTerm.autoTab: tilingMulti
-shod.notification.gap:    3
-shod.notification.gravity: NE
-
-pmenu.selbackground: SELBG
-
-xprompt.geometry:       800x30
-xprompt.font:           monospace:size=12
-
-xmenu.borderWidth:      2
-xmenu.separatorWidth:   9
-xmenu.height:           23
-xmenu.width:            90
-xmenu.gap:              4
-xmenu.background:       BG
-xmenu.foreground:       FG
-xmenu.selbackground:    SELBG
-xmenu.selforeground:    SELFG
-xmenu.border:           BORDER
-xmenu.separator:        SEPARATOR
-xmenu.font:             monospace:size=9
-xmenu.alignment:        right
-
-xterm*termName:         xterm-256color
-xterm*scrollBar:        false
-xterm*allowMouseOps:    true
-!xterm*forceBoxChars:    true
-!xterm*borderWidth:      3
-!xterm*internalBorder:   2
-!xterm*utf8:             2
-!xterm*locale:           true
-!xterm*scaleHeigh:       1
-! some black magic to change what characters XTerm considers "word delimiters"
-xterm*charClass:        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
-! select word on two clicks
-xterm*on2Clicks:        word
-! select whole line on three clicks
-xterm*on3Clicks:        line
-! key/button bindings
-xterm*vt100.translations: #override \
-	Ctrl <Key> minus: smaller-vt-font() \n\
-	Ctrl <Key> plus: larger-vt-font() \n\
-	<Key>Delete: string(0x1b) string("[3~") \n\
-	!<Key>KP_Delete: string(0x1b) string("[3~") \n\
-	Ctrl <Key> 0: set-vt-font(d)
-
-
-*cursor:                  left_ptr
-*rightcursor:             left_ptr
-*leftcursor:              left_ptr
-*uppercursor:             left_ptr
-*scrollDCursor:           left_ptr
-*scrollHCursor:           left_ptr
-*scrollLCursor:           left_ptr
-*scrollRCursor:           left_ptr
-*scrollUCursor:           left_ptr
-*scrollVCursor:           left_ptr
-*gripCursor:              left_ptr
-*betweenCursor:           left_ptr
-*verticalGripCursor:      left_ptr
-*verticalBetweenCursor:   left_ptr
-*horizontalGripCursor:    left_ptr
-*horizontalBetweenCursor: left_ptr
-
-xcalc*geometry: 350x460
-xcalc.ti.background:                    BG
-xcalc.ti.bevel.background:              BLACK
-xcalc.ti.bevel.screen.borderColor:      BLACK
-xcalc.ti.bevel.screen.background:       BLACK
-xcalc.ti.bevel.screen.DEC.background:   BLACK
-xcalc.ti.bevel.screen.DEC.foreground:   FG
-xcalc.ti.bevel.screen.DEG.background:   BLACK
-xcalc.ti.bevel.screen.DEG.foreground:   FG
-xcalc.ti.bevel.screen.GRAD.background:  BLACK
-xcalc.ti.bevel.screen.GRAD.foreground:  FG
-xcalc.ti.bevel.screen.RAD.background:   BLACK
-xcalc.ti.bevel.screen.RAD.foreground:   FG
-xcalc.ti.bevel.screen.INV.background:   BLACK
-xcalc.ti.bevel.screen.INV.foreground:   FG
-xcalc.ti.bevel.screen.LCD.background:   BLACK
-xcalc.ti.bevel.screen.LCD.foreground:   FG
-xcalc.ti.bevel.screen.LCD.shadowWidth:  0
-xcalc.ti.bevel.screen.M.background:     BLACK
-xcalc.ti.bevel.screen.M.foreground:     FG
-xcalc.ti.bevel.screen.P.background:     BLACK
-xcalc.ti.bevel.screen.P.foreground:     FG
-xcalc.ti.Command.foreground:            FG
-xcalc.ti.Command.background:            BLACKLIGHT
-xcalc.ti.button5.background:            BLUELIGHT
-xcalc.ti.button35.background:           REDLIGHT
-xcalc.ti.button40.background:           REDLIGHT
-xcalc.ti.button45.background:           REDLIGHT
-xcalc.ti.button50.background:           REDLIGHT
-xcalc.ti.button55.background:           REDLIGHT
-xcalc.ti.button37.background:           WHITE
-xcalc.ti.button38.background:           WHITE
-xcalc.ti.button39.background:           WHITE
-xcalc.ti.button42.background:           WHITE
-xcalc.ti.button43.background:           WHITE
-xcalc.ti.button44.background:           WHITE
-xcalc.ti.button47.background:           WHITE
-xcalc.ti.button48.background:           WHITE
-xcalc.ti.button49.background:           WHITE
-xcalc.ti.button52.background:           WHITE
+!! XCalc
+! Works on default OpenBSD XCalc, which has more buttons than the
+! default GNU/Linux XCalc.
+XCalc*geometry: 350x460
+XCalc.ti.background:                    BG
+XCalc.ti.bevel.background:              DARK
+XCalc.ti.bevel.screen.borderColor:      DARK
+XCalc.ti.bevel.screen.background:       DARK
+XCalc.ti.bevel.screen.DEC.background:   DARK
+XCalc.ti.bevel.screen.DEC.foreground:   FG
+XCalc.ti.bevel.screen.DEG.background:   DARK
+XCalc.ti.bevel.screen.DEG.foreground:   FG
+XCalc.ti.bevel.screen.GRAD.background:  DARK
+XCalc.ti.bevel.screen.GRAD.foreground:  FG
+XCalc.ti.bevel.screen.RAD.background:   DARK
+XCalc.ti.bevel.screen.RAD.foreground:   FG
+XCalc.ti.bevel.screen.INV.background:   DARK
+XCalc.ti.bevel.screen.INV.foreground:   FG
+XCalc.ti.bevel.screen.LCD.background:   DARK
+XCalc.ti.bevel.screen.LCD.foreground:   FG
+XCalc.ti.bevel.screen.LCD.shadowWidth:  0
+XCalc.ti.bevel.screen.M.background:     DARK
+XCalc.ti.bevel.screen.M.foreground:     FG
+XCalc.ti.bevel.screen.P.background:     DARK
+XCalc.ti.bevel.screen.P.foreground:     FG
+XCalc.ti.Command.foreground:            FG
+XCalc.ti.Command.background:            DARKLIGHT
+XCalc.ti.button5.background:            BLUELIGHT
+XCalc.ti.button35.background:           REDLIGHT
+XCalc.ti.button40.background:           REDLIGHT
+XCalc.ti.button45.background:           REDLIGHT
+XCalc.ti.button50.background:           REDLIGHT
+XCalc.ti.button55.background:           REDLIGHT
+XCalc.ti.button37.background:           LIGHT
+XCalc.ti.button38.background:           LIGHT
+XCalc.ti.button39.background:           LIGHT
+XCalc.ti.button42.background:           LIGHT
+XCalc.ti.button43.background:           LIGHT
+XCalc.ti.button44.background:           LIGHT
+XCalc.ti.button47.background:           LIGHT
+XCalc.ti.button48.background:           LIGHT
+XCalc.ti.button49.background:           LIGHT
+XCalc.ti.button52.background:           LIGHT
 XCalc*Cursor:                           hand2
-XCalc*ShapeStyle:                       rectangle
 
-NetHack*message*translations:	<KeyPress>: input()
-!
-! Example extra translations for the map window.
-NetHack*map*translations: #override \
-                          <Key>Left: input(h) \n\
-                          <Key>Right: input(l) \n\
-                          <Key>Up: input(k) \n\
-                          <Key>Down: input(j)
+!! XClock
+XClock*update:                          1
+XClock*geometry:                        210x210+1020+12
+XClock*render:                          1
+XClock*majorColor:                      rgba:f0/f0/19/7b
+XClock*minorColor:                      rgba:a0/c0/f0/c0
+XClock*hourColor:                       rgba:c9/66/11/72
+XClock*minuteColor:                     rgba:00/82/9f/72
+XClock*secondColor:                     rgba:50/93/30/6f
+
+!! shod
+!shod*background:                        #3465A4
+!shod*topShadowColor:                    #729FCF
+!shod*bottomShadowColor:                 #204A87
+!shod.inactive.background:               #555753
+!shod.inactive.topShadowColor:           #888A85
+!shod.inactive.bottomShadowColor:        #2E3436
+!shod.urgent.background:                 #CC0000
+!shod.urgent.topShadowColor:             #EF2929
+!shod.urgent.bottomShadowColor:          #A40000
+!shod.dock.background:                   #121212
+!shod.dock.topShadowColor:               #2E3436
+!shod.dock.bottomShadowColor:            #000000
+!shod.borderWidth:                       6
+!shod.notifGap:                          3
+!shod.notifGravity:                      NE
+!shod.shadowThickness:                   2
+!shod.snapProximity:                     8
+!shod.title.font:                        fixed
+!shod.title.foreground:                  FG
+!shod.titleWidth:                        17
+shod.class.XMenu.dockpos:               0
+shod.class.Paginator.dockpos:           1
+shod.class.wmapm.dockpos:               2
+shod.name.WMmp.dockpos:                 3
+shod.class.bubblemon.dockpos:           4
+shod.class.WMClock.dockpos:             5
+shod.numOfDesktops:                     5
+shod.dockSpace:                         66
+shod.dockWidth:                         66
+shod.dockGravity:                       E
+
+!! Paginator
+paginator.background:                   DARK
+paginator.selbackground:                LIGHT
+paginator.separator:                    LIGHT
+paginator.activeBackground:             BORDER
+paginator.activeTopShadowColor:         BORDERTOPSHADOW
+paginator.activeBottomShadowColor:      BORDERBOTSHADOW
+paginator.inactiveBackground:           WIDGET
+paginator.inactiveTopShadowColor:       WIDGETTOPSHADOW
+paginator.inactiveBottomShadowColor:    WIDGETBOTSHADOW
+paginator.numColumns:                   1
+paginator.numRows:                      0
+paginator.orientation:                  Vertical
+paginator.startingCorner:               TopLeft
+
+!! XNotify
+xnotify.geometry:                       230x0
+xnotify.imageWidth:                     64
+xnotify.padding:                        1
+xnotify.background:                     BG
+xnotify.foreground:                     FG
+xnotify.border:                         SELBORDER
+xnotify.alignment:                      left
+xnotify.shrink:                         false
+xnotify.wrap:                           true
+
+!! XMenu
+xmenu.borderWidth:                      2
+xmenu.separatorWidth:                   9
+xmenu.height:                           22
+xmenu.width:                            90
+xmenu.gap:                              4
+xmenu.background:                       DARK
+xmenu.foreground:                       FG
+xmenu.selbackground:                    SELBG
+xmenu.selforeground:                    SELFG
+xmenu.border:                           WIDGETBOTSHADOW
+xmenu.separator:                        SEPARATOR
+xmenu.font:                             monospace:size=9
+xmenu.alignment:                        right
+
+!! xv
+xv*background:                          #b2c0dc
+xv*foreground:                          #000000
+
+!! xpdf
+xpdf.geometry:                          650x820
+xpdf.fullscreen:                        True
+xpdf.fullscreenMode:                    True
+xpdf*background:                        WIDGET
+xpdf*bottomShadowColor:                 WIDGETBOTSHADOW
+xpdf*topShadowColor:                    WIDGETTOPSHADOW
+
+!! control (an experimental application of mine, I may delete that later)
+control.background:                     #121212
+control.foreground:                     #FFFFFF
+control.description:                    #555753
+control.hoverbackground:                #2E3436
+control.hoverforeground:                #FFFFFF
+control.hoverdescription:               #555753
+control.selbackground:                  #3465A4
+control.selforeground:                  #FFFFFF
+control.seldescription:                 #C5C8C6
+
+!! XDockbar (an experimental application of mine, I may delete that later)
+xdockbar*background:                    BLUE
+xdockbar.structure:                     2,2
+xdockbar.bar0.geometry:                 100%x30+0+0
+xdockbar.bar0.gravity:                  N
+xdockbar.bar1.geometry:                 100%x30+0+0
+xdockbar.bar1.gravity:                  S
+
+!! XFilter (an experimental replacement for XPrompt)
+xfilter.geometry:                       800x30
+xfilter.font:                           monospace:size=12

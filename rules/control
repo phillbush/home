@@ -1,0 +1,65 @@
+Apps
+	Draw Terminal					exec drawterm
+	KEY:A-T		Open Terminal at $HOME		exec xterm
+	KEY:A-S-T	Open Terminal Here		exec samedir
+	Take Screenshot					exec scrot select
+	RUN:	KEY:A-space	Run			exec xfilter -gi
+	Browse Files					exec run fm
+	Open Firefox					exec run www
+	Open Chrome					exec chrome
+	Chat						exec run hexchat
+	Games
+		TES III Morrowind			exec run morrowind
+		GNU Backgammon				exec run backgammon
+		Spider					exec run spider
+		Super Tux Kart				exec run supertuxkart
+Window
+	KEY:A-S-S	Stick container			exec shodc state -y
+	KEY:A-S-N	Shade container			exec shodc state -s
+	KEY:A-S-B	Lower container			exec shodc state -b
+	KEY:A-S-A	Raise container			exec shodc state -a
+	KEY:A-S-Z	Minimize container		exec shodc state -m
+	KEY:A-S-W	Maximize container		exec shodc state -M
+	KEY:A-S-F	FullScreen			exec shodc state -f
+	Move to
+		KEY:A-S-1	Move to desktop 1	exec shodc sendto 1
+		KEY:A-S-2	Move to desktop 2	exec shodc sendto 2
+		KEY:A-S-3	Move to desktop 3	exec shodc sendto 3
+		KEY:A-S-4	Move to desktop 4	exec shodc sendto 4
+		KEY:A-S-5	Move to desktop 5	exec shodc sendto 5
+	Focus
+		KEY:A-H		Focus column on the left	exec shodc focus -L
+		KEY:A-L		Focus column on the right	exec shodc focus -R
+		KEY:A-K		Focus row above			exec shodc focus -T
+		KEY:A-J		Focus row below			exec shodc focus -B
+		KEY:A-P		Focus previous tab		exec shodc focus -cP
+		KEY:A-N		Focus next tab			exec shodc focus -cN
+	KEY:A-S-Q		Close window			exec shodc close
+Files
+	TODO
+Windows
+	KEY:A-Tab	Focus Previous Window			exec shodc focus -cp
+	KEY:A-S-Tab	Focus Next Window			exec shodc focus -cn
+	Desktop
+		KEY:A-1		Go to desktop 1			exec shodc goto 1
+		KEY:A-2		Go to desktop 2			exec shodc goto 2
+		KEY:A-3		Go to desktop 3			exec shodc goto 3
+		KEY:A-4		Go to desktop 4			exec shodc goto 4
+		KEY:A-5		Go to desktop 5			exec shodc goto 5
+	PIPE:shodc list -l | awk -F "\t" '$4==$6{print $7 "\t" $6}'	Windows list		exec shodc focus
+Music
+	Toggle		exec mpc toggle
+	Previous	exec mpc cdprev
+	Next		exec mpc next
+	PIPE:mpc lsplaylists				Playlist	mpc clear && mpc load
+	PIPE:mpc playlist | awk '{printf $0 "\t";gsub(/[-.()]/," ");$0=$0;for(i=1;i<=NF;i++)printf " any " $i; print ""}'		Song		exec mpc searchplay
+Help
+	PIPE:cat $HOME/var/cache/man.1		Section 1	exec xman
+	PIPE:cat $HOME/var/cache/man.2		Section 2	exec xman
+	PIPE:cat $HOME/var/cache/man.3		Section 3	exec xman
+	PIPE:cat $HOME/var/cache/man.4		Section 4	exec xman
+	PIPE:cat $HOME/var/cache/man.5		Section 5	exec xman
+	PIPE:cat $HOME/var/cache/man.6		Section 6	exec xman
+	PIPE:cat $HOME/var/cache/man.7		Section 7	exec xman
+	PIPE:cat $HOME/var/cache/man.8		Section 8	exec xman
+	PIPE:cat $HOME/var/cache/man.9		Section 9	exec xman

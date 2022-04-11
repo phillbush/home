@@ -430,9 +430,12 @@ complete rcctl 1 disable enable get ls order set restart start stop
 complete rcctl 2 $(rcctl ls all)
 complete git 1 $(git --list-cmds=main)
 complete mpc 1 $(mpc help | awk '$1 == "mpc" { print $2 }')
-complete mpc 2 $(mpc lsplaylists | sort)
 complete kill 1 -9 -HUP -INFO -KILL -TERM
+complete ssh "" $(awk '$1 == "Host" {print $2}' "$HOME/.ssh/config")
 complete ifconfig 1 $(ifconfig | grep '^[a-z]' | cut -d: -f1)
+complete vmctl 1 console load reload start stop reset status send receive
+pgrep -q mpd && complete mpc 2 $(mpc lsplaylists | sort)
+pgrep -q vmd && complete vmctl "" $(vmctl status | awk '!/NAME/{print $NF}')
 
 # set prompt and window title
 PS1='$(
@@ -450,13 +453,12 @@ PS1='$(
 	esac
 
 	# set _rprompt to $_cwd; prefix it with "$_host:" if I am not on my laptop
-	case "$_host" in
-	("$LOCALHOST")
+	if test -z "$SSH_CONNECTION"
+	then
 		_rprompt="$_cwd"
-		;;
-	(*)
+	else
 		_rprompt="$_host:$_cwd"
-	esac
+	fi
 
 	# set _cols to the number of chars in _rprompt
 	_cols=$((COLUMNS - ${#_rprompt}))
@@ -490,3 +492,5 @@ PS1='$(
 
 # print previous command's non-zero exit status, bold and red, after it exits
 trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
+
+export GPG_TTY=$(tty)

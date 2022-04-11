@@ -1229,7 +1229,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AE06> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [               6,  dead_diaeresis,         notsign,       diaeresis ]
+        symbols[Group1]= [               6,              at,         notsign,       diaeresis ]
     };
     key <AE07> {
         type= "FOUR_LEVEL",
@@ -1332,19 +1332,19 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AC06> {
         type= "FOUR_LEVEL_ALPHABETIC",
-        symbols[Group1]= [               h,               H,            Left,            Left ]
+        symbols[Group1]= [               h,               H,         hstroke,         Hstroke ]
     };
     key <AC07> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               j,               J,            Down,            Down ]
+        symbols[Group1]= [               j,               J,       dead_hook,       dead_horn ]
     };
     key <AC08> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               k,               K,              Up,              Up ]
+        symbols[Group1]= [               k,               K,             kra,       ampersand ]
     };
     key <AC09> {
         type= "FOUR_LEVEL_ALPHABETIC",
-        symbols[Group1]= [               l,               L,           Right,           Right ]
+        symbols[Group1]= [               l,               L,         lstroke,         Lstroke ]
     };
     key <AC10> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
@@ -1352,7 +1352,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AC11> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [      dead_tilde, dead_circumflex,   dead_diaresis,  dead_abovering ]
+        symbols[Group1]= [      dead_tilde, dead_circumflex,  dead_diaeresis,  dead_abovering ]
     };
     key <LFSH> {         [         Shift_L ] };
     key <BKSL> {

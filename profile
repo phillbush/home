@@ -2,7 +2,7 @@
 # ~/.profile
 
 # installation prefixes
-PATH="$PATH:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
+PATH="$PATH:/usr/games:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
 MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
 for dir in $HOME/usr/*
 do
@@ -12,16 +12,21 @@ done
 unset dir
 export PATH HOME TERM MANPATH
 
-# hostname of my local machine, used in some scripts
-export LOCALHOST="thinkbsd"     # thinkpad + bsd
+# make variables
+export DEBUG="-g -O0 -Wall -Wextra"
+export PREFIX="$HOME/usr/local"
+export MANPREFIX="$PREFIX/man"
+export FREETYPEINC="/usr/X11R6/include/freetype2"
 
 # local installation directories
 export GOPATH="$HOME/usr/go"
 export PYTHONUSERBASE="$HOME/usr/python"
 export CHIBI_MODULE_PATH="$HOME/usr/scheme/lib"
-export PREFIX="$HOME/usr/local"
-export MANPREFIX="$PREFIX/man"
 export TMACPREFIX="$PREFIX/tmac"
+export RUBYLIB="$HOME/usr/ruby/lib"
+export RUBYPATH="$HOME/usr/ruby/bin"
+export GEM_HOME="$HOME/usr/ruby/gem"
+export GEM_PATH="/usr/local/lib/ruby/gems/3.0:$HOME/usr/ruby/gem"
 
 # ksh terminal session
 export ENV="$HOME/.session"
@@ -43,6 +48,7 @@ export APPPATH="$HOME/var/apps/utilities:$HOME/var/apps/games"
 export CACHEDIR="$HOME/var/cache"
 export RLWRAP_HOME="$HOME/var/history"
 export TRASH="$HOME/var/trash"
+export GNUPGHOME="$HOME/var/gpg"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.data"

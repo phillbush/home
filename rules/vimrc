@@ -221,7 +221,7 @@ function! CFolding(lnum)
 endfunction
 
 " file type detections
-filetype plugin on
+filetype plugin indent on
 autocmd Bufenter *.s set syntax=asm
 autocmd FileType c,cpp,yacc,lex,awk,sh,go set foldexpr=CFolding(v:lnum) foldmethod=expr
 autocmd FileType scheme set lisp expandtab
@@ -275,6 +275,11 @@ hi VertSplit    ctermfg=4       ctermbg=4       cterm=None
 hi TabLine      ctermfg=8       ctermbg=4       cterm=None
 hi TabLineSel   ctermfg=12      ctermbg=0       cterm=None
 hi TabLineFill  ctermfg=15      ctermbg=4       cterm=None
+
+" filetype sintax highlighting
+let c_no_curly_error    = 1
+let c_no_bracket_error  = 1
+let g:is_posix          = 1
 
 " Prevent various Vim features from keeping the contents of pass(1) password
 " files (or any other purely temporary files) in plaintext on the system.
