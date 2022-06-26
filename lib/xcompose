@@ -266,12 +266,6 @@
 <Multi_key> <l> <k> : "╰"
 <Multi_key> <k> <l> : "╰"
 
-# Light parts
-<Multi_key> <r> <r> : "╶"
-<Multi_key> <l> <l> : "╴"
-<Multi_key> <d> <d> : "╵"
-<Multi_key> <u> <u> : "╷"
-
 # Triple dash
 <Multi_key> <3> <h> : "┄"
 <Multi_key> <h> <3> : "┄"

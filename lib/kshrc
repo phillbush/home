@@ -121,6 +121,7 @@ dir() {
 	#
 	#      A hyphen (-) is a synonym for the option -0
 
+	typeset dir="."
 	typeset options="-L 1 -hNFC --dirsfirst --ignore-case"
 	typeset usage="usage: dir [-0123456789adl] file"
 	while [ "$#" -gt 0 ]
@@ -159,18 +160,24 @@ dir() {
 			;;
 		esac
 	done
+	case "$1" in
+	*/)
+		dir="$1"
+		shift
+		;;
+	esac
 	case "$#" in
 	0)
-		colortree $options .
+		colortree $options "$dir"
 		;;
 	1)
-		colortree $options -P "*$1*" --prune .
+		colortree $options -P "*$1*" --prune "$dir"
 		;;
 	*)
 		echo "$usage" >&2
 		return 1
 		;;
-	esac
+	esac | sed '/.*\/$/s/\[[^\[]*\] *//'
 }
 
 # change directory
@@ -422,7 +429,7 @@ alias makemake='make'
 alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
 
 # completions
-complete skel 1 $(\ls -1 "$SKEL")       # skel is a template system I created
+complete skel 1 $(\ls -1F "$SKEL")       # skel is a template system I created
 complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 complete sysctl "" $(sysctl | sed 's/[ =].*//')
 complete rcctl 1 disable enable get ls order set restart start stop

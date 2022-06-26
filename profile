@@ -32,10 +32,10 @@ export TZ="America/Sao_Paulo"
 # Directories
 #export TMPDIR="/tmp"
 #export MAIL=$HOME/var/mail
-export PROJDIR="$HOME/proj"
+export PROJDIR="$HOME/prj"
 export RULESDIR="$HOME/lib"
 export SKEL="$RULESDIR/skel"
-export MUSICDIR="$HOME/files/mus/"
+export MUSICDIR="$HOME/mus/"
 export CACHEDIR="$HOME/var/cache"
 export RLWRAP_HOME="$HOME/var/history"
 export TRASH="$HOME/var/trash"
@@ -74,11 +74,11 @@ export THUMBNAILER="thumbnail"
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"
-#export XCURSOR_PATH="$HOME/theme/cursor"
-#export XCURSOR_THEME="retrosmart"
-export ICONPATH="$HOME/theme/icons"
+export XCURSOR_PATH="$HOME/lib"
+export XCURSOR_THEME=""
+export ICONPATH="$HOME/lib/icons"
 export ICONSIZE=64
-export TROFFONTS="$HOME/theme/fonts/LinuxLibertine"
+export TROFFONTS="/usr/local/share/fonts/freefont:/usr/local/share/fonts/linuxlibertine:/usr/X11R6/lib/X11/fonts/TTF"
 
 # Less
 export LESS='-Sr~ -z-5 '

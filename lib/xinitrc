@@ -81,8 +81,7 @@ expenv $RULESDIR/Xresources | xrdb -merge -load -
 xkbcomp $RULESDIR/xkeymap $DISPLAY 2>/dev/null
 
 # fonts
-#export FONTCONFIG_PATH="$HOME/theme/fonts:/etc/fonts"
-xset +fp $HOME/theme/fonts
+xset +fp $HOME/lib/fonts
 xset fp rehash
 
 # make mouse invisible after a brief period

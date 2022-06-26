@@ -88,7 +88,7 @@ set comments=s1:/*,mb:*,ex:*/,:;,://,b:#,:%,:XCOMM,nb:>,nfb:--,nfb:•,nfb:·,fb
 set foldenable
 set foldminlines=1
 set foldopen=hor,insert,mark,search,undo
-set foldmethod=expr
+"set foldmethod=expr
 set foldtext=getline(v:foldstart).'\ '  " The text shown in closed folds
 
 " netrw
