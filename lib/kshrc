@@ -396,7 +396,6 @@ set -o braceexpand      # enable brace expansion
 # aliases
 alias :q=exit           # vi exit
 alias :Q=exit           # vi exit, wrong version
-alias vim='vim -p'      # vim; open each argument in a separate tab
 alias cp="cp -Riv"      # recursive, interactive, verbose cp
 alias mv="mv -iv"       # interactive, verbose mv
 alias rm='rm -rv'       # recursive, verbose rm
@@ -430,11 +429,12 @@ complete rcctl 1 disable enable get ls order set restart start stop
 complete rcctl 2 $(rcctl ls all)
 complete git 1 $(git --list-cmds=main)
 complete mpc 1 $(mpc help | awk '$1 == "mpc" { print $2 }')
+complete mpc 2 $(pgrep -q mpd && mpc lsplaylists | sort)
 complete kill 1 -9 -HUP -INFO -KILL -TERM
-complete ssh "" $(awk '$1 == "Host" {print $2}' "$HOME/.ssh/config")
+complete pkill 1 -9 -HUP -INFO -KILL -TERM
+complete ssh "" $(test -r "$HOME/.ssh/config" && awk '$1 == "Host" {print $2}' "$HOME/.ssh/config")
 complete ifconfig 1 $(ifconfig | grep '^[a-z]' | cut -d: -f1)
 complete vmctl 1 console load reload start stop reset status send receive
-pgrep -q mpd && complete mpc 2 $(mpc lsplaylists | sort)
 pgrep -q vmd && complete vmctl "" $(vmctl status | awk '!/NAME/{print $NF}')
 
 # set prompt and window title

@@ -4,15 +4,16 @@ Apps
 	KEY:A-S-T	Open Terminal Here		exec samedir
 	Take Screenshot					exec scrot select
 	RUN:	KEY:A-space	Run			exec xfilter -gi
-	Browse Files					exec run fm
-	Open Firefox					exec run www
-	Open Chrome					exec chrome
-	Chat						exec run hexchat
+	File Manager					exec xfiles
+	Seamonkey					exec focusnext -c Seamonkey seamonkey
+	Firefox						exec focusnext -c Firefox firefox
+	Chrome						exec focusnext -c Chromium chrome
+	Chat						exec focusnext hexchat hexchat
 	Games
-		TES III Morrowind			exec run morrowind
-		GNU Backgammon				exec run backgammon
-		Spider					exec run spider
-		Super Tux Kart				exec run supertuxkart
+		TES III Morrowind			exec openmw
+		Spider					exec spider
+		Super Tux Kart				exec supertuxkart
+		Nethack					exec nethack-3.6.6
 Window
 	KEY:A-S-S	Stick container			exec shodc state -y
 	KEY:A-S-N	Shade container			exec shodc state -s
@@ -48,18 +49,18 @@ Windows
 		KEY:A-5		Go to desktop 5			exec shodc goto 5
 	PIPE:shodc list -l | awk -F "\t" '$4==$6{print $7 "\t" $6}'	Windows list		exec shodc focus
 Music
-	Toggle		exec mpc toggle
-	Previous	exec mpc cdprev
-	Next		exec mpc next
-	PIPE:mpc lsplaylists				Playlist	mpc clear && mpc load
-	PIPE:mpc playlist | awk '{printf $0 "\t";gsub(/[-.()]/," ");$0=$0;for(i=1;i<=NF;i++)printf " any " $i; print ""}'		Song		exec mpc searchplay
+	Pause/Resume	exec mpc toggle
+	Previous song	exec mpc cdprev
+	Next song	exec mpc next
+	PIPE:mpc lsplaylists				Playlist	f(){ mpc clear && mpc load "$@" && mpc play; }; f
+	PIPE:mpc playlist | awk '{printf "%s\t\"%s\" ",$0,$0;gsub(/[^a-zA-Z0-1_]/," ");$0=$0;for(i=1;i<=NF;i++)printf " any " $i; print ""}'		Song		f(){ mpc searchplay filename $1 && return ; shift && mpc searchplay "$@"; }; f
 Help
-	PIPE:cat $HOME/var/cache/man.1		Section 1	exec xman
-	PIPE:cat $HOME/var/cache/man.2		Section 2	exec xman
-	PIPE:cat $HOME/var/cache/man.3		Section 3	exec xman
-	PIPE:cat $HOME/var/cache/man.4		Section 4	exec xman
-	PIPE:cat $HOME/var/cache/man.5		Section 5	exec xman
-	PIPE:cat $HOME/var/cache/man.6		Section 6	exec xman
-	PIPE:cat $HOME/var/cache/man.7		Section 7	exec xman
-	PIPE:cat $HOME/var/cache/man.8		Section 8	exec xman
-	PIPE:cat $HOME/var/cache/man.9		Section 9	exec xman
+	PIPE:cat $HOME/var/cache/man.1		Section 1	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.2		Section 2	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.3		Section 3	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.4		Section 4	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.5		Section 5	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.6		Section 6	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.7		Section 7	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.8		Section 8	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+	PIPE:cat $HOME/var/cache/man.9		Section 9	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f

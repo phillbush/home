@@ -50,42 +50,35 @@ notifymus() {
 # kill background jobs on exit
 trap 'atexit' EXIT
 
-# create named pipe for xnotify
-export XNOTIFYFIFO="$HOME/cache/xnotify$DISPLAY.fifo"
-coverfile="$HOME/cache/cover.png"
-rm -f "$XNOTIFYFIFO"
-mkfifo "$XNOTIFYFIFO"
-
 # generate manpage cache (used by xmenu and xfilter)
 rm -f "$HOME/var/cache/man."*
-IFS=", "
-apropos . | while read -r manp
-do
-	desc="${manp##*") - "}"
-	manp="${manp%%) - *}"
-	sect="${manp##*"("}"
-	manp="${manp%%"("*}"
-	case "$sect" in
-	(*[!0-9]*) continue ;;
-	esac
-	for i in $manp
+(
+	IFS=", "
+	apropos . | while read -r manp
 	do
-		echo "DESC:$desc	$i" >> "$HOME/var/cache/man.$sect"
+		desc="${manp##*") - "}"
+		manp="${manp%%) - *}"
+		sect="${manp##*"("}"
+		manp="${manp%%"("*}"
+		case "$sect" in
+		(*[!0-9]*) continue ;;
+		esac
+		for i in $manp
+		do
+			echo "DESC:$desc	$i	$sect $i" >> "$HOME/var/cache/man.$sect"
+		done
 	done
-done &
+) &
 
 # necessary for X 21.1.1
 xrandr --dpi 96
 
 # Load environment variables and xresources
 . $HOME/.profile
-expenv $HOME/rules/Xresources | xrdb -merge -load -
+expenv $RULESDIR/Xresources | xrdb -merge -load -
 
 # Load keymap
 xkbcomp $RULESDIR/xkeymap $DISPLAY 2>/dev/null
-
-# Set cursor
-xsetroot -cursor_name left_ptr
 
 # fonts
 #export FONTCONFIG_PATH="$HOME/theme/fonts:/etc/fonts"
@@ -106,7 +99,7 @@ synclient AccelFactor=0
 synclient HorizTwoFingerScroll=1
 
 # Set background
-feh --no-fehbg --bg-tile "$HOME/theme/bg.png"
+feh --no-fehbg --bg-tile "$RULESDIR/wallpaper.png"
 
 # compositor
 picom -c -l -15 -t -15 \
@@ -120,21 +113,25 @@ picom -c -l -15 -t -15 \
 mpd
 
 # desktop notifications
+export XNOTIFYFIFO="$HOME/var/cache/xnotify$DISPLAY.fifo"
+coverfile="$HOME/var/cache/cover.png"
+rm -f "$XNOTIFYFIFO"
+mkfifo "$XNOTIFYFIFO"
 xnotify -ws 10 <"$XNOTIFYFIFO" &
 notifycpu >"$XNOTIFYFIFO" &
 notifymus >"$XNOTIFYFIFO" &
 #pomodoro >"$XNOTIFYFIFO" &
 
-# menu system
-xmenu -ew rules/control &
-pmenu -ex Super-3 <rules/rootmenu &
-
-# dockapps
-paginator -iw -g64x192 -l1x5 &
-bubblemon &
-wmapm &
-wmclock &
-WMmp &
-
 # window manager
-shod
+shod <<-EOF
+	# menu system
+	xmenu -ew $RULESDIR/control &
+	pmenu -ex Super-3 <$RULESDIR/rootmenu &
+
+	# dockapps
+	paginator -iw -g64x192 -l1x5 &
+	bubblemon &
+	wmapm &
+	wmclock &
+	WMmp -bw &
+EOF

@@ -3,7 +3,7 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     minimum = 8;
     maximum = 255;
     <MDSW> = 8;
-     <ESC> = 9;
+    <CAPS> = 9;
     <AE01> = 10;
     <AE02> = 11;
     <AE03> = 12;
@@ -43,7 +43,7 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     <AC09> = 46;
     <AC10> = 47;
     <AC11> = 48;
-    <TLDE> = 49;
+     <ESC> = 49;
     <LFSH> = 50;
     <BKSL> = 51;
     <AB01> = 52;
@@ -1206,7 +1206,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     name[group1]="Portuguese (Brazil)";
 
     key <MDSW> {         [     Mode_switch ] };
-    key <TLDE> {         [          Escape ] };
+    key <ESC>  {         [          Escape ] };
     key <AE01> {
         type= "FOUR_LEVEL",
         symbols[Group1]= [               1,          exclam,      apostrophe,      apostrophe ]
@@ -1348,7 +1348,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AC10> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [        ccedilla,        Ccedilla,    dead_cedilla,     dead_ogonek ]
+        symbols[Group1]= [       backslash,             bar,       masculine,      dead_breve ]
     };
     key <AC11> {
         type= "FOUR_LEVEL",

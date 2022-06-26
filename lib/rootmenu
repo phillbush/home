@@ -1,10 +1,10 @@
 IMG:128x128/categories/applications-other.png		applications
-	IMG:128x128/apps/web-browser.png		Web Browser		exec run www
-	IMG:128x128/apps/file-manager.png		File Manager		exec run fm
-	IMG:128x128/apps/glenda.png			Drawterm		exec run glenda
-	IMG:128x128/apps/chat.png			Hexchat			exec run hexchat
-	IMG:128x128/apps/arandr.png			arandr			exec run monitor
-	IMG:128x128/apps/text-editor.png		vim			exec run vim
+	IMG:128x128/apps/web-browser.png		Web Browser		exec focusnext -c Seamonkey seamonkey
+	IMG:128x128/apps/file-manager.png		File Manager		exec xfiles
+	IMG:128x128/apps/glenda.png			Drawterm		exec /usr/local/bin/drawterm -a 10.0.0.2 -h 10.0.0.2 -u glenda
+	IMG:128x128/apps/chat.png			Hexchat			exec focusnext hexchat hexchat
+	IMG:128x128/apps/arandr.png			arandr			exec arandr
+	IMG:128x128/apps/text-editor.png		vim			exec xterm -e vim
 IMG:128x128/apps/preferences-system-windows.png		minimized windows	$ shodc list -l | awk 'BEGIN {FS = "\t"} /^...m/ && $4 == $6 {print substr($7, 1, 16) "twin minimize " $6}'
 IMG:128x128/apps/screenshooter.png			take screenshot		exec scrot select
 IMG:128x128/devices/media-optical.png			music
@@ -14,7 +14,7 @@ IMG:128x128/devices/media-optical.png			music
 	IMG:128x128/actions/media-playback-toggle.png	play/pause		exec mpc toggle
 IMG:128x128/apps/terminal.png				draw terminal		exec drawterm
 IMG:128x128/categories/applications-games.png		games
-	IMG:128x128/apps/backgammon.png			Backgammon		exec run backgammon
-	IMG:128x128/apps/morrowind.png			TES III: Morrowind	exec run morrowind
-	IMG:128x128/apps/naipes.png			Spider			exec run spider
-	IMG:128x128/apps/supertuxkart.png		Super Tux Kart		exec run supertuxkart
+	IMG:128x128/apps/backgammon.png			Backgammon		exec backgammon
+	IMG:128x128/apps/morrowind.png			TES III: Morrowind	exec openmw
+	IMG:128x128/apps/naipes.png			Spider			exec spider
+	IMG:128x128/apps/supertuxkart.png		Super Tux Kart		exec supertuxkart

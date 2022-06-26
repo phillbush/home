@@ -12,6 +12,9 @@ if (!empty($CACHEDIR))
 	set viminfo+=n$CACHEDIR/vim/viminfo
 endif
 
+set backup
+set writebackup
+
 " basic settings
 set encoding=utf8
 set hidden                              " hide buffers, don't close
@@ -38,17 +41,17 @@ set hlsearch                            " highlight the search matching text
 set smartcase                           " try to be smart about case when searching
 
 " list of directories to be searched for tags, names, etc
-set path=.,/usr/include,/usr/X11R6/include/,/usr/local/include/,,
+set path=.,include,../include,../../include,/usr/include,/usr/X11R6/include/,/usr/local/include/,,
 
 " statusline and ruler
 set laststatus=0                        " do not show statusline
 set showcmd                             " show a command as it is being typed
 set showmode                            " show current mode
 set ruler                               " show ruler
-set rulerformat=%60(%=%f\ %y\ (%l:%c%V\ hex:%B\ %p%%)\ %#ModeMsg#%(\ %M\ %)%)
+set rulerformat=%60(%=%f\ %y\ (%l/%L:%c%V\ hex:%B\ %p%%)\ %#ModeMsg#%(\ %M\ %)%)
 
 " Line indentification
-set number                              " show line number
+set nonumber                            " do not show line number
 set cursorline                          " highlight the screen line of the cursor
 
 " Tabulation
@@ -85,8 +88,7 @@ set comments=s1:/*,mb:*,ex:*/,:;,://,b:#,:%,:XCOMM,nb:>,nfb:--,nfb:•,nfb:·,fb
 set foldenable
 set foldminlines=1
 set foldopen=hor,insert,mark,search,undo
-set foldcolumn=1
-set foldmethod=marker
+set foldmethod=expr
 set foldtext=getline(v:foldstart).'\ '  " The text shown in closed folds
 
 " netrw
@@ -114,8 +116,8 @@ nnoremap k gk
 nnoremap gv `[v`]
 
 " remap b to q
-noremap q <Esc>
-noremap Q <Esc>
+noremap q :bn<C-M>
+noremap Q :bp<C-M>
 noremap b @
 noremap B q
 
@@ -186,12 +188,14 @@ noremap <Tab>   za
 noremap <S-Tab> zm
 
 " folding functions
+function! CommentFolding(lnum)
+endfunction
 function! TxtFolding(lnum)
 	let curline  = getline(a:lnum)
 	if curline =~# '^\s*$' && getline(a:lnum + 1) !~# '^\s*$'
 		let nextfold = TxtFolding(a:lnum + 1)
 		return nextfold[0] == '>' ? nextfold[1] : '='
-	elseif curline =~# '^§\+ ' | return '>' .. (len(matchstr(curline,'^§\+'))/2)
+	elseif curline =~# '^\(.* \)\?§\+ ' | return '>' .. (len(matchstr(curline,'§\+'))/2)
 	endif
 	return '='
 endfunction
@@ -200,25 +204,26 @@ function! MdFolding(lnum)
 	if curline =~# '^\s*$' && getline(a:lnum + 1) !~# '^\s*$'
 		let nextfold = MdFolding(a:lnum + 1)
 		return nextfold[0] == '>' ? nextfold[1] : '='
-	elseif curline =~# '^##\+ ' | return '>' .. (len(matchstr(curline,'^##\+'))-1)
+	elseif curline =~# '^#\+ ' | return '>' .. len(matchstr(curline,'#\+'))
 	endif
 	return '='
 endfunction
 function! CFolding(lnum)
-	let curline  = getline(a:lnum)
-	if curline =~# '^[^	 ].*{$'         | return '>1'
-	elseif curline =~# '^{$'                | return '>1'
-	elseif curline =~# '^}.*{$'             | return '='
-	elseif curline =~# '^%\?}'              | return '<1'
-	elseif curline =~# '^%%$'
-		if foldlevel(a:lnum - 1) == 1
-			return '<1'
-		else
-			return '>1'
-		endif
+	let curline = getline(a:lnum)
+	let prevlvl = foldlevel(a:lnum - 1)
+	if prevlvl < 0
+		let prevlvl = 0
+	endif
+
+	if curline =~# '^}.*{$'         | return '='
+	elseif curline =~# '^%%$'       | return '>1'
+	elseif curline =~# '^[^	 ].*{$' | return '>' . (prevlvl + 1)
+	elseif curline =~# '^{$'        | return '>' . (prevlvl + 1)
+	elseif curline =~# '^%\?}'      | return 's' . 1
 	endif
 	return '='
 endfunction
+set foldexpr=TxtFolding(v:lnum)
 
 " file type detections
 filetype plugin indent on
