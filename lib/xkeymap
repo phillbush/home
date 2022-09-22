@@ -3,7 +3,6 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     minimum = 8;
     maximum = 255;
     <MDSW> = 8;
-    <CAPS> = 9;
     <AE01> = 10;
     <AE02> = 11;
     <AE03> = 12;
@@ -31,7 +30,7 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     <AD11> = 34;
     <AD12> = 35;
     <RTRN> = 36;
-    <MKEY> = 37;
+    <LCTL> = 37;
     <AC01> = 38;
     <AC02> = 39;
     <AC03> = 40;
@@ -91,26 +90,27 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     <LSGT> = 94;
     <FK11> = 95;
     <FK12> = 96;
-    <DELE> = 97;
+    <HOME> = 97;
       <UP> = 98;
     <PGUP> = 99;
     <LEFT> = 100;
     <II65> = 101;
     <RGHT> = 102;
+     <END> = 103;
     <DOWN> = 104;
     <PGDN> = 105;
-    <RCTL> = 106;
-    <PRSC> = 107;
+     <INS> = 106;
+    <DELE> = 107;
     <KPEN> = 108;
      <END> = 109;
     <PAUS> = 110;
-    <HOME> = 111;
+    <PRSC> = 111;
     <KPDV> = 112;
-    <RALT> = 113;
+    <MKEY> = 113;
      <BRK> = 114;
     <LWIN> = 115;
     <RWIN> = 116;
-    <MENU> = 117;
+    <HOME> = 117;
     <FK13> = 118;
     <FK14> = 119;
     <FK15> = 120;
@@ -1205,15 +1205,16 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
 
     name[group1]="Portuguese (Brazil)";
 
+    key <MKEY> {         [       Multi_key ] };
     key <MDSW> {         [     Mode_switch ] };
-    key <ESC>  {         [          Escape ] };
+    key  <ESC> {         [          Escape ] };
     key <AE01> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [               1,          exclam,      apostrophe,      apostrophe ]
+        symbols[Group1]= [               1,          exclam,     onesuperior,      exclamdown ]
     };
     key <AE02> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [               2,        quotedbl,              at,              at ]
+        symbols[Group1]= [               2,        quotedbl,     twosuperior,         onehalf ]
     };
     key <AE03> {
         type= "FOUR_LEVEL",
@@ -1249,11 +1250,11 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AE11> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [           minus,      underscore,         section,    questiondown ]
+        symbols[Group1]= [           minus,      underscore,       backslash,    questiondown ]
     };
     key <AE12> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [           equal,            plus,           U2022,       paragraph ]
+        symbols[Group1]= [           equal,            plus,         section,     dead_ogonek ]
     };
     key <BKSP> {
         type= "CTRL+ALT",
@@ -1302,14 +1303,14 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AD11> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [      dead_acute,      dead_grave,     dead_macron,      dead_breve ]
+        symbols[Group1]= [      dead_acute,      dead_grave,           acute,           grave ]
     };
     key <AD12> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [     bracketleft,       braceleft,     bracketleft,       braceleft ]
+        symbols[Group1]= [     bracketleft,       braceleft,     ordfeminine,     dead_macron ]
     };
     key <RTRN> {         [          Return ] };
-    key <MKEY> {         [       Multi_key ] };
+    key <LCTL> {         [       Control_L ] };
     key <AC01> {
         type= "FOUR_LEVEL_ALPHABETIC",
         symbols[Group1]= [               a,               A,              ae,              AE ]
@@ -1348,24 +1349,28 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AC10> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [       backslash,             bar,       masculine,      dead_breve ]
+        symbols[Group1]= [       backslash,             bar,      dead_acute, dead_doubleacute ]
     };
     key <AC11> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [      dead_tilde, dead_circumflex,  dead_diaeresis,  dead_abovering ]
+        symbols[Group1]= [      dead_tilde, dead_circumflex,      asciitilde,     asciicircum ]
+    };
+    key <TLDE> {
+        type= "FOUR_LEVEL",
+        symbols[Group1]= [      apostrophe,        quotedbl,         notsign,         notsign ]
     };
     key <LFSH> {         [         Shift_L ] };
     key <BKSL> {
         type= "FOUR_LEVEL",
-        symbols[Group1]= [    bracketright,      braceright,    bracketright,      braceright ]
+        symbols[Group1]= [    bracketright,      braceright,       masculine,       masculine ]
     };
     key <AB01> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               z,               Z, leftsinglequotemark, leftdoublequotemark ]
+        symbols[Group1]= [               z,               Z,   guillemotleft,            less ]
     };
     key <AB02> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               x,               X, rightsinglequotemark, rightdoublequotemark ]
+        symbols[Group1]= [               x,               X,  guillemotright,         greater ]
     };
     key <AB03> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
@@ -1373,11 +1378,11 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <AB04> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               v,               V,   guillemotleft,   guillemotleft ]
+        symbols[Group1]= [               v,               V, leftdoublequotemark, leftsinglequotemark ]
     };
     key <AB05> {
         type= "FOUR_LEVEL_SEMIALPHABETIC",
-        symbols[Group1]= [               b,               B,  guillemotright,  guillemotright ]
+        symbols[Group1]= [               b,               B, rightdoublequotemark, rightsinglequotemark ]
     };
     key <AB06> {
         type= "FOUR_LEVEL_ALPHABETIC",
@@ -1406,7 +1411,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     };
     key <LALT> {         [           Alt_L,          Meta_L ] };
     key <SPCE> {         [           space ] };
-    key <LCTL> {         [       Control_L ] };
+    key <CAPS> {         [       Caps_Lock ] };
     key <FK01> {
         type= "CTRL+ALT",
         symbols[Group1]= [              F1,              F1,              F1,              F1, XF86Switch_VT_1 ]
@@ -1483,6 +1488,7 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
         type= "CTRL+ALT",
         symbols[Group1]= [             F12,             F12,             F12,             F12, XF86Switch_VT_12 ]
     };
+    key <PRSC> {         [            Home ] };
     key <HOME> {         [            Home ] };
     key   <UP> {         [              Up ] };
     key <PGUP> {         [           Prior ] };
@@ -1498,10 +1504,6 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     key <PAUS> {
         type= "PC_CONTROL_LEVEL2",
         symbols[Group1]= [           Pause,           Break ]
-    };
-    key <PRSC> {
-        type= "PC_ALT_LEVEL2",
-        symbols[Group1]= [           Print,         Sys_Req ]
     };
     key <KPDV> {
         type= "CTRL+ALT",
@@ -1707,6 +1709,7 @@ xkb_geometry "pc(pc105)" {
             top=  1;
             left= 1;
             keys {
+                {  <ESC>, "NORM",   1 },
                 { <FK01>, "NORM",  20, color="white" },
                 { <FK02>, "NORM",   1, color="white" },
                 { <FK03>, "NORM",   1, color="white" },

@@ -1,75 +1,5 @@
 #!/bin/sh
 
-set -m
-
-# commands to run when terminate the script
-atexit() {
-	kill -TERM -- -$$ $(printf "-%s " $(jobs -p))
-}
-
-# get sensorsd and apmd lines from syslog and format them for xnotify(1)
-notifycpu() {
-	tail -f /var/log/daemon |\
-	awk -v icon_powericon="$ICONPATH/128x128/status/battery-caution.png" -v icon_hearticon="$ICONPATH/128x128/status/dialog-warning.png" '
-		$5 ~ /^apmd.*:$/ && $0 ~ "external power status: not connected" && $(NF - 2) < 25 {
-			printf "SEC:0\tTAG:power\tIMG:%s\tBattery is low: %s\n", icon_powericon, $(NF - 2)
-		}
-		$5 ~ /^sensorsd.*:$/ && $7 == "exceeds" {
-			printf "SEC:5\tTAG:temp\tIMG:%s\tTemperature is at %d°C\n", icon_hearticon, $9
-		}
-		{
-			fflush()
-		}
-	'
-}
-
-# pomodoro timer daemon
-pomodoro() {
-	pomod |\
-	while read -r cycle
-	do
-		printf 'TAG:pomo\tIMG:%s\t%s\n' "$ICONPATH/128x128/status/appointment-soon.png" "$cycle"
-	done
-}
-
-# print current song and format it for xnotify(1)
-notifymus() {
-	while [ "$#" -gt 0 ] || mpc current --wait >/dev/null
-	do
-		s="$(mpc current -f 'SEC:2\tTAG:mpd\t%artist%\t%album%\t[[%title%]|[%name%]|[%file%]]')"
-		if ffmpeg -y -i "$MUSICDIR/$(mpc current -f '%file%')" -f image2 "$coverfile" 2>/dev/null
-		then
-			printf 'IMG:%s\t%s\n' "$coverfile" "$s"
-		else
-			printf '%s\n' "$s"
-		fi
-		set --
-	done
-}
-
-# kill background jobs on exit
-trap 'atexit' EXIT
-
-# generate manpage cache (used by xmenu and xfilter)
-rm -f "$HOME/var/cache/man."*
-(
-	IFS=", "
-	apropos . | while read -r manp
-	do
-		desc="${manp##*") - "}"
-		manp="${manp%%) - *}"
-		sect="${manp##*"("}"
-		manp="${manp%%"("*}"
-		case "$sect" in
-		(*[!0-9]*) continue ;;
-		esac
-		for i in $manp
-		do
-			echo "DESC:$desc	$i	$sect $i" >> "$HOME/var/cache/man.$sect"
-		done
-	done
-) &
-
 # necessary for X 21.1.1
 xrandr --dpi 96
 
@@ -111,26 +41,17 @@ picom -c -l -15 -t -15 \
 # music daemon
 mpd
 
-# desktop notifications
-export XNOTIFYFIFO="$HOME/var/cache/xnotify$DISPLAY.fifo"
-coverfile="$HOME/var/cache/cover.png"
-rm -f "$XNOTIFYFIFO"
-mkfifo "$XNOTIFYFIFO"
-xnotify -ws 10 <"$XNOTIFYFIFO" &
-notifycpu >"$XNOTIFYFIFO" &
-notifymus >"$XNOTIFYFIFO" &
-#pomodoro >"$XNOTIFYFIFO" &
-
 # window manager
-shod <<-EOF
+shod - <<-EOF
 	# menu system
-	xmenu -ew $RULESDIR/control &
+	ctrlmenu $RULESDIR/control &
 	pmenu -ex Super-3 <$RULESDIR/rootmenu &
 
 	# dockapps
 	paginator -iw -g64x192 -l1x5 &
+	taskinator -vihw &
 	bubblemon &
 	wmapm &
 	wmclock &
-	WMmp -bw &
+	wmpdart &
 EOF

@@ -155,6 +155,8 @@ and
 I manually build and install the following programs:
 .Bl -bullet -compact
 .It
+ctrlmenu
+.It
 fmutils
 .It
 paginator
@@ -164,12 +166,6 @@ pmenu
 shod
 .It
 xfiles
-.It
-xfilter
-.It
-xmenu
-.It
-xnotify
 .El
 .Pp
 I run
@@ -470,7 +466,7 @@ as window manager.
 Its main feature is the possibility to tile, and even tab, windows inside floating containers.
 Shod also displays a dock where there are the following dockapps.
 .Bl -tag -width Ds
-.It Xr xmenu 1
+.It Xr ctrlmenu 1
 A menu system.
 It lists menu entries.
 I can navigate through the menus and select an entry to be executed by the shell.
@@ -478,20 +474,18 @@ Each entry in the menu can be bound to a key press.
 For example, I bind
 .Sy Alt+T
 to open a terminal.
-Xmenu can also launch
-.Xr xfilter 1 ,
-which I use to search for entries and select an entry by typing its name.
+.Xr ctrlmenu 1
+can also spawn a prompt window where I can search for entries and select an entry by typing its name.
 .It Xr paginator 1
 A desktop pager.
 It display miniatures for the virtual desktops and for the windows on them.
+It also display the icon for minimized windows.
 .It Xr wmapm 1
 An
 .Xr apm 8
 monitor for batery.
-.It Xr WMmp 1
-A mpd controller.
-It shows the currently playing song
-and has buttons to change it.
+.It Xr wmpdart 1
+A mpd controller that shows the album art and title of the playing song.
 .It Xr bubblemon 1
 A system load monitor in the form of a rubber duck.
 .It Xr wmclock 1
@@ -499,36 +493,14 @@ A NeXTSTEP-like clock and calendar.
 .El
 .Pp
 I use
-.Xr xnotify 1
-for displaying notifications on the screen.
-Xnotify reads notification strings from the standard input,
-and display each notification on a small window on the screen.
-To be usable, it must read from a named pipe,
-which other programs should write into.
-I use
-.Xr xnotify 1
-in the managed mode, in which the window manager controll the notification windows.
-The following programs write into the notification pipe:
-.Bl -tag -width Ds
-.It Ic notifycpu
-This function in
-.Pa ~/.xsession
-reads the
-.Pa /var/log/daemon
-log file and checks for battery and CPU temperature,
-notifying when the battery gets low and the CPU gets hot.
-.It Ic notifymus
-This function in
-.Pa ~/.xsession
-uses
-.Xr mpc 1
-to notify when the current song changes.
-.El
-.Pp
-I use
 .Xr picom 1
 as my X11 compositor.
 I invoke it with a set of command-line arguments that creates a "blue aura" around the active window.
+.Pp
+I use
+.Xr feh
+to set the desktop wallpaper.
+Currently, I use a dark tiled wallpaper.
 .Sh ENVIRONMENT
 The following environment variables are set by the
 .It Pa ~/.profile
@@ -610,18 +582,16 @@ But I also archive there RPG books and fiction (both in book and movie formats).
 Meme directory.
 .It Pa ~/mus/
 Music directory.
-(Since this directory is managed by
-.Xr mpd 1
-and related programs, shouldn't it be at
-.Pa ~/var/ Ns ?)
+Organized as
+.Pa "ARTIST/YEAR - ALBUM/TRACK - TITLE.flac" .
 .It Pa ~/prj/
 Directory where I store whatever I am working on
 (mostly college stuff, things I am learning and programs I maintain).
 Each project has a subdirectory in it.
 For example,
-.Pa ~/prj/xmenu/
+.Pa ~/prj/shod/
 is for
-.Xr xmenu 1 ;
+.Xr shod 1 ;
 .Pa ~/prj/c/
 is for notes on the C Programming Language; etc.
 .It Pa ~/lib/
@@ -670,9 +640,9 @@ For example,
 .Pa ~/usr/go/bin/lf
 is the binary for lf installed by
 .Xr go 1 ;
-.Pa ~/usr/local/man/man1/xmenu.1
+.Pa ~/usr/local/man/man1/shod.1
 is the manual for
-.Xr xmenu 1 installed manually; etc.
+.Xr shod 1 installed manually; etc.
 .It Pa ~/var/
 Directory for files managed automatically by applications.
 For example,

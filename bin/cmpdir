@@ -1,0 +1,10 @@
+#!/bin/sh
+
+normalize() {
+	sed '1d;$d;s,^\(.* \)\[[^]]*\] *\(.*/\)$,\1\2,'
+}
+
+test "$#" -ne 2 && exit 1
+colortree -hNF "$1" | normalize >/tmp/a
+colortree -hNF "$2" | normalize >/tmp/b
+diff /tmp/a /tmp/b

@@ -77,8 +77,8 @@ Xcursor.theme:                          ""
 *selbackground:                         SELBG
 *cursorColor:                           FG
 *borderColor:                           WIDLIT
-!*faceName:                              InputMonoNarrow-Regular:size=9
-!*faceSize:                              9
+*faceName:                              -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
+*font:                                  -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
 
 !! Athena widgets
 ! Command:      Regular button (normally rectangular, but I set them as oval)
@@ -227,6 +227,8 @@ XLogo*foreground:                       RED1
 
 !! xterm resources (I use "xterm" (name) rather than "XTerm" (class) here)
 xterm*font:                             -misc-tadepe-medium-r-normal--16-150-75-75-C-80-ISO10646-1
+xterm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
+xterm*faceName:
 xterm*background:                       BG
 xterm*locale:                           UTF-8
 xterm*termName:                         xterm-256color
@@ -309,8 +311,7 @@ shod.inactiveBackground:                WIDMID
 shod.inactiveTopShadowColor:            WIDLIT
 shod.inactiveBottomShadowColor:         WIDHVY
 shod.dockBackground:                    WIDMID
-shod.dockTopShadowColor:                WIDLIT
-shod.dockBottomShadowColor:             WIDHVY
+shod.dockBorder:                        WIDLIT
 !shod.urgent.background:                 #CC0000
 !shod.urgent.topShadowColor:             #EF2929
 !shod.urgent.bottomShadowColor:          #A40000
@@ -322,16 +323,30 @@ shod.dockBottomShadowColor:             WIDHVY
 !shod.title.font:                        fixed
 !shod.title.foreground:                  FG
 !shod.titleWidth:                        17
-shod.class.XMenu.dockpos:               0
-shod.class.Paginator.dockpos:           1
-shod.class.wmapm.dockpos:               2
-shod.name.WMmp.dockpos:                 3
-shod.class.bubblemon.dockpos:           4
-shod.class.WMClock.dockpos:             5
-shod.numOfDesktops:                     5
+shod.CtrlMenu*dockpos:                  1
+shod.CtrlMenu*state:                    shrunk
+shod.Paginator*dockpos:                 2
+shod.Paginator*state:                   shrunk
+shod.Taskinator*dockpos:                3
+shod.Taskinator*state:                  extend
+shod.wmapm*dockpos:                     4
+shod.WMPDArt*dockpos:                   5
+shod.bubblemon*dockpos:                 6
+shod.WMClock*dockpos:                   7
 shod.dockSpace:                         66
 shod.dockWidth:                         66
-shod.dockGravity:                       E
+shod.dockGravity:                       EF
+shod.numOfDesktops:                     5
+
+!! Paginator
+taskinator.background:                  WIDMID
+taskinator.foreground:                  FG
+taskinator.activeBackground:            SELMID
+taskinator.activeTopShadowColor:        SELLIT
+taskinator.activeBottomShadowColor:     SELHVY
+taskinator.inactiveBackground:          WIDMID
+taskinator.inactiveTopShadowColor:      WIDLIT
+taskinator.inactiveBottomShadowColor:   WIDHVY
 
 !! Paginator
 paginator.background:                   WIDMID
@@ -359,19 +374,19 @@ xnotify.shrink:                         false
 xnotify.wrap:                           true
 
 !! XMenu
-xmenu.borderWidth:                      2
+xmenu.borderWidth:                      1
 xmenu.separatorWidth:                   9
 xmenu.height:                           22
 xmenu.width:                            90
-xmenu.gap:                              4
+xmenu.gap:                              2
 xmenu.background:                       WIDMID
 xmenu.foreground:                       WIDFG
 xmenu.selbackground:                    SELMID
 xmenu.selforeground:                    SELFG
 xmenu.border:                           WIDLIT
-xmenu.separator:                        WIDHVY
+xmenu.separator:                        WIDLIT
 xmenu.font:                             monospace:size=9
-xmenu.alignment:                        right
+xmenu.alignment:                        left
 
 !! Pmenu
 pmenu.background:                       BG
@@ -382,8 +397,8 @@ pmenu.border:                           WIDLIT
 pmenu.separator:                        WIDLIT
 
 !! xv
-!xv*background:                          #b2c0dc
-!xv*foreground:                          #000000
+xv*background:                          #b2c0dc
+xv*foreground:                          #000000
 
 !! xpdf
 xpdf.geometry:                          650x820
@@ -393,8 +408,8 @@ xpdf*background:                        WIDMID
 xpdf*topShadowColor:                    WIDLIT
 xpdf*bottomShadowColor:                 WIDHVY
 
-!! CtrlMenu (an experimental application of mine, I may delete that later)
-ctrlmenu.menu.faceName:                 monospace:size=9
+!! CtrlMenu
+ctrlmenu*faceName:                      -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
 ctrlmenu.menu.background:               WIDBG
 ctrlmenu.menu.foreground:               FG
 ctrlmenu.menu.selbackground:            SELBG
@@ -403,13 +418,15 @@ ctrlmenu.menu.topShadow:                WIDLIT
 ctrlmenu.menu.bottomShadow:             WIDHVY
 ctrlmenu.menu.shadowThickness:          2
 ctrlmenu.menu.alignment:                ALIGN_RIGHT
-ctrlmenu.menu.runnerfaceName:           monospace:size=12
+ctrlmenu.menu.keysym:                   Super_L
+ctrlmenu.menu.tornoff:                  True
+ctrlmenu.runner.keychord:               A-space
 ctrlmenu.runner.background:             BG
 ctrlmenu.runner.foreground:             FG
 ctrlmenu.runner.selbackground:          SELBG
 ctrlmenu.runner.selforeground:          FG
-ctrlmenu.runner.altforeground:          DARK0
-ctrlmenu.runner.altselforeground:       DARK0
+ctrlmenu.runner.altforeground:          LIGHT1
+ctrlmenu.runner.altselforeground:       LIGHT1
 
 !! control (an experimental application of mine, I may delete that later)
 control.background:                     #121212

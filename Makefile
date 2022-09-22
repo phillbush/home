@@ -1,5 +1,9 @@
 BINS = \
-        bin/fetch
+        bin/mancache \
+        bin/cmpdir \
+        bin/agenda \
+        bin/fetch \
+        bin/dir
 
 LIBEXECS = \
         lib/kshrc \
@@ -31,7 +35,6 @@ install:
 	         "${HOME}/lib/skel" \
 	         "${HOME}/usr/home/bin" \
 	         "${HOME}/usr/home/man/man7" \
-	         "${HOME}/var/apps" \
 	         "${HOME}/var/cache" \
 	         "${HOME}/var/history" \
 	         "${HOME}/var/mail" \

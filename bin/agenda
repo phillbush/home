@@ -1,0 +1,14 @@
+#!/bin/sh
+
+IFS=":"
+
+{
+	cal -m |\
+	sed -r "$(printf '3,$ s/[[:<:]]%s[[:>:]]/\033[7m&\033[0m/' "$(date +%d)")"
+
+	printf "\nEvents:\n"
+	calendar $PROJDIR/*/Calendar
+
+	printf "\nTasks:\n"
+	todo $PROJDIR/*/TODO
+} | sed -E 's:'"$PROJDIR"'/([^\:]+)/[^\:]+\::\1\::'

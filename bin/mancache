@@ -1,0 +1,18 @@
+#!/bin/sh
+
+rm -f "$HOME/var/cache/man."*
+IFS=", "
+apropos . | while read -r manp
+do
+	desc="${manp##*") - "}"
+	manp="${manp%%) - *}"
+	sect="${manp##*"("}"
+	manp="${manp%%"("*}"
+	case "$sect" in
+	(*[!0-9]*) continue ;;
+	esac
+	for i in $manp
+	do
+		echo "$i: $desc" >> "$HOME/var/cache/man.$sect"
+	done
+done

@@ -1,66 +1,104 @@
-Apps
-	Draw Terminal					exec drawterm
-	KEY:A-T		Open Terminal at $HOME		exec xterm
-	KEY:A-S-T	Open Terminal Here		exec samedir
-	Take Screenshot					exec scrot select
-	RUN:	KEY:A-space	Run			exec xfilter -gi
-	File Manager					exec xfiles
-	Seamonkey					exec focusnext -c Seamonkey seamonkey
-	Firefox						exec focusnext -c Firefox firefox
-	Chrome						exec focusnext -c Chromium chrome
-	Chat						exec focusnext hexchat hexchat
-	Games
-		TES III Morrowind			exec openmw
-		Spider					exec spider
-		Super Tux Kart				exec supertuxkart
-		Nethack					exec nethack-3.6.6
-Window
-	KEY:A-S-S	Stick container			exec shodc state -y
-	KEY:A-S-N	Shade container			exec shodc state -s
-	KEY:A-S-B	Lower container			exec shodc state -b
-	KEY:A-S-A	Raise container			exec shodc state -a
-	KEY:A-S-Z	Minimize container		exec shodc state -m
-	KEY:A-S-W	Maximize container		exec shodc state -M
-	KEY:A-S-F	FullScreen			exec shodc state -f
-	Move to
-		KEY:A-S-1	Move to desktop 1	exec shodc sendto 1
-		KEY:A-S-2	Move to desktop 2	exec shodc sendto 2
-		KEY:A-S-3	Move to desktop 3	exec shodc sendto 3
-		KEY:A-S-4	Move to desktop 4	exec shodc sendto 4
-		KEY:A-S-5	Move to desktop 5	exec shodc sendto 5
-	Focus
-		KEY:A-H		Focus column on the left	exec shodc focus -L
-		KEY:A-L		Focus column on the right	exec shodc focus -R
-		KEY:A-K		Focus row above			exec shodc focus -T
-		KEY:A-J		Focus row below			exec shodc focus -B
-		KEY:A-P		Focus previous tab		exec shodc focus -cP
-		KEY:A-N		Focus next tab			exec shodc focus -cN
-	KEY:A-S-Q		Close window			exec shodc close
-Files
-	TODO
-Windows
-	KEY:A-Tab	Focus Previous Window			exec shodc focus -cp
-	KEY:A-S-Tab	Focus Next Window			exec shodc focus -cn
-	Desktop
-		KEY:A-1		Go to desktop 1			exec shodc goto 1
-		KEY:A-2		Go to desktop 2			exec shodc goto 2
-		KEY:A-3		Go to desktop 3			exec shodc goto 3
-		KEY:A-4		Go to desktop 4			exec shodc goto 4
-		KEY:A-5		Go to desktop 5			exec shodc goto 5
-	PIPE:shodc list -l | awk -F "\t" '$4==$6{print $7 "\t" $6}'	Windows list		exec shodc focus
-Music
-	Pause/Resume	exec mpc toggle
-	Previous song	exec mpc cdprev
-	Next song	exec mpc next
-	PIPE:mpc lsplaylists				Playlist	f(){ mpc clear && mpc load "$@" && mpc play; }; f
-	PIPE:mpc playlist | awk '{printf "%s\t\"%s\" ",$0,$0;gsub(/[^a-zA-Z0-1_]/," ");$0=$0;for(i=1;i<=NF;i++)printf " any " $i; print ""}'		Song		f(){ mpc searchplay filename $1 && return ; shift && mpc searchplay "$@"; }; f
-Help
-	PIPE:cat $HOME/var/cache/man.1		Section 1	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.2		Section 2	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.3		Section 3	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.4		Section 4	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.5		Section 5	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.6		Section 6	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.7		Section 7	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.8		Section 8	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
-	PIPE:cat $HOME/var/cache/man.9		Section 9	f(){ exec /usr/bin/man -Tpdf "$@" | ifne zathura - ; }; f
+_Apps {
+	Draw Terminal                           -- exec drawterm
+	Open _Terminal at $HOME [A-T]           -- exec xterm
+	Open Terminal Here [A-S-T]              -- exec samedir
+	--
+	Take _Screenshot                        -- exec maim -d 3 -s "tmp/scrot-$(date +%Y-%m-%d-%H%M%S)"
+	File _Browser                           -- exec xfiles
+	_Netsurf                                -- exec focusnext -c netsurf-gtk3 netsurf-gtk3
+	_Seamonkey                              -- exec focusnext -c Seamonkey seamonkey
+	_Firefox                                -- exec focusnext -c Firefox firefox
+	_Chrome                                 -- exec focusnext -c Chromium chrome
+	_HexChat                                -- exec focusnext hexchat hexchat
+	A_randr                                 -- exec arandr
+	_DrawTerm                               -- exec drawterm
+	_Games {
+		_NetHack                        -- exec nethack-3.6.6
+		Space Cadet _Pinball            -- exec SpaceCadetPinball
+		_Spider                         -- exec spider
+		Super Tux _Kart                 -- exec supertuxkart
+		TES III Morro_wind              -- exec openmw
+	}
+}
+
+_Window {
+	Stic_k Container [A-S-S]                -- exec shodc state -y
+	S_hade Container [A-S-N]                -- exec shodc state -s
+	Minimi_ze Container [A-S-Z]             -- exec shodc state -m
+	_Maximize Container [A-S-W]             -- exec shodc state -M
+	Container _FullScreen [A-S-F]           -- exec shodc state -f
+	Container _Below [A-S-B]                -- exec shodc state -b
+	Container _Above [A-S-A]                -- exec shodc state -a
+	--
+	_Go To Desktop {
+		Go To Desktop _1 [A-1]          -- exec shodc goto 1
+		Go To Desktop _2 [A-2]          -- exec shodc goto 2
+		Go To Desktop _3 [A-3]          -- exec shodc goto 3
+		Go To Desktop _4 [A-4]          -- exec shodc goto 4
+		Go To Desktop _5 [A-5]          -- exec shodc goto 5
+	}
+	Move Container _To {
+		Move to Desktop _1 [A-S-1]      -- exec shodc sendto 1
+		Move to Desktop _2 [A-S-2]      -- exec shodc sendto 2
+		Move to Desktop _3 [A-S-3]      -- exec shodc sendto 3
+		Move to Desktop _4 [A-S-4]      -- exec shodc sendto 4
+		Move to Desktop _5 [A-S-5]      -- exec shodc sendto 5
+	}
+	--
+	_Focus {
+		Focus Column at _Left [A-H]     -- exec shodc focus -L
+		Focus Column at _Right [A-L]    -- exec shodc focus -R
+		Focus Row _Above [A-K]          -- exec shodc focus -T
+		Focus Row _Below [A-J]          -- exec shodc focus -B
+		Focus Previous Tab [A-P]        -- exec shodc focus -cP
+		Focus Next Tab [A-N]            -- exec shodc focus -cN
+	}
+	Windows _List                           -- exec shodc focus {
+		shodc list -l | awk -F "\t" '$4==$6{gsub(/--/, "");print $7 "--" $6}'
+	}
+	--
+	_Close Window [A-S-Q]                   -- exec shodc close
+}
+
+_Music {
+	Pause/_Continue                         -- exec mpc toggle
+	_Next song                              -- exec mpc next
+	_Previous song                          -- exec mpc cdprev
+	--
+	Play_lists                              -- mpc clear && mpc load "$*" && mpc play {
+		mpc lsplaylists | sed 's/.*/_&/'
+	}
+	_Song                                   -- mpc searchplay filename "$*" {
+		mpc playlist -f '[[[%artist% - [%album% - ]]%title%]|[%file%]] -- %file%'
+	}
+}
+
+_Help {
+	Section _1                              -- man -Tpdf 1 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.1
+	}
+	Section _2                              -- man -Tpdf 2 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.2
+	}
+	Section _3                              -- man -Tpdf 3 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.3
+	}
+	Section _4                              -- man -Tpdf 4 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.4
+	}
+	Section _5                              -- man -Tpdf 5 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.5
+	}
+	Section _6                              -- man -Tpdf 6 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.6
+	}
+	Section _7                              -- man -Tpdf 7 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.7
+	}
+	Section _8                              -- man -Tpdf 8 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.8
+	}
+	Section _9                              -- man -Tpdf 9 "$*" | ifne zathura - {
+		cat $HOME/var/cache/man.9
+	}
+}

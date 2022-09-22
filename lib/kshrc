@@ -91,95 +91,6 @@ dirs() {
 	done
 }
 
-# list entries in cwd or search for file given as argument
-dir() {
-	# NAME
-	#      dir - recursively list files or search for files
-	#
-	# SYNOPSIS
-	#      dir [-0123456789adl] [file]
-	#
-	# DESCRIPTION
-	#      The dir function is a wrapper around colortree(1).  It
-	#      can recursively list the entries of the current working
-	#      directory, or recursively search for a file given as
-	#      argument.  If an argument is passed, dir searches for
-	#      a file with this name.
-	#
-	#      The options are as follows
-	#
-	#      -a      List all entries except for '.' and '..'.
-	#
-	#      -d      List directories only.
-	#
-	#      -l      List in long format.
-	#
-	#      -0      List in infinite depth.
-	#
-	#      -1 to -9
-	#              List in given depth.
-	#
-	#      A hyphen (-) is a synonym for the option -0
-
-	typeset dir="."
-	typeset options="-L 1 -hNFC --dirsfirst --ignore-case"
-	typeset usage="usage: dir [-0123456789adl] file"
-	while [ "$#" -gt 0 ]
-	do
-		case "$1" in
-		-a|-d)
-			options="$options $1"
-			shift
-			;;
-		-l)
-			options="$options -pug"
-			shift
-			;;
-		-*[!0-9]*)
-			echo "$usage" >&2
-			return 1
-			;;
-		-|-0)
-			options=" ${options#"-L 1"}"
-			shift
-			;;
-		-*[0-9]*)
-			options="$options -L ${1#"-"}"
-			shift
-			;;
-		--)
-			shift
-			break
-			;;
-		-*)
-			echo "$usage" >&2
-			return 1
-			;;
-		*)
-			break
-			;;
-		esac
-	done
-	case "$1" in
-	*/)
-		dir="$1"
-		shift
-		;;
-	esac
-	case "$#" in
-	0)
-		colortree $options "$dir"
-		;;
-	1)
-		colortree $options -P "*$1*" --prune "$dir"
-		;;
-	*)
-		echo "$usage" >&2
-		return 1
-		;;
-	esac | sed '/.*\/$/s/\[[^\[]*\] *//'
-}
-
 # change directory
 cd() {
 	# NAME
@@ -429,7 +340,7 @@ alias makemake='make'
 alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
 
 # completions
-complete skel 1 $(\ls -1F "$SKEL")       # skel is a template system I created
+complete skel 1 $(\ls -1F "$SKEL" | sed 's/\*$//')       # skel is a template system I created
 complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 complete sysctl "" $(sysctl | sed 's/[ =].*//')
 complete rcctl 1 disable enable get ls order set restart start stop

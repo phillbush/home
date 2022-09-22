@@ -1,24 +1,34 @@
 # Dotfiles etc
 
+Read the manual at `./man/home.7` for more information.
+
 ## Theme
 
 Bitmap font is [tadepe](https://github.com/phillbush/tadepe/).  
-Scalable font is [input](https://input.djr.com/).  
 Cursor is [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors/).  
 Color scheme is [tango](https://en.wikipedia.org/wiki/Tango_Desktop_Project#Palette).  
 Icons are Haiku's.
 
-## Screenshots
+## Demo
 
 Dirty:
-![dirty](https://user-images.githubusercontent.com/63266536/175818196-a7ca94bd-5205-47c3-9415-8880b0ccc316.png)
+![dirty](https://user-images.githubusercontent.com/63266536/191413209-ab6647f0-cf46-45a4-9d95-0a58b4901cf2.png)
 
 Menus:
-![menus](https://user-images.githubusercontent.com/63266536/175818149-55524051-f7af-446f-abea-2fd9c8c2ac8f.png)
+![menus](https://user-images.githubusercontent.com/63266536/191412339-02388f5d-79aa-4f7d-adcc-5549e45c17b0.png)
 
-Font:
-![font](https://user-images.githubusercontent.com/63266536/175818275-714db57f-2fd6-4631-ab18-0bc501809cbe.png)
+Showcase video:
+<p align="center">
+<a href="https://www.youtube.com/watch?v=Um8jaGGn9sM">
+<img src="https://img.youtube.com/vi/Um8jaGGn9sM/maxresdefault.jpg", title="My OpenBSD Desktop showcase [shod + ctrlmenu]"/>
+</a>
+</p>
 
-## More Info
+## See Also
 
-Read the manual at `./man/home.7` for more information.
+* [shod](https://github.com/phillbush/shod).
+* [fmutils](https://github.com/phillbush/fmutils).
+* [wmpdart](https://github.com/phillbush/wmpdart).
+* [ctrlmenu](https://github.com/phillbush/ctrlmenu).
+* [paginator](https://github.com/phillbush/paginator).
+
