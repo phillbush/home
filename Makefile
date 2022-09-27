@@ -1,5 +1,7 @@
 BINS = \
+        bin/termdraw \
         bin/mancache \
+        bin/samedir \
         bin/cmpdir \
         bin/agenda \
         bin/fetch \

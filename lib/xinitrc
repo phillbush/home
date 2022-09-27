@@ -45,7 +45,7 @@ mpd
 shod - <<-EOF
 	# menu system
 	ctrlmenu $RULESDIR/control &
-	pmenu -ex Super-3 <$RULESDIR/rootmenu &
+	pmenu -ex 4-3 <$RULESDIR/rootmenu &
 
 	# dockapps
 	paginator -iw -g64x192 -l1x5 &

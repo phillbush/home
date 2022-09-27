@@ -2,6 +2,8 @@
 <Multi_key> <Q>: "/"
 <Multi_key> <w>: "?"
 <Multi_key> <W>: "?"
+<Multi_key> <equal>: "•"
+<Multi_key> <minus>: "§"
 
 # Spacing versions of dead accents      {{{1
 

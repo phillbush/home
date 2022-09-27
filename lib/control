@@ -1,11 +1,12 @@
 _Apps {
-	Draw Terminal                           -- exec drawterm
+	Draw Terminal                           -- exec termdraw
 	Open _Terminal at $HOME [A-T]           -- exec xterm
 	Open Terminal Here [A-S-T]              -- exec samedir
 	--
 	Take _Screenshot                        -- exec maim -d 3 -s "tmp/scrot-$(date +%Y-%m-%d-%H%M%S)"
 	File _Browser                           -- exec xfiles
 	_Netsurf                                -- exec focusnext -c netsurf-gtk3 netsurf-gtk3
+	Surf                                    -- exec focusnext -c Surf surf seninha.org
 	_Seamonkey                              -- exec focusnext -c Seamonkey seamonkey
 	_Firefox                                -- exec focusnext -c Firefox firefox
 	_Chrome                                 -- exec focusnext -c Chromium chrome

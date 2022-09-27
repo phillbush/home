@@ -16,3 +16,16 @@ do
 		echo "$i: $desc" >> "$HOME/var/cache/man.$sect"
 	done
 done
+for file in "$HOME/var/cache/man."*
+do
+	awk '
+	BEGIN {
+		FS = ":"
+		OFS = ":"
+	}
+	{
+		gsub(/_/, "\\_", $1)
+		print
+	}
+	' "$file" | sponge "$file"
+done

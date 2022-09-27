@@ -12,9 +12,9 @@ IMG:128x128/devices/media-optical.png			music
 	IMG:128x128/actions/media-playback-stop.png	stop song		exec mpc stop
 	IMG:128x128/actions/media-seek-backward.png	previous song		exec mpc cdprev
 	IMG:128x128/actions/media-playback-toggle.png	play/pause		exec mpc toggle
-IMG:128x128/apps/terminal.png				draw terminal		exec drawterm
+IMG:128x128/apps/terminal.png				draw terminal		exec termdraw
 IMG:128x128/categories/applications-games.png		games
-	IMG:128x128/apps/backgammon.png			Backgammon		exec backgammon
+	IMG:128x128/apps/pinball.png			Space Cadet Pinball	exec SpaceCadetPinball
 	IMG:128x128/apps/morrowind.png			TES III: Morrowind	exec openmw
 	IMG:128x128/apps/naipes.png			Spider			exec spider
 	IMG:128x128/apps/supertuxkart.png		Super Tux Kart		exec supertuxkart

@@ -1591,8 +1591,8 @@ xkb_symbols "pc+br+inet(pc105)+terminate(ctrl_alt_bksp)" {
     key  <I66> {         [   XF86Favorites ] };
     key  <I67> {         [      XF86Reload ] };
     key  <I68> {         [        XF86Stop ] };
-    key  <I69> {         [     XF86Forward ] };
-    key  <I6A> {         [        XF86Back ] };
+    key  <I69> {         [            Next ] };
+    key  <I6A> {         [           Prior ] };
     key  <I6B> {         [  XF86MyComputer ] };
     key  <I6C> {         [        XF86Mail ] };
     key  <I6D> {         [  XF86AudioMedia ] };

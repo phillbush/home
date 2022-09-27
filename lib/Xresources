@@ -420,6 +420,8 @@ ctrlmenu.menu.shadowThickness:          2
 ctrlmenu.menu.alignment:                ALIGN_RIGHT
 ctrlmenu.menu.keysym:                   Super_L
 ctrlmenu.menu.tornoff:                  True
+ctrlmenu.menu.dockapp:                  True
+ctrlmenu.menu.context:                  False
 ctrlmenu.runner.keychord:               A-space
 ctrlmenu.runner.background:             BG
 ctrlmenu.runner.foreground:             FG

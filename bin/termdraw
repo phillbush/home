@@ -1,0 +1,20 @@
+#!/bin/sh
+# termdraw: spawn a new terminal window inside a drawn rectangle
+# this file in public domain
+
+TERMCMD="${TERMCMD:-"xterm"}"
+FONT_W=8
+FONT_H=16
+
+data="$({
+	slop -f '%x %y %w %h'
+})" ||
+exit 1
+
+printf "%s" "$data" | {
+	read -r DRAW_X DRAW_Y DRAW_W DRAW_H
+	FINAL_W="$(( DRAW_W / FONT_W ))"
+	FINAL_H="$(( DRAW_H / FONT_H ))"
+
+	exec "$TERMCMD" -geometry "${FINAL_W}x${FINAL_H}+${DRAW_X}+${DRAW_Y}"
+}
