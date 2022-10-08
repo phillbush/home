@@ -500,6 +500,251 @@ I use
 .Xr feh
 to set the desktop wallpaper.
 Currently, I use a dark tiled wallpaper.
+.Sh INPUT
+In X11, I use a variation of the Brazilian ABNT-2 layout on a Thinkpad keyboard.
+It is configured in
+.Pa "~/lib/xkeymap"
+and set with
+.Xr xkbcomp 1 .
+This keyboard lacks the physical key for the
+.Sy "slash/question"
+symbols (which, on a regular ABNT-2 keyboard, appears at the right of the
+.Sy "colon/semicolon"
+key, making the right shift shorter).
+To type such symbols, I reassigned the
+.Sy "cedilla/Cedilla"
+key to
+.Sy "slash/question" .
+To type cedilla, I use
+.Sy "dead_acute + c" .
+.Pp
+I have the following mappings on my personal keyboard layout:
+.Bl -bullet
+.It
+I mapped
+.Sy Esc
+to the key at the left of
+.Sy one ,
+so I can reach it more easily.
+I use
+.Sy "Esc"
+mainly in
+.Xr vim 1
+and in other programs to cancel the current mode or action.
+.It
+The
+.Sy "Left control"
+and
+.Sy "Caps Lock"
+symbols are swapped.
+I use the control modifier regularly in different ways by different programs;
+and I never use the capslock modifier.
+That's why I have control at a more reachable position.
+.It
+Since I do not need
+.Sy "AltGr"
+for the two extra layers, my
+.Sy "AltGr"
+physical key generates the
+.Sy "Multi Key"
+symbol (also known as compose).
+See below for more information on how I use the
+.Sy "Multi Key"
+to compose symbols.
+.It
+Since I have the arrow keys and
+.Sy "Page Up"
+and
+.Sy "Page Down"
+keys at the main key cluster, below the right shift,
+I set the two keys next to them to generate the
+.Sy "Home"
+and
+.Sy "End"
+symbols.
+Thus, I have the arrow keys and th
+.Sy "Home" ,
+.Sy "End" ,
+.Sy "Page Up" ,
+and
+.Sy "Page Down"
+keys forming a cluster of scrolling keys that I can use with a single hand.
+.It
+The
+.Sy "Left Super"
+and
+.Sy "Left Alt"
+keys generate symbols and modifiers I use to control my desktop.
+.El
+.Pp
+Rather than a four level key symbol system (Normal, Shift, AltGr, Shift+AltGr)
+I use only two layers of key symbols, complemented with dead keys
+(for Portuguese symbols I use regularly, like accented letters and cedilla),
+and the compose key (for drawing characters, greek letters, ligatures, etc).
+.Pp
+The following illustrations describes the normal and shifted key symbols.
+(Postscript versions of those ilustrations can be generated with
+.Xr xkbrint 1 . )
+.Bd -literal -offset indent
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬────────┐
+│esc│ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │ 0 │ - │ = │ bkspc  │
+├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬──────┤
+│ tab │ q │ w │ e │ r │ t │ y │ u │ i │ o │ p │ ' │ [ │enter │
+├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐     │
+│ ctrl │ a │ s │ d │ f │ g │ h │ j │ k │ l │ / │ ~ │ ] │     │
+├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴─────┤
+│shft│ \e │ z │ x │ c │ v │ b │ n │ m │ , │ . │ ; │ shift     │
+├───┬┴───┼───┼───┼───┴───┴───┴───┴───┼───┼───┼───┼───┬───┬───┤
+│fn │caps│win│alt│       space       │mlt│hom│end│pup│up │pdw│
+└───┴────┴───┴───┴───────────────────┴───┴───┴───┼───┼───┼───┤
+                                                 │lft│dw │rgt│
+                                                 └───┴───┴───┘
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬────────┐
+│esc│ ! │ " │ # │ $ │ % │ @ │ & │ * │ ( │ ) │ _ │ + │ bkspc  │
+├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬──────┤
+│ tab │ Q │ W │ E │ R │ T │ Y │ U │ I │ O │ P │ ` │ { │enter │
+├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐     │
+│ ctrl │ A │ S │ D │ F │ G │ H │ J │ K │ L │ ? │ ^ │ } │     │
+├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴─────┤
+│shft│ | │ Z │ X │ C │ V │ B │ N │ M │ < │ > │ : │ shift     │
+├───┬┴───┼───┼───┼───┴───┴───┴───┴───┼───┼───┼───┼───┬───┬───┤
+│fn │caps│win│alt│       space       │mlt│hom│end│pup│up │pdw│
+└───┴────┴───┴───┴───────────────────┴───┴───┴───┼───┼───┼───┤
+                                                 │lft│dw │rgt│
+                                                 └───┴───┴───┘
+.Ed
+.Pp
+I have the following dead keys:
+.Bl -bullet
+.It
+.Sy "dead_acute"
+(at the right of
+.Sy "P" )
+generates vowel letters with the acute diacritic.
+It generates the lowercase and uppercase cedilla
+(common in Portuguese) when used with
+.Sy "C" .
+It generates an
+.Sy "apostrophe"
+when used with
+.Sy "space" .
+.It
+.Sy "dead_grave"
+(at the same place of
+.Sy "dead_acute" ,
+but on the shift layer) generates vowel letters with the grave diacritic
+(Portuguese only uses this diacritic with the letter
+.Dq "A" ).
+It generates subscript versions of numbers when used before a number.
+It generates the ASCI
+.Sy "grave"
+symbol when used with
+.Sy "space" .
+.It
+.Sy "dead_tilde"
+(at the right of
+.Sy "L" )
+generates vowel letters (and
+.Dq "N" )
+with tilde.
+(Portuguese only uses this diacritic with the letters
+.Dq "A"
+and
+.Dq "O" ).
+It generates the ASCI
+.Sy "tilde"
+symbol when used with
+.Sy "space" .
+.It
+.Sy "dead_circumflex"
+(at the same place of
+.Sy "dead_tilde" ,
+but on the shift layer) generates vowel letters with the circumflex diacritic.
+It generates superscript versions of numbers when used before a number.
+It generates the ASCI
+.Sy "caret"
+symbol when used with
+.Sy "space" .
+.It
+The dead keys
+.Sy "dead_macron" ,
+.Sy "dead_breve" ,
+.Sy "dead_diaeresis" ,
+and
+.Sy "dead_ring"
+are obtained by typing those respective keys after the compose key
+.El
+.Pp
+The following symbols are some of the symbols generated with the compose key
+(as configured in
+.Pa "~/lib/xcompose" ) .
+.Bl -bullet
+.It
+Greek letters are composed by the
+.Sy "Multi_key"
+followed by the
+.Sy "asterisk"
+followed by a latin letter.
+.It
+Drawing characters with combinations of
+the
+.Sy "V" ,
+.Sy "H" ,
+.Sy "L" ,
+.Sy "R" ,
+.Sy "U" ,
+and
+.Sy "D"
+keys.
+.It
+Several mathematical symbols.
+.It
+Double-stroke latin letters (commonly used in math to represent number sets)
+are composed with
+.Sy "bar"
+plus a latin letter.
+.It
+Subscript and superscript version of letters are composed by the
+.Sy "Multi_key"
+followed by lowercase
+.Sy "s"
+or uppercase
+.Sy "S" ,
+respectivelly, and a latin letter.
+.It
+.Xr utf8 7
+characters from
+.Sy U+0000
+to
+.Sy U+FFFF
+can be composed by their code points with the
+.Sy "Multi key"
+followed by the lowercase
+.Sy "u"
+followed by four lowercase hexadecimal digits
+.Ns ( Sy "0"
+to
+.Sy "f" ) .
+.Pp
+As pointer device, I use both Thinkpad's trackpoint and Synaptic's touchpad.
+I invoke the following commands at X11 initialization script to make them work:
+.Bd -literal -offset indent
+# thinkpad trackpoint
+xinput set-prop "/dev/wsmouse" \e
+	"WS Pointer Wheel Emulation" 1
+xinput set-prop "/dev/wsmouse" \e
+	"WS Pointer Wheel Emulation Button" 2
+xinput set-prop "/dev/wsmouse" \e
+	"WS Pointer Wheel Emulation Axes" 6 7 4 5
+
+# synaptics touchpad
+synclient TapButton1=1
+synclient TapButton2=2
+synclient TapButton3=3
+synclient AccelFactor=0
+synclient HorizTwoFingerScroll=1
+.Ed
+.El
 .Sh ENVIRONMENT
 The following environment variables are set by the
 .It Pa ~/.profile
@@ -507,66 +752,133 @@ script.
 .Bl -tag -width Ds
 .It Ev CACHEDIR
 Cache directory.
+(I set it to
+.Pa "$HOME/var/cache" . )
 .It Ev DEBUG
 Debug flags used by
 .Xr make 1
 to pass to
 .Xr cc 1 .
+(I set it to
+.Fl g
+.Fl O Cm 0
+.Fl Wall
+.Fl Wextra . )
+.It Ev ENV
+Path to ksh's rc file.
+(I set it to
+.Pa "$HOME/lib/kshrc" . )
 .It Ev EDITOR
 Default editor program.
+(I set it to
+.Pa "vim" . )
+.It Ev EXINIT
+Path to vi's rc file.
+(I set it to
+.Pa "$HOME/lib/exrc" . )
 .It Ev GOPATH
 Directory where software managed by
 .Xr go 1
 should be installed.
+(I set it to
+.Pa "$HOME/usr/go" . )
 .It Ev GNUPGHOME
 Configuration directory for
 .Xr gpg 1 .
+(I set it to
+.Pa "$HOME/var/gpg" . )
 .It Ev LANG
 Fallback locale.
+(I set it to
+.Ic "pt_BR.UTF-8" . )
 .It Ev MANPREFIX
 Directory where manuals should be installed.
-.It Ev MIMEFILE
-File containing mimetype-application relationships.
+(I set it to
+.Pa "$HOME/usr/local/man" . )
+.It Ev MANPATH
+Path to look for manual pages.
 .It Ev MUSICDIR
 Music directory.
+(I set it to
+.Pa "$HOME/mus" . )
 .It Ev OPENER
 Default file opener program.
+(I set it to
+.Pa "plumb" . )
 .It Ev PAGER
 Default pager program.
+(I set it to
+.Pa "less" . )
 .It Ev PREFIX
 Directory where manually compiled software should be installed.
+(I set it to
+.Pa "$HOME/usr/local" . )
 .It Ev PROJDIR
 Directory where projects are maintained.
+(I set it to
+.Pa "$HOME/prj" . )
 .It Ev RLWRAP_HOME
 Shell history directory used by
 .Xr rlwrap 1 .
+(I set it to
+.Pa "$HOME/var/history" . )
 .It Ev RULESDIR
 Directory where configuration files are installed.
+(I set it to
+.Pa "$HOME/lib" . )
 .It Ev SKEL
 Directory containing template (skeleton) files.
+(I set it to
+.Pa "$HOME/lib/skel" . 0
 .It Ev TERMCMD
 Default terminal emulator program.
+(I set it to
+.Pa "xterm" . )
 .It Ev THUMBNAILER
 Default thumbnail generator program.
+(I set it to
+.Pa "thumbnail" . )
 .It Ev TMACPREFIX
 Directory where troff macros are installed.
+(I set it to
+.Pa "$HOME/usr/local/tmac" . )
 .It Ev TRASH
 Trash directory maintained by
 .Xr trash 1 .
+(I set it to
+.Pa "$HOME/var/trash" . )
 .It Ev TROFFMACS
 Path to troff macros prefix.
+(I set it to
+.Pa "$HOME/usr/local/tmac/tmac." . )
 .It Ev TZ
 Timezone.
+(I set it to
+.Ic "America/Sao_Paulo" . )
+.It Ev VIMINIT
+Path to vim's rc file.
+(I set it to
+.Pa "$HOME/lib/vimrc" . )
 .It Ev VISUAL
 Default editor program.
+(I set it to
+.Pa "vim" . )
 .It Ev XCOMPOSEFILE
 File containing key symbol compositions.
+(I set it to
+.Pa "$HOME/lib/xcompose" . )
 .It Ev XDG_CACHE_HOME
 xdg shit
+(I set it to
+.Pa "$HOME/.cache" . )
 .It Ev XDG_CONFIG_HOME
 xdg shit
+(I set it to
+.Pa "$HOME/.config" . )
 .It Ev XDG_DATA_HOME
 xdg shit
+(I set it to
+.Pa "$HOME/.data" . )
 .El
 .Sh FILES
 The contents of my

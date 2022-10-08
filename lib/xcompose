@@ -2,8 +2,8 @@
 <Multi_key> <Q>: "/"
 <Multi_key> <w>: "?"
 <Multi_key> <W>: "?"
-<Multi_key> <equal>: "•"
-<Multi_key> <minus>: "§"
+<Multi_key> <slash>: "\\"
+<Multi_key> <question>: "|"
 
 # Spacing versions of dead accents      {{{1
 
@@ -91,10 +91,9 @@
 # Typographic Symbols                   {{{1
 
 <dead_acute> <s>                        : "§"
-<dead_acute> <p>                        : "¶"
-<dead_acute> <b>                        : "•"
+<dead_acute> <p>                        : "•"
+<dead_grabe> <P>                        : "¶"
 <Multi_key> <exclam> <question>         : "‽"
-<Multi_key> <question> <question>       : "¿"
 <Multi_key> <minus> <a>                 : "ª"
 <Multi_key> <minus> <o>                 : "º"
 <Multi_key> <quotedbl> <parenleft>      : "“"
@@ -179,7 +178,6 @@
 <Multi_key> <parenright> <U>            : "∪"
 <Multi_key> <Z> <parenright> <U>        : "⋃"
 <Multi_key> <Z> <parenleft> <U>         : "⋂"
-<Multi_key> <slash> <0>                 : "∅"
 <Multi_key> <0> <slash>                 : "∅"
 
 # Logical symbols

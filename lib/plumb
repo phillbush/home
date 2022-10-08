@@ -1,0 +1,58 @@
+BROWSER = seamonkey
+
+data       matches  '(([A-Za-z]+):(//)?)?(.*)' into _ protocol _ file
+file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
+file       types    mime
+
+rules      for      paged document
+mime       matches  '(application/(pdf|postscript|epub.*))|(image/.*djvu)'
+open       with     zathura -- %file
+
+rules      for      multimedia
+mime       matches  '(application/()octet-stream|ogg))|((video|audio)/.*)'
+open       with     mpv --no-terminal --force-window=immediate -- %file
+
+rules      for      pixmap
+extension  matches  'xpm|xbm'
+open       with     sh -c 'case "$1" in (/*) : ;; (*) set -- '''$PWD'''"/$1" ;; esac ; xbmbrowser -- "$(dirname "$1")"' -- %file
+
+rules      for      image
+mime       matches  'image/.*'
+open       with     img -- %file
+
+rules      for      youtube video
+protocol   matches  '(ytdl|https?)?'
+file       matches  '(.*/watch\?v=)?[A-Za-z0-9_-]{11}'
+open       with     mpv --no-terminal --force-window=immediate -- ytdl://%file
+
+rules      for      html file
+mime       matches  'text/html'
+open       with     $BROWSER -- file://%file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
+rules      for      web page
+protocol   matches  'https?'
+open       with     $BROWSER -- %data
+
+rules      for      video files
+extension  matches  'mp4|mkv|ogv'
+open       with     mpv --no-terminal --force-window=immediate -- %data
+
+rules      for      man page
+protocol   matches  '(man)?'
+extension  matches  '[0-9]'
+open       with     $TERMCMD -e man -l -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
+rules      for      text file
+mime       matches  '(text/.*)|(application/(x-empty|x-shellscript))'
+open       with     $TERMCMD -e $EDITOR -- %file
+
+HOST = '([A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)+)'
+PORT = '(:[0-9]+)?'
+PATH = '(/?[^?/#]*)*'
+QERY = '(\??[^#]*)?'
+FRAG = '(#?.*)?'
+rules      for      web page (without protocol)
+file       matches  $HOST$PORT$PATH$QERY$FRAG
+open       with     $BROWSER -- https://%file

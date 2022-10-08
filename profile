@@ -2,14 +2,16 @@
 # ~/.profile
 
 # installation prefixes
-PATH="$PATH:/usr/games:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
-MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
+PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin"
+MANPATH="/usr/share/man:/usr/X11R6/man:/usr/local/man"
 for dir in $HOME/usr/*
 do
-	PATH="$dir/bin${PATH:+":"}$PATH"
-	MANPATH="$dir/man${MANPATH:+":"}$MANPATH"
+	PATH="$dir/bin:$PATH"
+	MANPATH="$dir/man:$MANPATH"
 done
 unset dir
+PATH="$PATH:/usr/games:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
+MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
 export PATH HOME TERM MANPATH
 
 # make variables
@@ -47,7 +49,6 @@ export TROFFMACS="$HOME/usr/local/tmac/tmac."
 
 # Files
 export ENV="$RULESDIR/kshrc"
-export MIMEFILE="$RULESDIR/mime"
 export XCOMPOSEFILE="$RULESDIR/xcompose"
 #export IRCSERVERSFILE="$RULESDIR/irc.servers"
 #export IRCRC="$RULESDIR/ircrc"
@@ -59,16 +60,16 @@ export VIMINIT=":source $RULESDIR/vimrc"
 #export IRCNAME="seninha"
 #export IRCNICK="seninha"
 export GIT_PAGER=cat
-export GIT_COMMITTER_NAME="seninha"
+export GIT_COMMITTER_NAME="Lucas de Sena"
 export GIT_COMMITTER_EMAIL="lucas@seninha.org"
-export GIT_AUTHOR_NAME="seninha"
+export GIT_AUTHOR_NAME="Lucas de Sena"
 export GIT_AUTHOR_EMAIL="lucas@seninha.org"
 
 # Default programs
 export PAGER="less"
 export EDITOR="vim"
 export VISUAL="vim"
-export OPENER="open"
+export OPENER="plumb"
 export TERMCMD="xterm"
 export THUMBNAILER="thumbnail"
 
