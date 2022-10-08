@@ -1,4 +1,4 @@
-BROWSER = seamonkey
+BROWSER = surf
 
 data       matches  '(([A-Za-z]+):(//)?)?(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension

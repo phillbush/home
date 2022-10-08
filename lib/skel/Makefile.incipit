@@ -24,7 +24,7 @@ all: ${DOC}
 	ps2pdf "-sPAPERSIZE=${PAPERSIZE}" $< $@
 
 .roff.ps: fonts.roff
-	cat fonts.roff $< | pic | tbl | eqn | troff ${TFLAGS} -mpictures - | dpost -p"${ORIENTATION}" >$@
+	$< pic | tbl | eqn | troff ${TFLAGS} -mpictures - | dpost -p"${ORIENTATION}" >$@
 
 .txt.roff:
 	i2roff $< >$@

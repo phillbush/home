@@ -19,12 +19,25 @@ LIBS = \
         lib/control \
         lib/exrc \
         lib/lfrc \
-        lib/mime \
+        lib/plumb \
         lib/rootmenu \
         lib/vimrc \
         lib/wallpaper.png \
         lib/xcompose \
         lib/xkeymap
+
+SKEL = \
+       lib/skel/Makefile \
+       lib/skel/Makefile.incipit \
+       lib/skel/Makefile.ino \
+       lib/skel/man.1 \
+       lib/skel/mdoc.1 \
+       lib/skel/ms.ms \
+       lib/skel/postscript.ps
+
+SKELBINS = \
+       lib/skel/scheme \
+       lib/skel/sicp
 
 SRCS = profile ${BINS} ${LIBS} ${LIBEXECS} ${MANS}
 
@@ -46,7 +59,8 @@ install:
 	install -D -m 644 ${MANS} ${HOME}/usr/home/man/man7/
 	install -D -m 644 ${LIBS} ${HOME}/lib/
 	install -D -m 755 ${LIBEXECS} ${HOME}/lib/
-	-cp -rf lib/skel ${HOME}/lib/
+	install -D -m 644 ${SKEL} ${HOME}/lib/skel
+	install -D -m 755 ${SKELBINS} ${HOME}/lib/skel
 
 gitadd:
 	git add Makefile README.md LICENSE ${SRCS}
