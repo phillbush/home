@@ -1,0 +1,7 @@
+#!/usr/bin/env scheme-r7rs
+(import (scheme small)
+        (srfi 216))
+
+(define main
+  (lambda (args)
+    (exit #t)))
