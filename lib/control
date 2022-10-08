@@ -1,7 +1,7 @@
 _Apps {
 	Draw Terminal                           -- exec termdraw
-	Open _Terminal at $HOME [A-T]           -- exec xterm
-	Open Terminal Here [A-S-T]              -- exec samedir
+	Open _Terminal at $HOME [!A-T]          -- exec xterm
+	Open Terminal Here [!A-S-T]             -- exec samedir
 	--
 	Take _Screenshot                        -- exec maim -d 3 -s "tmp/scrot-$(date +%Y-%m-%d-%H%M%S)"
 	File _Browser                           -- exec xfiles
@@ -23,42 +23,42 @@ _Apps {
 }
 
 _Window {
-	Stic_k Container [A-S-S]                -- exec shodc state -y
-	S_hade Container [A-S-N]                -- exec shodc state -s
-	Minimi_ze Container [A-S-Z]             -- exec shodc state -m
-	_Maximize Container [A-S-W]             -- exec shodc state -M
-	Container _FullScreen [A-S-F]           -- exec shodc state -f
-	Container _Below [A-S-B]                -- exec shodc state -b
-	Container _Above [A-S-A]                -- exec shodc state -a
+	Stic_k Container [!A-S-S]               -- exec shodc state -y
+	S_hade Container [!A-S-N]               -- exec shodc state -s
+	Minimi_ze Container [!A-S-Z]            -- exec shodc state -m
+	_Maximize Container [!A-S-W]            -- exec shodc state -M
+	Container _FullScreen [!A-S-F]          -- exec shodc state -f
+	Container _Below [!A-S-B]               -- exec shodc state -b
+	Container _Above [!A-S-A]               -- exec shodc state -a
 	--
 	_Go To Desktop {
-		Go To Desktop _1 [A-1]          -- exec shodc goto 1
-		Go To Desktop _2 [A-2]          -- exec shodc goto 2
-		Go To Desktop _3 [A-3]          -- exec shodc goto 3
-		Go To Desktop _4 [A-4]          -- exec shodc goto 4
-		Go To Desktop _5 [A-5]          -- exec shodc goto 5
+		Go To Desktop _1 [!A-1]         -- exec shodc goto 1
+		Go To Desktop _2 [!A-2]         -- exec shodc goto 2
+		Go To Desktop _3 [!A-3]         -- exec shodc goto 3
+		Go To Desktop _4 [!A-4]         -- exec shodc goto 4
+		Go To Desktop _5 [!A-5]         -- exec shodc goto 5
 	}
 	Move Container _To {
-		Move to Desktop _1 [A-S-1]      -- exec shodc sendto 1
-		Move to Desktop _2 [A-S-2]      -- exec shodc sendto 2
-		Move to Desktop _3 [A-S-3]      -- exec shodc sendto 3
-		Move to Desktop _4 [A-S-4]      -- exec shodc sendto 4
-		Move to Desktop _5 [A-S-5]      -- exec shodc sendto 5
+		Move to Desktop _1 [!A-S-1]     -- exec shodc sendto 1
+		Move to Desktop _2 [!A-S-2]     -- exec shodc sendto 2
+		Move to Desktop _3 [!A-S-3]     -- exec shodc sendto 3
+		Move to Desktop _4 [!A-S-4]     -- exec shodc sendto 4
+		Move to Desktop _5 [!A-S-5]     -- exec shodc sendto 5
 	}
 	--
 	_Focus {
-		Focus Column at _Left [A-H]     -- exec shodc focus -L
-		Focus Column at _Right [A-L]    -- exec shodc focus -R
-		Focus Row _Above [A-K]          -- exec shodc focus -T
-		Focus Row _Below [A-J]          -- exec shodc focus -B
-		Focus Previous Tab [A-P]        -- exec shodc focus -cP
-		Focus Next Tab [A-N]            -- exec shodc focus -cN
+		Focus Column at _Left [!A-H]    -- exec shodc focus -L
+		Focus Column at _Right [!A-L]   -- exec shodc focus -R
+		Focus Row _Above [!A-K]         -- exec shodc focus -T
+		Focus Row _Below [!A-J]         -- exec shodc focus -B
+		Focus Previous Tab [!A-P]       -- exec shodc focus -cP
+		Focus Next Tab [!A-N]           -- exec shodc focus -cN
 	}
 	Windows _List                           -- exec shodc focus {
 		shodc list -l | awk -F "\t" '$4==$6{gsub(/--/, "");print $7 "--" $6}'
 	}
 	--
-	_Close Window [A-S-Q]                   -- exec shodc close
+	_Close Window [!A-S-Q]                  -- exec shodc close
 }
 
 _Music {
@@ -70,7 +70,8 @@ _Music {
 		mpc lsplaylists | sed 's/.*/_&/'
 	}
 	_Song                                   -- mpc searchplay filename "$*" {
-		mpc playlist -f '[[[%artist% - [%album% - ]]%title%]|[%file%]] -- %file%'
+		mpc playlist -f '[[[%artist% - [%album% - ]]%title%]|[%file%]] -- %file%' |\
+		awk 'BEGIN {FS = " -- "; OFS = " -- "} {gsub(/[][{}_]/, "\\&/", $1); print }'
 	}
 }
 

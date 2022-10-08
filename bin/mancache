@@ -13,19 +13,15 @@ do
 	esac
 	for i in $manp
 	do
-		echo "$i: $desc" >> "$HOME/var/cache/man.$sect"
+		echo "$i	$desc" >> "$HOME/var/cache/man.$sect"
 	done
 done
 for file in "$HOME/var/cache/man."*
 do
-	awk '
-	BEGIN {
-		FS = ":"
-		OFS = ":"
-	}
-	{
-		gsub(/_/, "\\_", $1)
-		print
-	}
+	awk -F "\t" '
+		{
+			gsub(/[][{}_-]/, "\\\\&")
+			printf "%s [%s]\n", $1, $2
+		}
 	' "$file" | sponge "$file"
 done

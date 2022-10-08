@@ -72,9 +72,11 @@ Xcursor.theme:                          ""
 
 !! general
 *foreground:                            FG
-*background:                            BG
+*background:                            WIDMID
 *selforeground:                         SELFG
 *selbackground:                         SELBG
+*altforeground:                         DARK1
+*altselforeground:                      DARK1
 *cursorColor:                           FG
 *borderColor:                           WIDLIT
 *faceName:                              -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
@@ -373,20 +375,8 @@ xnotify.alignment:                      left
 xnotify.shrink:                         false
 xnotify.wrap:                           true
 
-!! XMenu
-xmenu.borderWidth:                      1
-xmenu.separatorWidth:                   9
-xmenu.height:                           22
-xmenu.width:                            90
-xmenu.gap:                              2
-xmenu.background:                       WIDMID
-xmenu.foreground:                       WIDFG
-xmenu.selbackground:                    SELMID
-xmenu.selforeground:                    SELFG
-xmenu.border:                           WIDLIT
-xmenu.separator:                        WIDLIT
-xmenu.font:                             monospace:size=9
-xmenu.alignment:                        left
+!! CtrlMenu
+ctrlmenu.alignment:                     ALIGN_LEFT
 
 !! Pmenu
 pmenu.background:                       BG
@@ -408,48 +398,10 @@ xpdf*background:                        WIDMID
 xpdf*topShadowColor:                    WIDLIT
 xpdf*bottomShadowColor:                 WIDHVY
 
-!! CtrlMenu
-ctrlmenu*faceName:                      -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
-ctrlmenu.menu.background:               WIDBG
-ctrlmenu.menu.foreground:               FG
-ctrlmenu.menu.selbackground:            SELBG
-ctrlmenu.menu.selforeground:            FG
-ctrlmenu.menu.topShadow:                WIDLIT
-ctrlmenu.menu.bottomShadow:             WIDHVY
-ctrlmenu.menu.shadowThickness:          2
-ctrlmenu.menu.alignment:                ALIGN_RIGHT
-ctrlmenu.menu.keysym:                   Super_L
-ctrlmenu.menu.tornoff:                  True
-ctrlmenu.menu.dockapp:                  True
-ctrlmenu.menu.context:                  False
-ctrlmenu.runner.keychord:               A-space
-ctrlmenu.runner.background:             BG
-ctrlmenu.runner.foreground:             FG
-ctrlmenu.runner.selbackground:          SELBG
-ctrlmenu.runner.selforeground:          FG
-ctrlmenu.runner.altforeground:          LIGHT1
-ctrlmenu.runner.altselforeground:       LIGHT1
+!! XFiles
+xfiles.background:                      BG
 
-!! control (an experimental application of mine, I may delete that later)
-control.background:                     #121212
-control.foreground:                     #FFFFFF
-control.description:                    #555753
-control.hoverbackground:                #2E3436
-control.hoverforeground:                #FFFFFF
-control.hoverdescription:               #555753
-control.selbackground:                  #3465A4
-control.selforeground:                  #FFFFFF
-control.seldescription:                 #C5C8C6
-
-!! XDockbar (an experimental application of mine, I may delete that later)
-xdockbar*background:                    BLUE
-xdockbar.structure:                     2,2
-xdockbar.bar0.geometry:                 100%x30+0+0
-xdockbar.bar0.gravity:                  N
-xdockbar.bar1.geometry:                 100%x30+0+0
-xdockbar.bar1.gravity:                  S
-
-!! XFilter (an experimental replacement for XPrompt)
+!! XFilter
 xfilter.background:                     BG
 xfilter.geometry:                       800x30
 xfilter.font:                           monospace:size=12
