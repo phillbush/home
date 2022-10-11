@@ -44,6 +44,16 @@ is reasonable,
 but I also add
 .Ic persist
 to it so I'm not asked for password again for some time after successfully authenticating.
+I also make it possible for wheel users to run certain commands without password.
+.Bd -literal -offset indent
+permit persist keepenv :wheel
+permit nopass keepenv :wheel as root cmd sysupgrade
+permit nopass keepenv :wheel as root cmd syspatch
+permit nopass keepenv :wheel as root cmd pkg_add
+permit nopass keepenv :wheel as root cmd reboot
+permit nopass keepenv :wheel as root cmd mount
+permit nopass keepenv :wheel as root cmd umount
+.Ed
 .Pp
 The default system resources limits to the staff login class defined at
 .Pa /etc/login.conf
@@ -293,7 +303,8 @@ can be enabled by writing to /etc/sysctl.conf.
 kern.audio.record=1
 kern.video.record=1
 .Ed
-.Sh SHELL SESSION
+.Sh USAGE
+.Ss Shell Session
 I use
 .Xr ksh 1
 with emacs-like keybindings, and brace expansion.
@@ -458,7 +469,7 @@ The right prompt is the cwd.
 .Pp
 I trap the ERR special signal to notify the exit status of the last command,
 when it is nonzero.
-.Sh X11 SESSION
+.Ss X11 Session
 I use
 .Xr shod 1
 as window manager.
@@ -500,7 +511,7 @@ I use
 .Xr feh
 to set the desktop wallpaper.
 Currently, I use a dark tiled wallpaper.
-.Sh INPUT
+.Ss Input
 In X11, I use a variation of the Brazilian ABNT-2 layout on a Thinkpad keyboard.
 It is configured in
 .Pa "~/lib/xkeymap"
@@ -747,137 +758,137 @@ synclient HorizTwoFingerScroll=1
 .El
 .Sh ENVIRONMENT
 The following environment variables are set by the
-.It Pa ~/.profile
+.Pa ~/.profile
 script.
 .Bl -tag -width Ds
 .It Ev CACHEDIR
 Cache directory.
-(I set it to
+(Set to
 .Pa "$HOME/var/cache" . )
 .It Ev DEBUG
 Debug flags used by
 .Xr make 1
 to pass to
 .Xr cc 1 .
-(I set it to
+(Set to
 .Fl g
-.Fl O Cm 0
+.Fl O0
 .Fl Wall
 .Fl Wextra . )
 .It Ev ENV
 Path to ksh's rc file.
-(I set it to
+(Set to
 .Pa "$HOME/lib/kshrc" . )
 .It Ev EDITOR
 Default editor program.
-(I set it to
+(Set to
 .Pa "vim" . )
 .It Ev EXINIT
 Path to vi's rc file.
-(I set it to
+(Set to
 .Pa "$HOME/lib/exrc" . )
 .It Ev GOPATH
 Directory where software managed by
 .Xr go 1
 should be installed.
-(I set it to
+(Set to
 .Pa "$HOME/usr/go" . )
 .It Ev GNUPGHOME
 Configuration directory for
 .Xr gpg 1 .
-(I set it to
+(Set to
 .Pa "$HOME/var/gpg" . )
 .It Ev LANG
 Fallback locale.
-(I set it to
+(Set to
 .Ic "pt_BR.UTF-8" . )
 .It Ev MANPREFIX
 Directory where manuals should be installed.
-(I set it to
+(Set to
 .Pa "$HOME/usr/local/man" . )
 .It Ev MANPATH
 Path to look for manual pages.
 .It Ev MUSICDIR
 Music directory.
-(I set it to
+(Set to
 .Pa "$HOME/mus" . )
 .It Ev OPENER
 Default file opener program.
-(I set it to
+(Set to
 .Pa "plumb" . )
 .It Ev PAGER
 Default pager program.
-(I set it to
+(Set to
 .Pa "less" . )
 .It Ev PREFIX
 Directory where manually compiled software should be installed.
-(I set it to
+(Set to
 .Pa "$HOME/usr/local" . )
 .It Ev PROJDIR
 Directory where projects are maintained.
-(I set it to
+(Set to
 .Pa "$HOME/prj" . )
 .It Ev RLWRAP_HOME
 Shell history directory used by
 .Xr rlwrap 1 .
-(I set it to
+(Set to
 .Pa "$HOME/var/history" . )
 .It Ev RULESDIR
 Directory where configuration files are installed.
-(I set it to
+(Set to
 .Pa "$HOME/lib" . )
 .It Ev SKEL
 Directory containing template (skeleton) files.
-(I set it to
+(Set to
 .Pa "$HOME/lib/skel" . 0
 .It Ev TERMCMD
 Default terminal emulator program.
-(I set it to
+(Set to
 .Pa "xterm" . )
 .It Ev THUMBNAILER
 Default thumbnail generator program.
-(I set it to
+(Set to
 .Pa "thumbnail" . )
 .It Ev TMACPREFIX
 Directory where troff macros are installed.
-(I set it to
+(Set to
 .Pa "$HOME/usr/local/tmac" . )
 .It Ev TRASH
 Trash directory maintained by
 .Xr trash 1 .
-(I set it to
+(Set to
 .Pa "$HOME/var/trash" . )
 .It Ev TROFFMACS
 Path to troff macros prefix.
-(I set it to
+(Set to
 .Pa "$HOME/usr/local/tmac/tmac." . )
 .It Ev TZ
 Timezone.
-(I set it to
+(Set to
 .Ic "America/Sao_Paulo" . )
 .It Ev VIMINIT
 Path to vim's rc file.
-(I set it to
+(Set to
 .Pa "$HOME/lib/vimrc" . )
 .It Ev VISUAL
 Default editor program.
-(I set it to
+(Set to
 .Pa "vim" . )
 .It Ev XCOMPOSEFILE
 File containing key symbol compositions.
-(I set it to
+(Set to
 .Pa "$HOME/lib/xcompose" . )
 .It Ev XDG_CACHE_HOME
 xdg shit
-(I set it to
+(Set to
 .Pa "$HOME/.cache" . )
 .It Ev XDG_CONFIG_HOME
 xdg shit
-(I set it to
+(Set to
 .Pa "$HOME/.config" . )
 .It Ev XDG_DATA_HOME
 xdg shit
-(I set it to
+(Set to
 .Pa "$HOME/.data" . )
 .El
 .Sh FILES
@@ -956,6 +967,11 @@ is the manual for
 .Xr shod 1 installed manually; etc.
 .It Pa ~/var/
 Directory for files managed automatically by applications.
+While
+.Pa "~/lib"
+contains files only read by applications,
+.Pa "~/var"
+contains files written (and possibly read) by them.
 For example,
 .Pa ~/var/trash/
 contains trashed files managed by

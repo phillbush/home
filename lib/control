@@ -23,13 +23,13 @@ _Apps {
 }
 
 _Window {
-	Stic_k Container [!A-S-S]               -- exec shodc state -y
-	S_hade Container [!A-S-N]               -- exec shodc state -s
-	Minimi_ze Container [!A-S-Z]            -- exec shodc state -m
-	_Maximize Container [!A-S-W]            -- exec shodc state -M
-	Container _FullScreen [!A-S-F]          -- exec shodc state -f
-	Container _Below [!A-S-B]               -- exec shodc state -b
-	Container _Above [!A-S-A]               -- exec shodc state -a
+	Stic_k [!A-S-S]                         -- exec shodc state -y
+	S_hade [!A-S-N]                         -- exec shodc state -s
+	Minimi_ze [!A-S-Z]                      -- exec shodc state -m
+	_Maximize [!A-S-W]                      -- exec shodc state -M
+	Full_Screen [!A-S-F]                    -- exec shodc state -f
+	_Below [!A-S-B]                         -- exec shodc state -b
+	_Above [!A-S-A]                         -- exec shodc state -a
 	--
 	_Go To Desktop {
 		Go To Desktop _1 [!A-1]         -- exec shodc goto 1
@@ -38,7 +38,7 @@ _Window {
 		Go To Desktop _4 [!A-4]         -- exec shodc goto 4
 		Go To Desktop _5 [!A-5]         -- exec shodc goto 5
 	}
-	Move Container _To {
+	Move _To {
 		Move to Desktop _1 [!A-S-1]     -- exec shodc sendto 1
 		Move to Desktop _2 [!A-S-2]     -- exec shodc sendto 2
 		Move to Desktop _3 [!A-S-3]     -- exec shodc sendto 3
