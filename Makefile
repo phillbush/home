@@ -1,66 +1,53 @@
-BINS = \
-        bin/termdraw \
-        bin/mancache \
-        bin/samedir \
-        bin/cmpdir \
-        bin/agenda \
-        bin/fetch \
-        bin/dir
-
-LIBEXECS = \
-        lib/kshrc \
-        lib/xinitrc
-
-MANS = \
-        man/home.7
-
-LIBS = \
-        lib/Xresources \
-        lib/control \
-        lib/exrc \
-        lib/lfrc \
-        lib/plumb \
-        lib/rootmenu \
-        lib/vimrc \
-        lib/wallpaper.png \
-        lib/xcompose \
-        lib/xkeymap
-
-SKEL = \
-       lib/skel/Makefile \
-       lib/skel/Makefile.incipit \
-       lib/skel/Makefile.ino \
-       lib/skel/man.1 \
-       lib/skel/mdoc.1 \
-       lib/skel/ms.ms \
-       lib/skel/postscript.ps
-
-SKELBINS = \
-       lib/skel/scheme \
-       lib/skel/sicp
-
-SRCS = profile ${BINS} ${LIBS} ${LIBEXECS} ${MANS}
+LIBDIR = ${HOME}/lib
+SKLDIR = ${HOME}/lib/skel
+BINDIR = ${HOME}/usr/home/bin
+MANDIR = ${HOME}/usr/home/man
 
 all:
 	@echo no need to build
 
-install:
-	mkdir -p "${HOME}/prj" \
-	         "${HOME}/tmp" \
-	         "${HOME}/lib/skel" \
-	         "${HOME}/usr/home/bin" \
-	         "${HOME}/usr/home/man/man7" \
-	         "${HOME}/var/cache" \
-	         "${HOME}/var/history" \
-	         "${HOME}/var/mail" \
-	         "${HOME}/var/trash"
-	install -D -m 755 profile ${HOME}/.profile
-	install -D -m 755 ${BINS} ${HOME}/usr/home/bin/
-	install -D -m 644 ${MANS} ${HOME}/usr/home/man/man7/
-	install -D -m 644 ${LIBS} ${HOME}/lib/
-	install -D -m 755 ${LIBEXECS} ${HOME}/lib/
-	install -D -m 644 ${SKEL} ${HOME}/lib/skel
-	install -D -m 755 ${SKELBINS} ${HOME}/lib/skel
+install: dirs envs mans bins libs skels
+
+DIRS = \
+       ${HOME}/prj \
+       ${HOME}/tmp \
+       ${HOME}/var/cache \
+       ${HOME}/var/history \
+       ${HOME}/var/mail \
+       ${HOME}/var/trash \
+       ${LIBDIR} \
+       ${SKLDIR} \
+       ${BINDIR} \
+       ${MANDIR}
+dirs: ${DIRS}
+${DIRS}: $@
+	mkdir -p -- $@
+
+envs: ${HOME}/.profile
+${HOME}/.profile: profile
+	install -D -m 755 profile $@
+
+MANS = ${MANDIR}/man7/home.7
+mans: ${MANS}
+${MANS}: ./${@:T}
+	install -D -m 644 ./${@:T} $@
+
+BINS != for i in execs/* ; do printf "${BINDIR}/%s\n" "`basename "$$i"`" ; done
+bins: ${BINS}
+${BINS}: execs/${@:T}
+	install -D -m 755 execs/${@:T} $@
+
+LIBS != for i in rules/* ; do printf "${LIBDIR}/%s\n" "`basename "$$i"`" ; done
+libs: ${LIBS}
+${LIBS}: rules/${@:T}
+	install -D -m 644 rules/${@:T} $@
+
+SKELS != for i in skels/* ; do printf "${SKLDIR}/%s\n" "`basename "$$i"`" ; done
+skels: ${SKELS}
+${SKELS}: skels/${@:T}
+	install -D -m 644 skels/${@:T} $@
+
+SRCS = profile ${MANS} ${BINS} ${LIBS} ${SKELS} ${ICONS}
 
 gitadd:
 	git add Makefile README.md LICENSE ${SRCS}
@@ -70,4 +57,4 @@ gitpush:
 	# git remote add origin git@github.com:phillbush/home.git
 	git push -u origin master
 
-.PHONY: all install
+.PHONY: all install gitadd gitpush skels libs bins mans envs dirs
