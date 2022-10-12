@@ -238,7 +238,7 @@ xterm*visualBell:                       False
 xterm*scrollBar:                        False
 xterm*rightScrollBar:                   True
 xterm*allowMouseOps:                    True
-xterm*forceBoxChars:                    True
+xterm*forceBoxChars:                    False
 xterm*internalBorder:                   5
 xterm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 xterm*eightBitInput:                    False
