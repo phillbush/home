@@ -357,9 +357,6 @@ pgrep -q vmd && complete vmctl "" $(vmctl status | awk '!/NAME/{print $NF}')
 
 # set prompt and window title
 PS1='$(
-	# set _host to the host name of the machine
-	_host="$(hostname)"
-
 	# set _cwd to $PWD, replacing $HOME with ~
 	case "$PWD/" in
 	("$HOME"/*)
@@ -370,20 +367,20 @@ PS1='$(
 		;;
 	esac
 
-	# set _rprompt to $_cwd; prefix it with "$_host:" if I am not on my laptop
-	if test -z "$SSH_CONNECTION"
-	then
-		_rprompt="$_cwd"
-	else
-		_rprompt="$_host:$_cwd"
-	fi
-
-	# set _cols to the number of chars in _rprompt
-	_cols=$((COLUMNS - ${#_rprompt}))
-
 	# set _tty to the name of tty, trim any /dev/ at the beginning
 	_tty=$(tty)
 	_tty=${_tty#/dev/}
+
+	# set _host to the host name of the machine
+	# set _title to "$_cwd - $_tty"; prefix it with "$_host:" if I am not on my laptop
+	if test -z "$SSH_CONNECTION"
+	then
+		_host=""
+		_title="$_cwd - $_tty"
+	else
+		_host="$(hostname)"
+		_title="$_host:$_cwd - $_tty"
+	fi
 
 	# set _color to red if we are root, or to white if we are a normal user
 	if [ $(id -u) -eq 0 ]
@@ -393,18 +390,12 @@ PS1='$(
 		_color="1m"
 	fi
 
-	# set _title to "$_host:$_cwd - $_tty"
-	_title="$_rprompt - $_tty"
-
 	# return prompt
+	printf "\\\\[\e[0m\\\\]"                # clear formatting
 	printf "\\\\[\e]0;%s\a\\\\]" "$_title"  # set window title
 	printf "\n"                             # print blank line before prompt
-	printf "\\\\[\e[0m\\\\]\\\\[\e[s\\\\]"  # clear formatting and save cursor position
-	printf "\\\\[\e[%sG\\\\]" "$_cols"      # go to column $_cols
-	printf "%s" "$_rprompt"                 # print right prompt
-	printf "\\\\[\e[u\\\\]"                 # go back to first column
 	printf "\\\\[\e[%s\\\\]" "$_color"      # set color to red if root, white otherwise
-	printf " ❯ "                            # set left prompt to a single ❯ char
+	printf "%s ❯ " "$_host"                 # set left prompt
 	printf "\\\\[\e[0m\\\\]"                # clear formatting
 )'
 

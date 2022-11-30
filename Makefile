@@ -1,12 +1,13 @@
 LIBDIR = ${HOME}/lib
 SKLDIR = ${HOME}/lib/skel
+ICODIR = ${HOME}/lib/icons
 BINDIR = ${HOME}/usr/home/bin
 MANDIR = ${HOME}/usr/home/man
 
 all:
 	@echo no need to build
 
-install: dirs envs mans bins libs skels
+install: dirs envs mans bins libs skels icons
 
 DIRS = \
        ${HOME}/prj \
@@ -46,6 +47,16 @@ SKELS != for i in skels/* ; do printf "${SKLDIR}/%s\n" "`basename "$$i"`" ; done
 skels: ${SKELS}
 ${SKELS}: skels/${@:T}
 	install -D -m 644 skels/${@:T} $@
+
+ICO16 != for i in icons/16x16/* ; do printf "${ICODIR}/16x16/%s\n" "`basename "$$i"`" ; done
+${ICO16}: icons/16x16/${@:T}
+	install -D -m 644 icons/16x16/${@:T} $@
+
+ICO64 != for i in icons/64x64/* ; do printf "${ICODIR}/64x64/%s\n" "`basename "$$i"`" ; done
+${ICO64}: icons/64x64/${@:T}
+	install -D -m 644 icons/64x64/${@:T} $@
+
+icons: ${ICO16} ${ICO64}
 
 SRCS = profile ${MANS} ${BINS} ${LIBS} ${SKELS} ${ICONS}
 

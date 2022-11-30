@@ -1,9 +1,14 @@
+<Multi_key> <at>: "lucas@seninha.org"
 <Multi_key> <q>: "/"
 <Multi_key> <Q>: "/"
 <Multi_key> <w>: "?"
 <Multi_key> <W>: "?"
 <Multi_key> <slash>: "\\"
 <Multi_key> <question>: "|"
+<Multi_key> <z>: "“"
+<Multi_key> <x>: "”"
+<Multi_key> <Z>: "‘"
+<Multi_key> <X>: "’"
 
 # Spacing versions of dead accents      {{{1
 
@@ -123,7 +128,6 @@
 
 # Calculus
 <Multi_key> <0> <0>                     : "∞"
-<Multi_key> <Z> <plus>                  : "∑"
 <Multi_key> <plus> <Z>                  : "∑"
 
 # Operations
@@ -139,11 +143,15 @@
 <Multi_key> <0> <plus>                  : "⊕"
 <Multi_key> <0> <asterisk>              : "⊗"
 <Multi_key> <0> <period>                : "⊙"
+<dead_acute> <period>                   : "·"
+<dead_acute> <x>                        : "×"
+<Multi_key> <6>                         : "¬"
 
 # Equality
 <Multi_key> <equal> <less>              : "≤"
 <Multi_key> <greater> <equal>           : "≥"
 <Multi_key> <dead_tilde> <equal>        : "≈"
+<dead_tilde> <equal>                    : "≈"
 <Multi_key> <exclam> <equal>            : "≠"
 <Multi_key> <3> <equal>                 : "≡"
 <Multi_key> <equal> <3>                 : "≡"
@@ -176,8 +184,8 @@
 <Multi_key> <parenleft> <C>             : "⊂"
 <Multi_key> <parenleft> <U>             : "∩"
 <Multi_key> <parenright> <U>            : "∪"
-<Multi_key> <Z> <parenright> <U>        : "⋃"
-<Multi_key> <Z> <parenleft> <U>         : "⋂"
+<Multi_key> <plus> <parenright> <U>     : "⋃"
+<Multi_key> <plus> <parenleft> <U>      : "⋂"
 <Multi_key> <0> <slash>                 : "∅"
 
 # Logical symbols

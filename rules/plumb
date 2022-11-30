@@ -1,15 +1,13 @@
-BROWSER = surf
-
 data       matches  '(([A-Za-z]+):(//)?)?(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
 file       types    mime
 
 rules      for      paged document
-mime       matches  '(application/(pdf|postscript|epub.*))|(image/.*djvu)'
+extension  matches  'pdf|eps|ps|djvu'
 open       with     zathura -- %file
 
 rules      for      multimedia
-mime       matches  '(application/()octet-stream|ogg))|((video|audio)/.*)'
+mime       matches  '(application/(octet-stream|ogg))|((video|audio)/.*)'
 open       with     mpv --no-terminal --force-window=immediate -- %file
 
 rules      for      pixmap
@@ -26,7 +24,7 @@ file       matches  '(.*/watch\?v=)?[A-Za-z0-9_-]{11}'
 open       with     mpv --no-terminal --force-window=immediate -- ytdl://%file
 
 rules      for      html file
-mime       matches  'text/html'
+extension  matches  'html'
 open       with     $BROWSER -- file://%file
 edit       with     $TERMCMD -e $EDITOR -- %file
 
@@ -56,3 +54,19 @@ FRAG = '(#?.*)?'
 rules      for      web page (without protocol)
 file       matches  $HOST$PORT$PATH$QERY$FRAG
 open       with     $BROWSER -- https://%file
+
+rules      for      web search
+protocol   matches  's'
+open       with     $BROWSER https://search.disroot.org/search?q=%file
+
+rules      for      youtube search
+protocol   matches  'y'
+open       with     $BROWSER https://yewtu.be/search?q=%file
+
+rules      for      wikipedia search
+protocol   matches  'w'
+open       with     $BROWSER https://en.wikipedia.org/wiki/%file
+
+rules      for      wiktionary search
+protocol   matches  'd'
+open       with     $BROWSER https://en.wiktionary.org/wiki/%file

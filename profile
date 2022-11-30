@@ -15,7 +15,7 @@ MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/lo
 export PATH HOME TERM MANPATH
 
 # make variables
-export DEBUG="-g -O0 -Wall -Wextra"
+export DEBUG="-g -O0 -Wall -Wextra -Wstrict-prototypes -Wold-style-definition"
 
 # local installation directories
 export PREFIX="$HOME/usr/local"
@@ -39,12 +39,19 @@ export RULESDIR="$HOME/lib"
 export SKEL="$RULESDIR/skel"
 export MUSICDIR="$HOME/mus/"
 export CACHEDIR="$HOME/var/cache"
+export NEWSDIR="$HOME/var/news"
 export RLWRAP_HOME="$HOME/var/history"
 export TRASH="$HOME/var/trash"
 export GNUPGHOME="$HOME/var/gpg"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.data"
+export XDG_DESKTOP_DIR="$HOME/tmp"
+export XDG_DOCUMENTS_DIR="$HOME/doc"
+export XDG_DOWNLOAD_DIR="$HOME/tmp"
+export XDG_MUSIC_DIR="$HOME/mus"
+export XDG_PICTURES_DIR="$HOME/mem"
+export XDG_TEMPLATES_DIR="$HOME/lib/skel"
 export TROFFMACS="$HOME/usr/local/tmac/tmac."
 
 # Files
@@ -71,6 +78,7 @@ export EDITOR="vim"
 export VISUAL="vim"
 export OPENER="plumb"
 export TERMCMD="xterm"
+export BROWSER="www"
 export THUMBNAILER="thumbnail"
 
 # Theme

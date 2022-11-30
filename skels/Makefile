@@ -15,7 +15,7 @@ LIBS = -L${LOCALLIB} -L${X11LIB} -lX11
 all: ${PROG}
 
 ${PROG}: ${OBJS}
-	${CC} -o $@ ${OBJS} ${LIBS} ${LDFLAGS}
+	${CC} ${LIBS} ${LDFLAGS} -o $@ ${OBJS}
 
 ${OBJS}: config.h
 

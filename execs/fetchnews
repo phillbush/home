@@ -1,0 +1,96 @@
+#!/bin/sh
+# fetch feeds from $NEWSFILE and fill them into $NEWSDIR
+# depends on curl, xmllint, lynx and UNIX utils (printf, tr, sed, ...)
+
+argv0="$0"
+IFS='	'
+NEWSFILE="$HOME/lib/news"
+NEWSDIR="$HOME/var/news"
+
+warn() {
+	fmt="$1"
+	shift
+	printf "%s: $fmt\n" "$argv0" "$@"
+}
+
+err() {
+	warn "$@"
+	exit 1
+}
+
+fetch() {
+	#ftp -M -V -w 15 -o - -- "$1" 2>/dev/null
+	curl -L --http1.1 --max-redirs 0 -H "User-Agent:" -f -s -m 10 "$1" 2>/dev/null
+}
+
+unescape() {
+	sed -E '
+		s/((^|[^\\])(\\\\)*)\\n/\1\
+/g
+		s/((^|[^\\])(\\\\)*)\\t/\1	/g
+		s/\\\\/\\/g
+	'
+}
+
+escape() {
+	tr -d "'\\\"" | tr '\n' ' ' | sed -E '
+		s, +, ,g
+		s,/+,%,g
+		s,[[:cntrl:]]+,,g
+		s,^ *,,
+		s, *$,,
+	'
+}
+
+feed() {
+	mkdir -p "$NEWSDIR/$1"
+	printf '%s: ' "$1"
+	sfeed "$2" < "$3" |\
+	sed -E 's/	/& /g' |\
+	while read -r timestamp title link content contenttype id author enclosure category
+	do
+		timestamp="${timestamp:+"$timestamp."}"
+		author="${author# }"
+		title="${title# }"
+		link="${link# }"
+		id="${id# }"
+		file="$(printf '%s\n' "$timestamp$title" | escape)"
+		if test -n "$file" && ! test -e "$NEWSDIR/$1/$file"
+		then {
+			printf -- '<!DOCTYPE HTML>\n'
+			printf -- '<html>\n'
+			printf -- '\t<head>\n'
+			printf -- '\t\t<meta name="referrer" content="no-referrer" />\n'
+			printf -- '\t\t<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\n'
+			printf -- '\t\t<title>%s</title>\n' "$title"
+			printf -- '\t</head>\n'
+			printf -- '\t<body class="noframe">\n'
+			printf -- '<h1><a href="%s">%s</a></h1>\n' "$link" "$title"
+			printf -- '%s\n' "$content"
+			printf -- '\t</body>\n</html>\n'
+		} | unescape >"$NEWSDIR/$1/$file"
+		fi
+	done
+	echo "OK"
+}
+
+mkdir -p "$NEWSDIR" || err "could not make news directory"
+tmp="$(mktemp)" || err "could not make temporary file"
+trap 'rm -f "$tmp"' EXIT
+while read -r line
+do
+	case "$line" in
+	(""|"#"*)
+		;;
+	(*)
+		title="$(printf -- '%s\n' "$line" | sed -E 's/ *:.*$//g' | escape)"
+		url="$(printf -- '%s\n' "$line" | sed -E 's/^[^:]*: *//g')"
+		if fetch "$url" >"$tmp" && test -n "$title"
+		then
+			feed "$title" "$url" "$tmp"
+		else
+			warn "could not fetch from %s" "$title"
+		fi
+		;;
+	esac
+done < "${NEWSFILE}"
