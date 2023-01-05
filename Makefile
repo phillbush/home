@@ -1,13 +1,13 @@
 LIBDIR = ${HOME}/lib
 SKLDIR = ${HOME}/lib/skel
-ICODIR = ${HOME}/lib/icons
+WALDIR = ${HOME}/lib/pape
 BINDIR = ${HOME}/usr/home/bin
 MANDIR = ${HOME}/usr/home/man
 
 all:
 	@echo no need to build
 
-install: dirs envs mans bins libs skels icons
+install: dirs envs mans bins libs skels papes
 
 DIRS = \
        ${HOME}/prj \
@@ -18,6 +18,7 @@ DIRS = \
        ${HOME}/var/trash \
        ${LIBDIR} \
        ${SKLDIR} \
+       ${WALDIR} \
        ${BINDIR} \
        ${MANDIR}
 dirs: ${DIRS}
@@ -48,24 +49,9 @@ skels: ${SKELS}
 ${SKELS}: skels/${@:T}
 	install -D -m 644 skels/${@:T} $@
 
-ICO16 != for i in icons/16x16/* ; do printf "${ICODIR}/16x16/%s\n" "`basename "$$i"`" ; done
-${ICO16}: icons/16x16/${@:T}
-	install -D -m 644 icons/16x16/${@:T} $@
+PAPES != for i in papes/* ; do printf "${WALDIR}/%s\n" "`basename "$$i"`" ; done
+papes: ${PAPES}
+${PAPES}: papes/${@:T}
+	install -D -m 644 papes/${@:T} $@
 
-ICO64 != for i in icons/64x64/* ; do printf "${ICODIR}/64x64/%s\n" "`basename "$$i"`" ; done
-${ICO64}: icons/64x64/${@:T}
-	install -D -m 644 icons/64x64/${@:T} $@
-
-icons: ${ICO16} ${ICO64}
-
-SRCS = profile ${MANS} ${BINS} ${LIBS} ${SKELS} ${ICONS}
-
-gitadd:
-	git add Makefile README.md LICENSE ${SRCS}
-
-gitpush:
-	# only do this once:
-	# git remote add origin git@github.com:phillbush/home.git
-	git push -u origin master
-
-.PHONY: all install gitadd gitpush skels libs bins mans envs dirs
+.PHONY: all install skels libs bins mans envs dirs papes

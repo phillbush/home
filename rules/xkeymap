@@ -2,7 +2,7 @@ xkb_keymap {
 xkb_keycodes "xfree86+aliases(qwerty)" {
     minimum = 8;
     maximum = 255;
-    <MDSW> = 8;
+    <CAPS> = 9;
     <AE01> = 10;
     <AE02> = 11;
     <AE03> = 12;
@@ -30,7 +30,7 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
     <AD11> = 34;
     <AD12> = 35;
     <RTRN> = 36;
-    <LCTL> = 37;
+    <MDSW> = 37;
     <AC01> = 38;
     <AC02> = 39;
     <AC03> = 40;
@@ -1206,7 +1206,10 @@ xkb_symbols "ABNT-2 variation for Thinkpad" {
     name[group1]="Portuguese (Brazil)";
 
     key <MKEY> {         [       Multi_key ] };
-    key <MDSW> {         [     Mode_switch ] };
+    key <MDSW> {
+        type= "FOUR_LEVEL",
+        symbols[Group1]= [       backslash,             bar,       masculine,      dead_breve ]
+    };
     key  <ESC> {         [          Escape ] };
     key <AE01> {
         type= "FOUR_LEVEL",
@@ -1600,7 +1603,6 @@ xkb_symbols "ABNT-2 variation for Thinkpad" {
     key  <I6D> {         [  XF86AudioMedia ] };
     key  <I74> {         [     XF86Battery ] };
     key  <I76> {         [        XF86WLAN ] };
-    modifier_map Mod5 { <MDSW> };
     modifier_map Control { <LCTL> };
     modifier_map Shift { <LFSH> };
     modifier_map Shift { <RTSH> };

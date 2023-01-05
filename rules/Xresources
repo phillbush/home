@@ -230,6 +230,8 @@ XLogo*foreground:                       RED1
 !! xterm resources (I use "xterm" (name) rather than "XTerm" (class) here)
 xterm*font:                             -misc-tadepe-medium-r-normal--16-150-75-75-C-80-ISO10646-1
 xterm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
+xterm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
+xterm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
 xterm*faceName:
 xterm*background:                       BG
 xterm*locale:                           UTF-8
@@ -296,7 +298,11 @@ xterm.vt100.translations:               #override \
 !XCalc*Cursor:                           hand2
 
 !! XClock
-!XClock*update:                          1
+XClock*update:                          1
+XClock*face:                            Pixel LCD7:size=10
+XClock*analog:                          False
+XClock*buffer:                          True
+XClock*render:                          True
 !XClock*geometry:                        210x210+1020+12
 !XClock*render:                          1
 !XClock*majorColor:                      rgba:f0/f0/19/7b
@@ -326,17 +332,26 @@ shod.dockBorder:                        WIDLIT
 !shod.title.foreground:                  FG
 !shod.titleWidth:                        17
 shod.CtrlMenu*dockpos:                  1
-shod.CtrlMenu*state:                    shrunk
+shod.CtrlMenu*state:                    shrunk,resized
 shod.Paginator*dockpos:                 2
-shod.Paginator*state:                   shrunk
+shod.Paginator*state:                   shrunk,resized
 shod.Taskinator*dockpos:                3
-shod.Taskinator*state:                  extend
+shod.Taskinator*state:                  extend,resized
 shod.wmapm*dockpos:                     4
 shod.WMPDArt*dockpos:                   5
 shod.bubblemon*dockpos:                 6
-shod.WMClock*dockpos:                   7
-shod.dockSpace:                         66
-shod.dockWidth:                         66
+shod.XLoad*dockpos:                     6
+shod.XLoad*type:                        dockapp
+shod.XLoad*state:                       shrunk,resized
+shod.WMClock*dockpos:                   8
+shod.XClock*dockpos:                    5
+shod.XClock*type:                       dockapp
+shod.XClock*state:                      shrunk,resized
+shod.XBattmon*dockpos:                  7
+shod.XBattmon*type:                     dockapp
+shod.XBattmon*state:                    shrunk,resized
+shod.dockSpace:                         64
+shod.dockWidth:                         65
 shod.dockGravity:                       EF
 shod.numOfDesktops:                     5
 

@@ -1,6 +1,6 @@
 PROG =
-OBJS =
-SRCS =
+OBJS = ${PROG:=.o}
+SRCS = ${OBJS:.o=.c}
 
 PREFIX ?= /usr/local
 MANPREFIX ?= ${PREFIX}/share/man
@@ -15,7 +15,7 @@ LIBS = -L${LOCALLIB} -L${X11LIB} -lX11
 all: ${PROG}
 
 ${PROG}: ${OBJS}
-	${CC} ${LIBS} ${LDFLAGS} -o $@ ${OBJS}
+	${CC} -o $@ ${OBJS} ${LIBS} ${LDFLAGS}
 
 ${OBJS}: config.h
 
@@ -32,10 +32,10 @@ install: all
 	install -d ${DESTDIR}${PREFIX}/bin
 	install -d ${DESTDIR}${MANPREFIX}/man1
 	install -m 755 ${PROG} ${DESTDIR}${PREFIX}/bin/${PROG}
-	install -m 644 ${PROG}.1 ${DESTDIR}${MANPREFIX}/man1/${PROG}.1
+	install -m 644 ${PROG:=.1} ${DESTDIR}${MANPREFIX}/man1/${PROG:=.1}
 
 uninstall:
 	rm ${DESTDIR}${PREFIX}/bin/${PROG}
-	rm ${DESTDIR}${MANPREFIX}/man1/${PROG}.1
+	rm ${DESTDIR}${MANPREFIX}/man1/${PROG:=.1}
 
 .PHONY: all tags clean install uninstall

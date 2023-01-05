@@ -297,6 +297,10 @@ rm() {
 	return $?
 }
 
+manwatch() {
+	echo "$1" | entr man -l "$1"
+}
+
 # colon separated list of directories used by the cd command
 CDPATH=".:$HOME:$HOME/proj:$HOME/files"
 

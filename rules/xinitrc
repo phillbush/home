@@ -30,7 +30,7 @@ synclient AccelFactor=0
 synclient HorizTwoFingerScroll=1
 
 # Set background
-feh --no-fehbg --bg-tile "$RULESDIR/wallpaper.png"
+feh --no-fehbg --bg-tile "$RULESDIR/papes/blue.png"
 
 # compositor
 picom -c -l -15 -t -15 \
@@ -43,6 +43,9 @@ picom -c -l -15 -t -15 \
 # music daemon
 mpd
 
+# clipboard manager
+xclipd &
+
 # window manager
 shod - <<-EOF
 	# menu system
@@ -50,10 +53,12 @@ shod - <<-EOF
 	pmenu -ex 4-3 <$RULESDIR/rootmenu &
 
 	# dockapps
-	paginator -iw -g64x192 -l1x5 &
-	taskinator -vihw &
+	paginator -iw -g64x184 -l1x5 &
+	taskinator -dvihw -a _SHOD_CONTAINER_LIST &
 	bubblemon &
 	wmapm &
 	wmclock &
 	wmpdart &
+	#xload -nolabel -jumpscroll 1 -update 1 -geometry 100x40 &
+	#xclock -strftime "%H:%M" &
 EOF

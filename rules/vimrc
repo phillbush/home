@@ -16,6 +16,7 @@ set backup
 set writebackup
 
 " basic settings
+set title
 set encoding=utf8
 set hidden                              " hide buffers, don't close
 set autoread                            " reload on external file changes
@@ -24,11 +25,11 @@ set noautochdir                         " some plugins requires this option be o
 set modelines=0                         " for security reasons
 set nomodeline                          " for security reasons
 set undofile                            " persist the undo tree for each file
-set mouse=a                             " enable mouse
+"set mouse=a                             " enable mouse
 set wildmenu                            " command line completion
 set backspace=indent,eol,start          " backspace
 set scrolloff=5                         " scrolling; make some content visible when scrolling
-set clipboard=unnamedplus,autoselect    " enable clipboard
+"set clipboard=autoselect                " enable clipboard
 set lazyredraw                          " redraw only when we need to
 set background=dark
 
@@ -147,11 +148,11 @@ noremap U <C-R>
 nnoremap <Leader>u g-
 nnoremap <Leader>U g+
 
-"" Copying/pasting from X
-map <Leader>p "+p
-map <Leader>y "+y
-map <Leader>d "+d
-map <Leader>P "+P
+" clipboard
+noremap <Leader>y "+y
+noremap <Leader>Y "+Y
+noremap <Leader>p "+p
+noremap <Leader>P "+P
 
 " Jumplist
 noremap H <C-O>
@@ -217,9 +218,11 @@ function! CFolding(lnum)
 
 	if curline =~# '^}.*{$'         | return '='
 	elseif curline =~# '^%%$'       | return '>1'
-	elseif curline =~# '^[^	 ].*{$' | return '>' . (prevlvl + 1)
-	elseif curline =~# '^{$'        | return '>' . (prevlvl + 1)
 	elseif curline =~# '^%\?}'      | return 's' . 1
+	elseif (curline =~# '^[^	 ].*{$') || (curline =~# '^{$')
+		if getline(a:lnum - 1) =~# '^}' | return '>' . prevlvl
+		else                            | return '>' . (prevlvl + 1)
+		endif
 	endif
 	return '='
 endfunction

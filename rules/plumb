@@ -1,72 +1,132 @@
-data       matches  '(([A-Za-z]+):(//)?)?(.*)' into _ protocol _ file
+BROWSER = 'seamonkey'
+
+data       matches  '(([A-Za-z]+):(//)?)? *(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
 file       types    mime
 
-rules      for      paged document
-extension  matches  'pdf|eps|ps|djvu'
-open       with     zathura -- %file
+# desktop rules
+
+rules      for      application
+protocol   matches  'exec'
+run        with     %file
+
+rules      for      application
+protocol   matches  'focus'
+run        with     focusnext -- %file
+
+rules      for      screenshot
+data       matches  'scrot'
+run        with     sh -c 'maim -s -- "'$HOME'/tmp/scrot-$(date +%%Y-%%m-%%d-%%H%%M%%S).png"'
+
+rules      for      screenshot
+protocol   matches  'scrot'
+run        with     maim -s -- %file
+
+rules      for      window manager control
+protocol   matches  'wm'
+run        with     shodc -- %file
+
+
+# multimedia rules
 
 rules      for      multimedia
 mime       matches  '(application/(octet-stream|ogg))|((video|audio)/.*)'
-open       with     mpv --no-terminal --force-window=immediate -- %file
+open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- %file
 
-rules      for      pixmap
-extension  matches  'xpm|xbm'
-open       with     sh -c 'case "$1" in (/*) : ;; (*) set -- '''$PWD'''"/$1" ;; esac ; xbmbrowser -- "$(dirname "$1")"' -- %file
+rules      for      multimedia
+extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi|m3u'
+open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- %data
 
-rules      for      image
-mime       matches  'image/.*'
-open       with     img -- %file
+
+# external document rules
 
 rules      for      youtube video
 protocol   matches  '(ytdl|https?)?'
-file       matches  '(.*/watch\?v=)?[A-Za-z0-9_-]{11}'
-open       with     mpv --no-terminal --force-window=immediate -- ytdl://%file
+file       matches  '(.*youtu.be/|.*/watch\?(.*&)?v=)?[A-Za-z0-9_-]{11}([&?].*)?'
+open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- ytdl://%file
+
+rules      for      external paged document
+protocol   matches  '(gopher|http)s?'
+extension  imatches 'pdf|eps|ps|djvu'
+open       with     sh -c 'cd /tmp && curl -LOfsm 10 --max-filesize 10M -- "$@" 2>/dev/null && zathura -- "$(basename "$@")"' sh %data
+
+rules      for      image
+protocol   matches  '(gopher|http)s?'
+extension  imatches 'jpe?g|png|gif|xpm|xbm'
+open       with     feh --title '%n - feh' -- %data
+
+
+# local file rules
 
 rules      for      html file
-extension  matches  'html'
+mime       matches  'text/html'
 open       with     $BROWSER -- file://%file
 edit       with     $TERMCMD -e $EDITOR -- %file
+
+rules      for      paged document
+protocol   matches  '(file)?'
+extension  imatches 'pdf|eps|ps|djvu'
+open       with     zathura -- %file
+
+rules      for      pixmap
+protocol   matches  '(file)?'
+extension  imatches 'xpm|xbm'
+open       with     sh -c 'case "$1" in (/*) : ;; (*) set -- '''$PWD'''"/$1" ;; esac ; xbmbrowser -- "$(dirname "$1")"' sh %file
+edit       with     gimp -- %file
+
+rules      for      image
+protocol   matches  '(file)?'
+mime       matches  'image/.*'
+open       with     img -- %file
+edit       with     gimp -- %file
+
+rules      for      man page
+protocol   matches  '(man)?'
+extension  imatches '[0-9]'
+open       with     $TERMCMD -e man -l -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
+rules      for      text file
+mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
+open       with     $TERMCMD -e $EDITOR -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
+rules      for      text file
+extension  imatches 'txt|md|awk|sh'
+open       with     $TERMCMD -e $EDITOR -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
+
+# web page rules
 
 rules      for      web page
 protocol   matches  'https?'
 open       with     $BROWSER -- %data
 
-rules      for      video files
-extension  matches  'mp4|mkv|ogv'
-open       with     mpv --no-terminal --force-window=immediate -- %data
-
-rules      for      man page
-protocol   matches  '(man)?'
-extension  matches  '[0-9]'
-open       with     $TERMCMD -e man -l -- %file
-edit       with     $TERMCMD -e $EDITOR -- %file
-
-rules      for      text file
-mime       matches  '(text/.*)|(application/(x-empty|x-shellscript))'
-open       with     $TERMCMD -e $EDITOR -- %file
-
-HOST = '([A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)+)'
+HOST = '([A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*)'
+TLDS = '(\.(net|org|com|en|us|io|sh|xyz|dev|coffee))'
 PORT = '(:[0-9]+)?'
 PATH = '(/?[^?/#]*)*'
 QERY = '(\??[^#]*)?'
 FRAG = '(#?.*)?'
 rules      for      web page (without protocol)
-file       matches  $HOST$PORT$PATH$QERY$FRAG
+file       matches  $HOST$TLDS$PORT$PATH$QERY$FRAG
 open       with     $BROWSER -- https://%file
 
-rules      for      web search
-protocol   matches  's'
-open       with     $BROWSER https://search.disroot.org/search?q=%file
+
+# web search rules
 
 rules      for      youtube search
 protocol   matches  'y'
-open       with     $BROWSER https://yewtu.be/search?q=%file
+search     with     $BROWSER -- https://yewtu.be/search?q=%file
 
 rules      for      wikipedia search
 protocol   matches  'w'
-open       with     $BROWSER https://en.wikipedia.org/wiki/%file
+search     with     $BROWSER -- https://en.wikipedia.org/wiki/%file
 
 rules      for      wiktionary search
 protocol   matches  'd'
-open       with     $BROWSER https://en.wiktionary.org/wiki/%file
+search     with     $BROWSER -- https://en.wiktionary.org/wiki/%file
+
+rules      for      web search
+search     with     $BROWSER -- https://duckduckgo.com/?q=%file
