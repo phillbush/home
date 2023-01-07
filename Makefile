@@ -1,6 +1,6 @@
 LIBDIR = ${HOME}/lib
 SKLDIR = ${HOME}/lib/skel
-WALDIR = ${HOME}/lib/pape
+WALDIR = ${HOME}/lib/papes
 BINDIR = ${HOME}/usr/home/bin
 MANDIR = ${HOME}/usr/home/man
 
