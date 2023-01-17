@@ -32,6 +32,9 @@ _Control {
 	_Below [!A-S-B : #16x16/window-below.xpm]       -- exec shodc state -b
 	_Above [!A-S-A : #16x16/window-above.xpm]       -- exec shodc state -a
 	--
+	Focus _Previous [!A-S-Tab]                      -- exec shodc cycle -s
+	Focus _Next [!A-Tab]                            -- exec shodc cycle
+	--
 	_Go To Desktop {
 		Go To Desktop _1 [!A-1]                 -- exec shodc goto 1
 		Go To Desktop _2 [!A-2]                 -- exec shodc goto 2

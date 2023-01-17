@@ -6,12 +6,21 @@ PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbi
 MANPATH="/usr/share/man:/usr/X11R6/man:/usr/local/man"
 for dir in $HOME/usr/*
 do
-	PATH="$dir/bin:$PATH"
-	MANPATH="$dir/man:$MANPATH"
+	case "$dir" in
+	($HOME/usr/home)
+		# set later
+		;;
+	(*)
+		PATH="$dir/bin:$PATH"
+		MANPATH="$dir/man:$MANPATH"
+		;;
+	esac
 done
 unset dir
 PATH="$PATH:/usr/games:/usr/local/jdk-11/bin:/usr/local/heirloom-doctools/bin:/usr/local/plan9/bin"
+PATH="$HOME/usr/home/bin:$PATH"
 MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/local/plan9/man"
+MANPATH="$HOME/usr/home/man:$MANPATH"
 export PATH HOME TERM MANPATH
 
 # make variables
@@ -35,6 +44,7 @@ export TZ="America/Sao_Paulo"
 #export TMPDIR="/tmp"
 #export MAIL=$HOME/var/mail
 export PROJDIR="$HOME/prj"
+export MEMEDIR="$HOME/mem"
 export RULESDIR="$HOME/lib"
 export SKEL="$RULESDIR/skel"
 export MUSICDIR="$HOME/mus/"
@@ -81,6 +91,7 @@ export OPENER="plumb"
 export TERMCMD="xterm"
 export MENUCMD="pmenu"
 export BROWSER="www"
+export PROMPTCMD="xprompt"
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"
@@ -92,7 +103,6 @@ export TROFFONTS="/usr/local/share/fonts/freefont:/usr/local/share/fonts/linuxli
 
 # Less
 export LESS='-Sr~ -z-5 '
-export LESSOPEN='|preview %s'
 
 # Firefox
 export MOZ_ACCELERATED=1

@@ -1,0 +1,252 @@
+#!/bin/sh
+
+MEMEDIR="${MEMEDIR:-"$HOME/mem"}"
+PROMPTCMD="${PROMPTCMD:-"dmenu"}"
+MENUCMD="${MENUCMD:-"xmenu"}"
+TERMCMD="${TERMCMD:-"xterm"}"
+EDITOR="${EDITOR:-"${VISUAL:-"vi"}"}"
+
+term() {
+	"$TERMCMD" -e "$@"
+}
+
+dialog() {
+	term /bin/sh -c '
+		cmd="$1"
+		shift 1
+		printf "\t%s\n" "$@"
+		case "$cmd" in
+		("cp")
+			printf "Copy? [y/N] "
+			;;
+		("mv")
+			printf "Move? [y/N] "
+			;;
+		("ln")
+			printf "Link? [y/N] "
+			;;
+		("rm")
+			printf "Send to trash? [y/N] "
+			;;
+		esac
+		read -r arg
+		case "$arg" in
+		([Yy]*)      ;;
+		(*)     exit ;;
+		esac
+		case "$cmd" in
+		("cp")
+			cp -v "$@" .
+			;;
+		("mv")
+			mv -v "$@" .
+			;;
+		("ln")
+			ln -s "$@" .
+			;;
+		("rm")
+			trash "$@"
+			;;
+		esac
+	' xfilesctl "$@"
+}
+
+snarf() {
+	case "$#" in
+	(0)
+		# no file to copy
+		return
+		;;
+	esac
+	# send URIs to clipboard
+	printf 'file://%s\r\n' "$@" |\
+	xclip -selection clipboard -in -target "text/uri-list" &
+}
+
+paste() {
+	cmd="$1"
+	shift 1
+	{
+		# get URIs from clipboard
+		xclip -selection clipboard -out -target "text/uri-list"
+		echo
+	} | sed 's,^file://,,' | tr -d '\r' | {
+		set --
+		while read -r f
+		do
+			case "$f" in
+			("")
+				;;
+			(*)
+				set -- "$@" "$f"
+				;;
+			esac
+		done
+		dialog "$cmd" "$@"
+	}
+}
+
+dropmenu() {
+	case "$(
+	"$MENUCMD" <<-EOF
+		copy
+		move
+		link
+		none
+	EOF
+	)" in
+	("copy")
+		dialog "cp" "$@"
+		;;
+	("move")
+		dialog "mv" "$@"
+		;;
+	("link")
+		dialog "ln" "$@"
+		;;
+	("term")
+		"$TERMCMD" &
+		;;
+	esac
+}
+
+dirmenu() {
+	case "$(
+	"$MENUCMD" <<EOF
+paste
+	copy
+	move
+	link
+	none
+touch
+random
+term
+EOF
+	)" in
+	("copy")
+		paste "cp" "$@"
+		;;
+	("move")
+		paste "mv" "$@"
+		;;
+	("link")
+		paste "ln" "$@"
+		;;
+	("touch")
+		touch "$(TMPDIR="$PWD" mktemp -qt)"
+		;;
+	("random")
+		random
+		;;
+	("term")
+		"$TERMCMD" &
+		;;
+	esac
+}
+
+filemenu() {
+	case "$(
+	"$MENUCMD" <<-EOF
+		rename
+		snarf
+		trash
+		edit
+	EOF
+	)" in
+	("rename")
+		term bulkrename "$@"
+		;;
+	("snarf")
+		snarf "$@"
+		;;
+	("trash")
+		dialog rm "$@"
+		;;
+	("edit")
+		"$TERMCMD" -e "$EDITOR" "$1"
+		;;
+	esac
+}
+
+changedir() {
+	xprop -id "$WINDOWID" -format "_CONTROL_GOTO" 8u -set "_CONTROL_GOTO" "$1"
+}
+
+random() {
+	case "$PWD" in
+	("$MEMEDIR"*)
+		meme "$PWD" &
+		;;
+	(*)
+		find . -type f | head -n 10000 | sort -R | head -n 1 | tr -d '\n' | xargs -0 plumb -o -- &
+		;;
+	esac
+}
+
+operation="$1"
+shift 1
+case "$operation" in
+("menu")
+	case "$#" in
+	(0)
+		dirmenu "$@"
+		;;
+	(*)
+		filemenu "$@"
+		;;
+	esac
+	;;
+("drop-ask")
+	dropmenu "$@"
+	;;
+("drop-copy")
+	drop "cp" "$@"
+	;;
+("drop-move")
+	drop "mv" "$@"
+	;;
+("drop-link")
+	drop "ln" "$@"
+	;;
+(^BackSpace)
+	# go up
+	changedir ".."
+	;;
+(^F5|^[Rr])
+	# cd to where we are just to refresh
+	changedir "."
+	;;
+(^[LlGg])
+	# call dmenu to go somewhere
+	newdir="$("$PROMPTCMD" -fw "$WINDOWID")"
+	changedir "$newdir"
+	;;
+(^[Cc])
+	# snarf files
+	snarf "$@"
+	;;
+(^[Vv])
+	# copy snarfed files
+	paste "cp"
+	;;
+(^[Nn])
+	# create new file
+	newfile="$(skel | "$PROMPTCMD" -w "$WINDOWID")"
+	if !skel "$newfile" 2>/dev/null
+	then
+		touch "$newfile"
+	fi
+	;;
+(^Delete)
+	case "$#" in
+	(0)
+		# nothing to delete
+		;;
+	(*)
+		dialog "rm" "$@"
+		;;
+	esac
+	;;
+esac
+
+exit

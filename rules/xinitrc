@@ -49,13 +49,13 @@ xclipd &
 # window manager
 shod - <<-EOF
 	# menu system
-	ctrlmenu -dit -r "A-space" -a "Super_L" $RULESDIR/control &
+	ctrlmenu -dit -r "A-space" -a "Alt_L" $RULESDIR/control &
 	pmenu -ex 4-3 <$RULESDIR/rootmenu &
 
 	# dockapps
 	paginator -iw -g64x184 -l1x5 &
 	taskinator -dvihw -a _SHOD_CONTAINER_LIST &
-	bubblemon &
+	#bubblemon &
 	wmapm &
 	wmclock &
 	wmpdart &
