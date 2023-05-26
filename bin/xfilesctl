@@ -185,7 +185,7 @@ rename() {
 	for file
 	do
 		shift
-		set -- "$@" "${file##*/}"
+		set -- "$@" "$(basename "$file")"
 	done
 	term bulkrename "$@"
 }

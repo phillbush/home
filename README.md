@@ -7,22 +7,18 @@ Read the manual at `./man/home.7` for more information.
 Bitmap font is [tadepe](https://github.com/phillbush/tadepe/).  
 Cursor is [retrosmart](https://github.com/mdomlop/retrosmart-x11-cursors/).  
 Color scheme is [tango](https://en.wikipedia.org/wiki/Tango_Desktop_Project#Palette).  
-Icons are Haiku's.
+Icons are created by me (plus a few Haiku icons).
 
 ## Demo
 
+Clean:
+![clean](./clean.png)
+
 Dirty:
-![dirty](https://user-images.githubusercontent.com/63266536/191413209-ab6647f0-cf46-45a4-9d95-0a58b4901cf2.png)
+![dirty](./dirty.png)
 
 Menus:
-![menus](https://user-images.githubusercontent.com/63266536/191412339-02388f5d-79aa-4f7d-adcc-5549e45c17b0.png)
-
-Showcase video:
-<p align="center">
-<a href="https://www.youtube.com/watch?v=Um8jaGGn9sM">
-<img src="https://img.youtube.com/vi/Um8jaGGn9sM/maxresdefault.jpg", title="My OpenBSD Desktop showcase [shod + ctrlmenu]"/>
-</a>
-</p>
+![menus](./menus.png)
 
 ## See Also
 
