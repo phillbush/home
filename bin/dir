@@ -31,7 +31,7 @@
 
 dir="."
 long="0"
-options="-L 1 -hNFC --dirsfirst --ignore-case"
+options="-L 1 -hNFC --dirsfirst --ignore-case --charset UTF8"
 usage="usage: dir [-0123456789adl] [directory/] [file]"
 while [ "$#" -gt 0 ]
 do
@@ -87,7 +87,7 @@ case "$#" in
 	echo "$usage" >&2
 	return 1
 	;;
-esac | if [ long -eq 1 ]
+esac | if [ "$long" -eq 1 ]
 then
 	cat
 else

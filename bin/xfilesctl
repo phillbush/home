@@ -10,7 +10,7 @@ term() {
 	"$TERMCMD" -e "$@"
 }
 
-dialog() {
+_dialog() {
 	term /bin/sh -c '
 		cmd="$1"
 		shift 1
@@ -49,6 +49,37 @@ dialog() {
 			;;
 		esac
 	' xfilesctl "$@"
+}
+
+refresh() {
+	for WINDOWID in $(shodc list)
+	do
+		case "$(xprop -id "$WINDOWID" WM_CLASS)" in
+		(*'"XFiles"'*)
+			changedir "."
+			;;
+		esac
+	done
+}
+
+dialog() {
+	cmd="$1"
+	shift 1
+	case "$cmd" in
+	("cp")
+		cp -v "$@" .
+		;;
+	("mv")
+		mv -v "$@" .
+		refresh
+		;;
+	("ln")
+		ln -s "$@" .
+		;;
+	("rm")
+		trash "$@"
+		;;
+	esac
 }
 
 snarf() {
@@ -118,9 +149,11 @@ paste
 	move
 	link
 	none
-touch
+up
+open
+	tty
+	browse
 random
-term
 EOF
 	)" in
 	("copy")
@@ -132,16 +165,29 @@ EOF
 	("link")
 		paste "ln" "$@"
 		;;
-	("touch")
-		touch "$(TMPDIR="$PWD" mktemp -qt)"
+	("up")
+		changedir ".."
+		;;
+	("tty")
+		"$TERMCMD" &
 		;;
 	("random")
 		random
 		;;
-	("term")
-		"$TERMCMD" &
+	("browse")
+		xfiles
 		;;
 	esac
+}
+
+rename() {
+	case "$#" in (0) return ;; esac
+	for file
+	do
+		shift
+		set -- "$@" "${file##*/}"
+	done
+	term bulkrename "$@"
 }
 
 filemenu() {
@@ -154,7 +200,7 @@ filemenu() {
 	EOF
 	)" in
 	("rename")
-		term bulkrename "$@"
+		rename "$@"
 		;;
 	("snarf")
 		snarf "$@"
@@ -200,17 +246,20 @@ case "$operation" in
 	dropmenu "$@"
 	;;
 ("drop-copy")
-	drop "cp" "$@"
+	dialog "cp" "$@"
 	;;
 ("drop-move")
-	drop "mv" "$@"
+	dialog "mv" "$@"
 	;;
 ("drop-link")
-	drop "ln" "$@"
+	dialog "ln" "$@"
 	;;
 (^BackSpace)
 	# go up
 	changedir ".."
+	;;
+(^F2)
+	rename "$@"
 	;;
 (^F5|^[Rr])
 	# cd to where we are just to refresh
@@ -243,7 +292,7 @@ case "$operation" in
 		# nothing to delete
 		;;
 	(*)
-		dialog "rm" "$@"
+		#dialog "rm" "$@"
 		;;
 	esac
 	;;

@@ -2,7 +2,7 @@
 # ~/.profile
 
 # installation prefixes
-PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin"
+PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/ports/infrastructure/bin"
 MANPATH="/usr/share/man:/usr/X11R6/man:/usr/local/man"
 for dir in $HOME/usr/*
 do
@@ -23,13 +23,10 @@ MANPATH="$MANPATH:/usr/local/jdk-11/man:/usr/local/heirloom-doctools/man:/usr/lo
 MANPATH="$HOME/usr/home/man:$MANPATH"
 export PATH HOME TERM MANPATH
 
-# make variables
-export DEBUG="-g -O0 -Wall -Wextra -Wstrict-prototypes -Wold-style-definition"
-
 # local installation directories
-export PREFIX="$HOME/usr/local"
-export MANPREFIX="$PREFIX/man"
-export TMACPREFIX="$PREFIX/tmac"
+#export PREFIX="$HOME/usr/local"
+#export MANPREFIX="$PREFIX/man"
+#export TMACPREFIX="$PREFIX/tmac"
 export GOPATH="$HOME/usr/go"
 export PYTHONUSERBASE="$HOME/usr/python"
 export CHIBI_MODULE_PATH="$HOME/usr/scheme/lib"

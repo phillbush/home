@@ -47,9 +47,9 @@ mpd
 xclipd &
 
 # window manager
-shod - <<-EOF
+exec shod -d - <<-EOF
 	# menu system
-	ctrlmenu -dit -r "A-space" -a "Alt_L" $RULESDIR/control &
+	ctrlmenu -dit -r "A-space" $RULESDIR/control &
 	pmenu -ex 4-3 <$RULESDIR/rootmenu &
 
 	# dockapps

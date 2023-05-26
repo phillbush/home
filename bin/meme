@@ -1,0 +1,11 @@
+#!/bin/sh
+
+MEMEDIR="${MEMEDIR:-"$HOME/mem"}"
+case "$1" in
+("") ;;
+(/*) MEMEDIR="$1" ;;
+(*)  MEMEDIR="$MEMEDIR/$1" ;;
+esac
+find "$MEMEDIR" -type f | sort -R |\
+ifne mpv --autofit=1024x480 --no-terminal --force-window=yes \
+    --keep-open=always --reset-on-next-file=pause --playlist=-

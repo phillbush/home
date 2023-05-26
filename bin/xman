@@ -1,0 +1,55 @@
+#!/bin/sh
+# xman - open manual as a PDF file on zathura(1),
+#        watching for changes on the manual file
+
+# get file
+case "$#" in
+(1)
+	case "$1" in
+	(*/*)
+		file="$1"
+		;;
+	(*)
+		file="$(man -w "$1" | head -n 1)"
+		;;
+	esac
+	;;
+(2)
+	file="$(man -ws "$1" "$2" | head -n 1)"
+	;;
+(*)
+	exit 1
+	;;
+esac
+test -f "$file" || exit 1
+
+# get file format
+case "$(<"$file" sed -n '/^\.[^\\]/{p;q;}')" in
+(.Dd*|.Dt*) fmt="mdoc" ;;
+(*)         fmt="man"  ;;
+esac
+
+# make temp file
+tmp="$(mktemp)" || exit 1
+trap 'rm "$tmp"' EXIT
+
+# create pdf file whenever manual file changes
+printf '%s\n' "$file" | entr -nrs "
+	{
+		printf '.fp 5 CW DejaVuSansMono\n'
+		cat \"$file\"
+	} |
+	eqn |
+	tbl |
+	troff -\"$fmt\" - |
+	dpost |
+	ps2pdf -sPAPERSIZE=letter - >\"$tmp\"
+" &
+pid="$!"
+
+# open pdf file on zathura
+sleep 2
+zathura "$tmp"
+
+# kill entr
+kill "$pid"

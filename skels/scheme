@@ -1,6 +1,0 @@
-#!/usr/bin/env scheme-r7rs
-(import (scheme small))
-
-(define main
-  (lambda (args)
-    (exit #t)))

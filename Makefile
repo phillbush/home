@@ -1,13 +1,9 @@
 LIBDIR = ${HOME}/lib
 SKLDIR = ${HOME}/lib/skel
 WALDIR = ${HOME}/lib/papes
+TEDDIR = ${HOME}/lib/teddy
 BINDIR = ${HOME}/usr/home/bin
 MANDIR = ${HOME}/usr/home/man
-
-all:
-	@echo no need to build
-
-install: dirs envs mans bins libs skels papes
 
 DIRS = \
        ${HOME}/prj \
@@ -21,37 +17,94 @@ DIRS = \
        ${WALDIR} \
        ${BINDIR} \
        ${MANDIR}
-dirs: ${DIRS}
+
+ENVS = ${HOME}/.profile
+
+MANS = \
+       ${MANDIR}/man7/painframe.7 \
+       ${MANDIR}/man7/text.7
+
+BINS = \
+       ${BINDIR}/agenda \
+       ${BINDIR}/cmpdir \
+       ${BINDIR}/dir \
+       ${BINDIR}/fetch \
+       ${BINDIR}/fetchnews \
+       ${BINDIR}/mancache \
+       ${BINDIR}/meme \
+       ${BINDIR}/samedir \
+       ${BINDIR}/termdraw \
+       ${BINDIR}/www \
+       ${BINDIR}/xfilesctl \
+       ${BINDIR}/xman
+
+LIBS = \
+       ${LIBDIR}/Xresources \
+       ${LIBDIR}/control \
+       ${LIBDIR}/exrc \
+       ${LIBDIR}/favs \
+       ${LIBDIR}/kshrc \
+       ${LIBDIR}/lfrc \
+       ${LIBDIR}/menu \
+       ${LIBDIR}/news \
+       ${LIBDIR}/plumb \
+       ${LIBDIR}/read \
+       ${LIBDIR}/rootmenu \
+       ${LIBDIR}/vimrc \
+       ${LIBDIR}/xcompose \
+       ${LIBDIR}/xinitrc \
+       ${LIBDIR}/xkeymap
+
+SKLS = \
+       ${SKLDIR}/Makefile \
+       ${SKLDIR}/man.1 \
+       ${SKLDIR}/mdoc.1 \
+       ${SKLDIR}/ms.ms \
+       ${SKLDIR}/postscript.ps \
+       ${SKLDIR}/scheme \
+       ${SKLDIR}/sicp
+
+WALS = \
+       ${WALDIR}/blac.png \
+       ${WALDIR}/blue.png \
+       ${WALDIR}/doom.png
+
+TEDS = \
+       ${TEDDIR}/puffy.png
+
+all:
+	@echo no need to build
+
+install: dir env man bin lib wal ted
+
+dir: ${DIRS}
 ${DIRS}: $@
 	mkdir -p -- $@
 
-envs: ${HOME}/.profile
-${HOME}/.profile: profile
+env: ${ENVS}
+${ENVS}: profile
 	install -D -m 755 profile $@
 
-MANS = ${MANDIR}/man7/home.7
-mans: ${MANS}
-${MANS}: ./${@:T}
-	install -D -m 644 ./${@:T} $@
+man: ${MANS}
+${MANS}: man/${@:T}
+	install -D -m 644 man/${@:T} $@
 
-BINS != for i in execs/* ; do printf "${BINDIR}/%s\n" "`basename "$$i"`" ; done
-bins: ${BINS}
-${BINS}: execs/${@:T}
-	install -D -m 755 execs/${@:T} $@
+bin: ${BINS}
+${BINS}: bin/${@:T}
+	install -D -m 755 bin/${@:T} $@
 
-LIBS != for i in rules/* ; do printf "${LIBDIR}/%s\n" "`basename "$$i"`" ; done
-libs: ${LIBS}
-${LIBS}: rules/${@:T}
-	install -D -m 644 rules/${@:T} $@
+lib: ${LIBS}
+${LIBS}: lib/${@:T}
+	install -D -m 644 lib/${@:T} $@
 
-SKELS != for i in skels/* ; do printf "${SKLDIR}/%s\n" "`basename "$$i"`" ; done
-skels: ${SKELS}
-${SKELS}: skels/${@:T}
-	install -D -m 644 skels/${@:T} $@
+skl: ${SKLS}
+${SKLS}: lib/skels/${@:T}
+	install -D -m 644 lib/skel/${@:T} $@
 
-PAPES != for i in papes/* ; do printf "${WALDIR}/%s\n" "`basename "$$i"`" ; done
-papes: ${PAPES}
-${PAPES}: papes/${@:T}
-	install -D -m 644 papes/${@:T} $@
+wal: ${WALS}
+${WALS}: lib/papes/${@:T}
+	install -D -m 644 lib/papes/${@:T} $@
 
-.PHONY: all install skels libs bins mans envs dirs papes
+ted: ${TEDS}
+${TEDS}: lib/teddy/${@:T}
+	install -D -m 644 lib/teddy/${@:T} $@

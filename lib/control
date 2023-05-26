@@ -14,7 +14,15 @@ _Apps {
 	A_randr [#16x16/screen-size.xpm]                -- exec arandr
 	_DrawTerm                                       -- exec drawterm
 	_Games [#16x16/game.xpm] {
-		_DOOM [#16x16/doom.xpm]                 -- exec gzdoom
+		_DOOM [#16x16/doom.xpm]                 -- exec dsda-doom -pistolstart -iwad DOOM.WAD
+		DOOM II [#16x16/doom2.xpm]              -- exec dsda-doom -pistolstart -iwad DOOM2.WAD
+		_SIGIL [#16x16/sigil.xpm]               -- exec dsda-doom -pistolstart -iwad DOOM.WAD -file SIGIL.WAD
+		_Going Down [#16x16/goingdown.xpm]      -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file gd.wad
+		_Overboard [#16x16/overboard.xpm]       -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file overboard.wad
+		--
+		Battle for _Wesnoth [#16x16/hack.xpm]   -- exec wesnoth
+		_Chromium-BSU [#16x16/spaceship.xpm]    -- exec chromium-bsu
+		_Hedgewars [#16x16/bullets.xpm]         -- exec hedgewars
 		_NetHack [#16x16/hack.xpm]              -- exec nethack-3.6.6
 		_Pinball 3D [#16x16/pinball.xpm]        -- exec SpaceCadetPinball
 		_Spider [#16x16/solitaire.xpm]          -- exec spider
@@ -92,31 +100,31 @@ _Music {
 }
 
 _Help {
-	Section _1                                      -- man -Tpdf 1 "$*" | ifne zathura - {
+	Section _1                                      -- xman 1 "$*" {
 		cat $HOME/var/cache/man.1
 	}
-	Section _2                                      -- man -Tpdf 2 "$*" | ifne zathura - {
+	Section _2                                      -- xman 2 "$*" {
 		cat $HOME/var/cache/man.2
 	}
-	Section _3                                      -- man -Tpdf 3 "$*" | ifne zathura - {
+	Section _3                                      -- xman 3 "$*" {
 		cat $HOME/var/cache/man.3
 	}
-	Section _4                                      -- man -Tpdf 4 "$*" | ifne zathura - {
+	Section _4                                      -- xman 4 "$*" {
 		cat $HOME/var/cache/man.4
 	}
-	Section _5                                      -- man -Tpdf 5 "$*" | ifne zathura - {
+	Section _5                                      -- xman 5 "$*" {
 		cat $HOME/var/cache/man.5
 	}
-	Section _6                                      -- man -Tpdf 6 "$*" | ifne zathura - {
+	Section _6                                      -- xman 6 "$*" {
 		cat $HOME/var/cache/man.6
 	}
-	Section _7                                      -- man -Tpdf 7 "$*" | ifne zathura - {
+	Section _7                                      -- xman 7 "$*" {
 		cat $HOME/var/cache/man.7
 	}
-	Section _8                                      -- man -Tpdf 8 "$*" | ifne zathura - {
+	Section _8                                      -- xman 8 "$*" {
 		cat $HOME/var/cache/man.8
 	}
-	Section _9                                      -- man -Tpdf 9 "$*" | ifne zathura - {
+	Section _9                                      -- xman 9 "$*" {
 		cat $HOME/var/cache/man.9
 	}
 }

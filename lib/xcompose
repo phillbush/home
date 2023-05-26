@@ -325,6 +325,11 @@
 <Multi_key> <h> <V> : "╫"
 <Multi_key> <V> <h> : "╫"
 
+# diagonals
+<Multi_key> <D> <F> : "╱"
+<Multi_key> <D> <B> : "╲"
+<Multi_key> <D> <X> : "╳"
+
 
 # Composed Letters                      {{{1
 

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+IFS=":"
+
+cal -m |\
+sed -E '2,$s,(.{14}).,\1|,' |\
+sed -E "$(printf '3,$ s/[[:<:]]%s[[:>:]]/\033[7m&\033[0m/' "$(date +%d)")"
+
+printf "\nEvents:\n"
+calendar $PROJDIR/Calendar
+
+printf "\nTasks:\n"
+todo $PROJDIR/TODO

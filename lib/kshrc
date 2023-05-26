@@ -1,6 +1,13 @@
 #!/bin/ksh
 # ~/.session -- set up ksh terminal session
 
+if command -v doas >/dev/null
+then
+	DOAS='doas'
+else
+	DOAS='sudo'
+fi
+
 # load global kshrc
 [[ -x /etc/ksh.kshrc ]] && . /etc/ksh.kshrc
 
@@ -66,7 +73,7 @@ hist() {
 fuck() {
 	typeset n=$(fc -l 1 | egrep -v '^[0-9]+[ ]*fuck' | tail -n 1 | cut -d'	' -f1)
 	fc -e "ed -s" "$n" <<-EOF
-		,v/^doas/s/^/doas /
+		,v/^${DOAS}/s/^/${DOAS} /
 		w
 	EOF
 }
@@ -89,6 +96,24 @@ dirs() {
 		esac
 		d="${DIRSTACK[$((i++))]}"
 	done
+}
+
+# set environment variables according to pwd
+setenv() {
+	case "$PWD" in
+	("$PROJDIR"/*)
+		#export DEBUG="-g -O0 -Wall -Wextra -Wdouble-promotion -Wconversion"
+		export DEBUG="-g -O0 -Wall -Wextra"
+		export PREFIX="$HOME/usr/local"
+		export MANPREFIX="$PREFIX/man"
+		;;
+	(*)
+		unset DEBUG
+		unset PREFIX
+		unset MANPREFIX
+		;;
+	esac
+	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 }
 
 # change directory
@@ -227,9 +252,9 @@ cd() {
 			[ -e "$1" ] && command cd "$(dirname "$1")"
 		}
 	} >/dev/null 2>&1 || {
-		echo "$0: cd: $1: unknown file" >&2 && return 1
+		echo "$0: cd: $1: bad directory" >&2 && return 1
 	}
-	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
+	setenv
 	dirs
 	return 0
 }
@@ -297,6 +322,11 @@ rm() {
 	return $?
 }
 
+# tee to terminal
+see() {
+	tee /dev/tty
+}
+
 manwatch() {
 	echo "$1" | entr man -l "$1"
 }
@@ -331,7 +361,7 @@ alias hex='hexdump -C'  # sane hexdump
 alias od='od -cAx'      # sane od
 alias df='df -h'        # df with human readable sizes
 alias du='du -hc'       # du with human readable sizes and grand total
-alias doas='doas '      # this hack only works on bash; try to complete commands after doas
+alias doas="${DOAS} "   # doas <- sudo
 alias dira='dir -a'     # list all dir (our colortree function, see above)
 alias da='dir -a'       # list all dir (our colortree function, see above)
 alias l='less'          # lazyman less
@@ -345,13 +375,10 @@ alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
 
 # completions
 complete skel 1 $(\ls -1F "$SKEL" | sed 's/\*$//')       # skel is a template system I created
-complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
 complete sysctl "" $(sysctl | sed 's/[ =].*//')
 complete rcctl 1 disable enable get ls order set restart start stop
 complete rcctl 2 $(rcctl ls all)
 complete git 1 $(git --list-cmds=main)
-complete mpc 1 $(mpc help | awk '$1 == "mpc" { print $2 }')
-complete mpc 2 $(pgrep -q mpd && mpc lsplaylists | sort)
 complete kill 1 -9 -HUP -INFO -KILL -TERM
 complete pkill 1 -9 -HUP -INFO -KILL -TERM
 complete ssh "" $(test -r "$HOME/.ssh/config" && awk '$1 == "Host" {print $2}' "$HOME/.ssh/config")
@@ -407,3 +434,5 @@ PS1='$(
 trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
 
 export GPG_TTY=$(tty)
+
+setenv

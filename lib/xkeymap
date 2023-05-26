@@ -110,7 +110,7 @@ xkb_keycodes "xfree86+aliases(qwerty)" {
      <BRK> = 114;
     <LWIN> = 115;
     <RWIN> = 116;
-    <HOME> = 117;
+    <HOMA> = 117;
     <FK13> = 118;
     <FK14> = 119;
     <FK15> = 120;
@@ -1494,7 +1494,8 @@ xkb_symbols "ABNT-2 variation for Thinkpad" {
     key  <K66> {         [            Next ] };
     key  <K68> {         [           Prior ] };
     key <PRSC> {         [            Home ] };
-    key <HOME> {         [            Home ] };
+    key <HOMA> {         [            Home ] };
+    key <HOME> {         [          Delete ] };
     key   <UP> {         [              Up ] };
     key <PGUP> {         [           Prior ] };
     key <LEFT> {         [            Left ] };

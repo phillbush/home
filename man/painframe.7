@@ -1,11 +1,14 @@
-.Dd October 12, 2022
-.Dt HOME 7
+.Dd May 22, 2023
+.Dt PAINFRAME 7
 .Os
 .Sh NAME
-.Nm home
-.Nd my system and how I interact with it
-.Sh HARDWARE
-I use a secondhand Lenovo Thinkpad T430 model 23501M2,
+.Nm painframe
+.Nd Thinkpad T430
+.Sh DESCRIPTION
+.Nm
+is my home computer.
+.Pp
+It is a secondhand Lenovo Thinkpad T430 model 23501M2,
 with an Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz and 8GB of RAM.
 .Pp
 I applied the following modifications to the laptop:
@@ -28,10 +31,17 @@ I use OpenBSD -current.
 See
 .Lk https://www.openbsd.org/faq
 for more information on the operating system and how to install it.
-.Pp
+.Ss User management
+During installation, I create a regular user and set its password.
 After installation, I run
 .Xr userinfo 8
-to make sure my user is in the wheel group and in the staff login class.
+to make sure my user is in the
+.Ic wheel , wobj , operator
+groups
+(for powers for system administration, port compilation, and machine shutdown, respectively),
+and is in the
+.Ic staff
+login class.
 If it is not, I set it up with
 .Xr usermod 8 .
 .Pp
@@ -47,11 +57,11 @@ to it so I'm not asked for password again for some time after successfully authe
 I also make it possible for wheel users to run certain commands without password.
 .Bd -literal -offset indent
 permit persist keepenv :wheel
-permit nopass keepenv :wheel as root cmd sysupgrade
-permit nopass keepenv :wheel as root cmd syspatch
-permit nopass keepenv :wheel as root cmd pkg_add
-permit nopass keepenv :wheel as root cmd reboot
 permit nopass keepenv :wheel as root cmd mount
+permit nopass keepenv :wheel as root cmd pkg_add
+permit nopass keepenv :wheel as root cmd pkg_delete
+permit nopass keepenv :wheel as root cmd syspatch
+permit nopass keepenv :wheel as root cmd sysupgrade
 permit nopass keepenv :wheel as root cmd umount
 .Ed
 .Pp
@@ -61,22 +71,18 @@ are reasonable.
 But the
 .Ic datasize-cur
 option can be increased a little bit, if necessary.
-.Pp
+.Ss Programs
 I use the following programs available on the OpenBSD package repository.
 .Bl -bullet -compact
 .It
-.Sy calc
+.Sy colortree ,
+for a fancy recursive
+.Xr ls 1 .
 .It
-.Sy chibi-scheme
-.It
-.Sy colortree
-.It
-.Sy feh
-.It
-.Sy ffmpegthumbnailer Ns ,
-.Sy ImageMagick Ns ,
-.Sy poppler-utils Ns ,
-.Sy mediainfo Ns ,
+.Sy ffmpegthumbnailer ,
+.Sy ImageMagick ,
+.Sy poppler-utils ,
+.Sy mediainfo ,
 and
 .Sy w3m Ns ,
 to display thumbnails and file preview.
@@ -130,6 +136,8 @@ for email.
 .Sy slop
 .It
 .Sy nsxiv
+and
+.Sy feh
 to open images
 .It
 .Sy unclutter
@@ -186,8 +194,6 @@ I run
 to install and update needed non-free firmware packages, and
 .Xr syspatch 8
 to update the base system.
-.Pp
-The following subsections describe the daemons I enable, and the configuration files I edit.
 .Ss Power Management
 I use
 .Xr apmd 8
@@ -307,8 +313,7 @@ can be enabled by writing to /etc/sysctl.conf.
 kern.audio.record=1
 kern.video.record=1
 .Ed
-.Sh USAGE
-.Ss Shell Session
+.Sh SHELL SESSION
 I use
 .Xr ksh 1
 with emacs-like keybindings, and brace expansion.
@@ -320,7 +325,103 @@ At the beginning of this script, it sources the system-wide
 if this file exists.
 History is saved on
 .Pa ~/var/history/ksh_history .
+.Ss Command-line Editing
+I use emacs-like keybindings because it is configurable on OpenBSD
+.Xr ksh 1
+(vi-like keybindings cannot be reconfigured).
+Those are the usual
+.Ic "^U"
+for cleaning the line;
+.Ic "^W"
+for deleting a word; etc.
 .Pp
+The function
+.Ic fuck
+re-runs previous non-doas command with
+.Xr doas 1
+or retry previos doas command.
+If
+.Xr doas 1
+is not found on the system, it uses
+.Xr sudo 1
+instead (I do that to use the same
+.Pa "kshrc"
+on both OpenBSD and Linux.
+.Pp
+The function
+.Ic hist
+searches command history and rerun or edit a past command.
+It replaces
+.Ic fc
+for me.
+.Pp
+Other than path completion, i use completions for arguments of a few commands.
+The completion system of
+.Xr ksh 1
+is very simple and not as powerful as the one of
+.Xr bash 1 .
+Except for the completions for
+.Xr make 1
+(which is relative to the current directory, see below),
+all completions are set once at the beginning of the shell session.
+The completion-able commands are the following.
+.Bl -bullet -compact
+.It
+.Xr skel 1 ,
+completed with files from
+.Pa ~/lib/skel/ .
+.It
+.Xr make 1 ,
+completed with targets from the current Makefile.
+.It
+.Xr sysctl 1 ,
+completed with kernel state variables.
+.It
+.Xr rcctl 1 ,
+completed with sub-commands as first argument,
+and with the names of servers and daemons as second argument.
+.It
+.Xr git 1 ,
+completed with git sub-commands.
+.It
+.Xr kill 1
+and
+.Xr pkill 1 ,
+completed with commonly used signals.
+.It
+.Xr ssh 1 ,
+completed with host aliases from my
+.Pa ~/.ssh/config .
+.It
+.Xr ifconfig 1 ,
+completed with the names of known interfaces.
+.It
+.Xr vmctl 1 ,
+completed with vmctl sub-commands and virtual machine names.
+.El
+.Ss Prompt
+Usually, my prompt contains only a character similar to a
+.Qq Ic ">"
+at the beginning of the line.  But it can be more complex than that.
+.Pp
+First, my
+.Ev PS1
+sets the window title to curent directory and the name of the current terminal.
+(for example,
+.Qq Ic "~/tmp - ttyp2" ) .
+.Pp
+Above the prompt there is a newline, for vertical spacement.
+The prompt itself is the aforementioned
+.qq Ic ">"
+arrow,
+which gets red when using the shell as root.
+When running under
+.Xr ssh 1 ,
+the hostname appears before the arrow.
+.Pp
+I trap the ERR special signal to notify the exit status of the last command,
+when it is nonzero.
+.Ss Current Directory
 The function
 .Ic cd
 extends the homonym builtin command with a more powerful syntax.
@@ -336,8 +437,36 @@ This function also implements features from
 and
 .Ic popd Ns .
 .Pp
+Whenever i enter on a directory under
+.Pa "~/prj"
+(the projects directory)
+the
+.Ev DEBUG
+and
+.Ev PREFIX
+environment variables are set for
+.Xr make 1 .
+.Pp
+If the current directory has a makefile,
+.Ic cd
+automatically sets completions for possible
+.Xr make 1
+targets.
+.Ss Notable Commands
+.Pp
 The function
-.Ic dir
+.Ic see
+shows what is passing through a pipe.
+For example, the command shows what is flowing from
+.Ic foo
+to
+.Ic bar
+and print its into the terminal.
+.Bd -literal -offset indent
+$ foo | see | bar
+.Ed
+.Pp
+.Xr dir 1
 is a wrapper around
 .Xr colortree 1 .
 It can recursively list the entries of the current working directory,
@@ -346,21 +475,6 @@ It replaces
 .Xr ls 1
 and
 .Xr find 1
-for me.
-.Pp
-The function
-.Ic fuck
-runs previous non-doas command with
-.Xr doas 1
-or retry previos doas command.
-.Pp
-The function
-.Ic hist
-searches command history and rerun or edit a past command.
-It replaces
-.Sy Ctrl-R
-and
-.Ic fc
 for me.
 .Pp
 I set some aliases:
@@ -413,67 +527,7 @@ Aliases for
 .Xr rlwrap
 wrapped around interpreters and REPL.
 .El
-.Pp
-I set completions for arguments of the following commands.
-All completions are set once at the beginning of the shell session,
-except for
-.Xr make 1 ,
-which is set whenever I run
-.Ic cd
-to the current change directory.
-.Bl -bullet -compact
-.It
-.Xr skel 1 ,
-completed with files from
-.Pa ~/lib/skel/ .
-.It
-.Xr make 1 ,
-completed with targets from the current Makefile.
-.It
-.Xr sysctl 1 ,
-completed with kernel state variables.
-.It
-.Xr rcctl 1 ,
-completed with sub-commands as first argument,
-and with the names of servers and daemons as second argument.
-.It
-.Xr git 1 ,
-completed with git sub-commands.
-.It
-.Xr mpc 1 ,
-completed with mpc sub-commands as first argument
-and with playlists as second argument.
-.It
-.Xr kill 1
-and
-.Xr pkill 1 ,
-completed with commonly used signals.
-.It
-.Xr ssh 1 ,
-completed with host aliases from my
-.Pa ~/.ssh/config .
-.It
-.Xr ifconfig 1 ,
-completed with the names of known interfaces.
-.It
-.Xr vmctl 1 ,
-completed with vmctl sub-commands.
-.El
-.Pp
-My
-.Ev PS1
-sets the window title and an upper prompt, a left prompt and a right prompt.
-The window title is set to the name of the tty and the cwd
-(for example,
-.Em ttyp2: ~/tmp Ns ).
-The upper prompt is a newline (for vertical spacement).
-The left prompt is the hostname (if running on ssh) and a left arrow
-(which gets red when logged as super user).
-The right prompt is the cwd.
-.Pp
-I trap the ERR special signal to notify the exit status of the last command,
-when it is nonzero.
-.Ss X11 Session
+.Sh X11 SESSION
 I use
 .Xr shod 1
 as window manager.
@@ -482,7 +536,16 @@ Shod can be controlled via mouse (by drag-and-dropping windows' titlebars)
 and via X11 client messages (through a client called
 .Xr shodc 1 ) .
 .Pp
-Shod also displays a dock where dockapps
+I use
+.Xr picom 1
+as my X11 compositor.
+I invoke it with a set of command-line arguments that creates a "blue aura" around the active window.
+I use
+.Xr feh 1
+to set the desktop wallpaper.
+Currently, i use a blue tiled wallpaper.
+.Ss Dockbar
+Shod displays a dock where dockapps
 (small windows commonly used on other window managers like WindowMaker)
 can be placed.
 I use the following dockapps.
@@ -500,21 +563,10 @@ An
 monitor for batery.
 .It Xr wmpdart 1
 A mpd controller that shows the album art and title of the playing song.
-.It Xr bubblemon 1
-A system load monitor in the form of a rubber duck.
 .It Xr wmclock 1
 A NeXTSTEP-like clock and calendar.
 .El
-.Pp
-I use
-.Xr picom 1
-as my X11 compositor.
-I invoke it with a set of command-line arguments that creates a "blue aura" around the active window.
-I use
-.Xr feh
-to set the desktop wallpaper.
-Currently, I use a dark tiled wallpaper.
-.Pp
+.Ss Menu system
 .Xr ctrlmenu 1
 is a unified launcher and menu system for X11.
 It creates input methods for selecting commands to be run.
@@ -532,7 +584,6 @@ I can also invoke the runner and type
 .Qq "terminal" ;
 that will filter for commands containing this string
 (among which is the command to open a terminal).
-.Pp
 Several commands are collected by
 .Xr ctrlmenu 1 ,
 including the following:
@@ -540,11 +591,10 @@ including the following:
 .It
 Spawn applications (terminal windows, web browser, games, etc).
 .It
-Window manager operations (close windows, maximize or minimize them,
-change virtual desktop, etc).
+Window manager operations (close, maximize or minimize windows, etc).
 .It
-Open files (bookmarked websites and documents, books I'm reading now,
-articles from RSS and Atom feeds, emails, etc).
+Open files (bookmarked websites and documents,
+RSS and Atom feeds, emails, etc).
 .It
 .Xr mpd 1
 controlling (navigate through the playlist, select song to play, etc).
@@ -557,10 +607,16 @@ where I can type a simple expression to be computed by
 .Xr bc 1 .
 The runner can also open a file or URL with
 .Xr plumb 1 .
-.Sh Editor Session
-[TODO]
-.Sh INPUT
-In X11, I use a variation of the Brazilian ABNT-2 layout on a Thinkpad keyboard.
+.Pp
+.Xr plumb 1
+opens a file (or an URL or any string) with the best program associated to the rules the file match.
+It can opens the file with different programs according to the desired action
+(such as
+.Em open
+or
+.Em edit ) .
+.Ss Keyboard Input
+I use a variation of the Brazilian ABNT-2 layout on a Thinkpad keyboard.
 It is configured in
 .Pa "~/lib/xkeymap"
 and set with
@@ -804,6 +860,15 @@ synclient TapButton3=3
 synclient AccelFactor=0
 synclient HorizTwoFingerScroll=1
 .Ed
+.Sh VIRTUALIZATION
+I run a few virtual machines on
+.Nm
+using OpenBSD's
+.Xr vmm 4 .
+.Pp
+Configuration is necessary to set up network access to the guest machines.
+Guest machines are connected to both the same network of the host,
+and to a virtual network that only exists between the host and the virtual machines.
 .Sh ENVIRONMENT
 The following environment variables are set by the
 .Pa ~/.profile

@@ -71,8 +71,11 @@ Xcursor.path:                           $HOME/lib
 Xcursor.theme:                          ""
 
 !! general
+*background:                            BG
 *foreground:                            FG
-*background:                            WIDMID
+*middleShadowColor:                     WIDMID
+*topShadowColor:                        WIDLIT
+*bottomShadowColor:                     WIDHVY
 *selforeground:                         SELFG
 *selbackground:                         SELBG
 *altforeground:                         DARK1
@@ -108,6 +111,10 @@ Xcursor.theme:                          ""
 *Grip.width:                            5
 *Grip.borderWidth:                      1
 *Text.background:                       BG
+*displayList:                           foreground gray30;\
+                                        draw-lines +1,-1,-1,-1,-1,+1;\
+                                        foreground gray85;\
+                                        draw-lines -1,+0,+0,+0,+0,-1
 *Paned.cursor:                          left_ptr
 *Paned.betweenCursor:                   left_ptr
 *Paned.verticalGripCursor:              sb_v_double_arrow
@@ -227,30 +234,37 @@ Xcursor.theme:                          ""
 XLogo*background:                       BG
 XLogo*foreground:                       RED1
 
-!! xterm resources (I use "xterm" (name) rather than "XTerm" (class) here)
-xterm*font:                             -misc-tadepe-medium-r-normal--16-150-75-75-C-80-ISO10646-1
-xterm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
-xterm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
-xterm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
-xterm*faceName:
-xterm*background:                       BG
-xterm*locale:                           UTF-8
-xterm*termName:                         xterm-256color
-xterm*visualBell:                       False
-xterm*scrollBar:                        False
-xterm*rightScrollBar:                   True
-xterm*allowMouseOps:                    True
-xterm*forceBoxChars:                    False
-xterm*internalBorder:                   5
-xterm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
-xterm*eightBitInput:                    False
-xterm*on2Clicks:                        word
-xterm*on3Clicks:                        line
-xterm.vt100.translations:               #override \
+!! xterm resources
+XTerm*font:                             -misc-tadepe-medium-r-normal--16-150-75-75-C-80-ISO10646-1
+XTerm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
+XTerm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
+XTerm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
+XTerm*faceName:
+!XTerm*faceName:                         Input Mono-12
+XTerm*background:                       BG
+XTerm*locale:                           UTF-8
+XTerm*termName:                         xterm-256color
+XTerm*visualBell:                       False
+XTerm*scrollBar:                        False
+XTerm*rightScrollBar:                   True
+XTerm*allowMouseOps:                    True
+XTerm*forceBoxChars:                    False
+XTerm*internalBorder:                   5
+XTerm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+XTerm*eightBitInput:                    False
+XTerm*on2Clicks:                        word
+XTerm*on3Clicks:                        line
+XTerm.vt100.translations:               #override \
                                         Ctrl<Key>minus: smaller-vt-font() \n\
                                         Ctrl<Key>plus:  larger-vt-font() \n\
                                         <Key>Delete:    string(0x1b) string("[3~") \n\
                                         Ctrl<Key>0:     set-vt-font(d)
+
+!! xterm for presentation
+xterm2*faceName:                        Input Mono-20
+xterm2*background:                      #FFFFAA
+xterm2*foreground:                      #000000
+xterm2*cursorColor:                     #000000
 
 !! XCalc
 ! Works on default OpenBSD XCalc, which has more buttons than the
@@ -391,7 +405,8 @@ xnotify.shrink:                         false
 xnotify.wrap:                           true
 
 !! CtrlMenu
-ctrlmenu.alignment:                     ALIGN_LEFT
+ctrlmenu*alignment:                     ALIGN_LEFT
+ctrlmenu*background:                    WIDMID
 
 !! Pmenu
 pmenu.background:                       BG
@@ -414,7 +429,20 @@ xpdf*topShadowColor:                    WIDLIT
 xpdf*bottomShadowColor:                 WIDHVY
 
 !! XFiles
-xfiles.background:                      BG
+!XFiles.enableStatusBar:                 FALSE
+XFiles.background:                      BG
+XFiles.fileIcons:                       \n\
+	*.c=code\n\
+	*.h=code\n\
+	~/doc/=documents_dir\n\
+	~/lib/=config_dir\n\
+	~/mem/=meme_dir\n\
+	~/mus/=music_dir\n\
+	~/mnt/=mount_dir\n\
+	~/prj/=code_dir\n\
+	~/tmp/=downloads_dir\n\
+	~/usr/=apps_dir\n\
+	~/var/=database_dir
 
 !! XFilter
 xfilter.background:                     BG

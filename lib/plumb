@@ -71,19 +71,20 @@ open       with     zathura -- %file
 rules      for      pixmap
 protocol   matches  '(file)?'
 extension  imatches 'xpm|xbm'
-open       with     sh -c 'case "$1" in (/*) : ;; (*) set -- '''$PWD'''"/$1" ;; esac ; xbmbrowser -- "$(dirname "$1")"' sh %file
+open       with     sh -c 'case "$#" in (1) set -- "$(dirname "$1")" ;; esac ; xbmbrowser "$@"' sh %file
 edit       with     gimp -- %file
 
 rules      for      image
 protocol   matches  '(file)?'
 mime       matches  'image/.*'
-open       with     img -- %file
+#open       with     feh --title '%n - feh' -- %file
+open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' sh %file
 edit       with     gimp -- %file
 
 rules      for      man page
 protocol   matches  '(man)?'
 extension  imatches '[0-9]'
-open       with     $TERMCMD -e man -l -- %file
+open       with     xman %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 
 rules      for      text file
