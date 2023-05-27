@@ -869,6 +869,210 @@ using OpenBSD's
 Configuration is necessary to set up network access to the guest machines.
 Guest machines are connected to both the same network of the host,
 and to a virtual network that only exists between the host and the virtual machines.
+.Ss Shared network
+To make the guests connect to the same network of the host,
+I enable IP forwarding at
+.Xr systcl.conf 5 ;
+and set up a
+.Xr bridge 4
+interface to the host's wired network interface at
+.Xr hostname.if 5 .
+.Pp
+I append the following lines to
+.Pa "/etc/sysctl.conf" ,
+to enable IP forwarding:
+.Bd -literal -offset indent
+net.inet.ip.forwarding=1
+net.inet6.ip6.forwarding=1
+.Ed
+.Pp
+I write the following content to
+.Pa "/etc/hostname.bridge0"
+to configure a
+.Xr bridge 4
+interface to the
+.Xr em 4
+interface:
+.Bd -literal -offset indent
+add em0
+up
+.Ed
+.Ss Virtual network
+To make a virtual network between the guests and the host,
+I set up a virtual ethernet
+.Pq Xr vether 4
+interface and a
+.Xr bridge 4
+to that virtual ethernet at
+.Xr hostname.if 5 .
+I also make my host as a
+.Xr dhcpd 8
+server in that virtual network.
+I also set a NAT for the virtual network at
+.Xr pf.conf 5 .
+Finally, I name the guests at
+.Xr hosts 5 .
+.Pp
+The virtual network I chose is
+.Ic "10.0.0.0/24" ,
+and the host is the gateway
+.Pq Ic "10.0.0.1" .
+To make this, I write the following lines into
+.Pa "/etc/hostname.vether0" :
+.Bd -literal -offset indent
+inet 10.0.0.1/24
+up
+.Ed
+.Pp
+I write the following lines to
+.Pa "/etc/hostname.bridge1"
+to configure a
+.Xr bridge 4
+interface to the
+.Xr vether 4
+interface:
+.Bd -literal -offset indent
+add vether0
+up
+.Ed
+.Pp
+I write the following lines to
+.Pa "/etc/dhcpd.conf" ,
+giving IPs to the virtual machines according to their MAC addresses.
+I then enable
+.Xr dhcpd 8
+with
+.Xr rcctl 8 :
+.Bd -literal -offset indent
+subnet 10.0.0.0 netmask 255.255.255.0 {
+	range 10.0.0.10 10.0.0.127;
+	option domain-name-servers 9.9.9.9;
+	option routers 10.0.0.1;
+
+	host machine0 {
+		hardware ethernet FE:E1:BA:00:00:00;
+		fixed-address 10.0.0.10;
+	}
+
+	host machine2 {
+		hardware ethernet FE:E1:BA:00:00:01;
+		fixed-address 10.0.0.11;
+	}
+
+	host machine3 {
+		hardware ethernet FE:E1:BA:00:00:02;
+		fixed-address 10.0.0.12;
+	}
+
+	host machine4 {
+		hardware ethernet FE:E1:BA:00:00:03;
+		fixed-address 10.0.0.13;
+	}
+
+	host machine5 {
+		hardware ethernet FE:E1:BA:00:00:04;
+		fixed-address 10.0.0.14;
+	}
+}
+.Ed
+.Pp
+I append the following lines to
+.Pa "/etc/pf.conf"
+to configure the NAT:
+.Bd -literal -offset indent
+match out on egress from vether0:network to any nat-to (egress)
+.Ed
+.Pp
+Finally, I append the following lines to
+.Pa "/etc/hosts"
+to give names to the virtual machines:
+.Bd -literal -offset indent
+10.0.0.10       9front.vm
+10.0.0.11       guix.vm
+10.0.0.12       wagie1.vm
+10.0.0.13       wagie2.vm
+.Ed
+.Ss Virtual machines
+I keep my virtual machines at
+.Pa "~/var/vms"
+and control them with
+.Xr vmctl 8 .
+.Pp
+Currently, I have the following virtual machines:
+.Bl -tag -width Ds
+.It Xr wagie 7
+A Debian system used for work and Linux development.
+.It Xr freedoom 7
+A GNU Guix system used for fun.
+.It Xr nein 7
+A 9front system used for fun.
+.El
+.Pp
+I write the following to
+.Pa "/etc/vm.conf"
+to set up the virtual machines and their network interfaces.
+.Bd -literal -offset indent
+switch "physical" {
+	interface bridge0
+}
+
+switch "virtual" {
+	interface bridge1
+}
+
+vm "9front" {
+	disable
+	memory 1024M
+	boot device disk
+	cdrom "/home/lucas/var/vms/9front.bak/9front.iso"
+	disk "/home/lucas/var/vms/9front.bak/9front.qcow2"
+	owner lucas
+	interface {
+		switch "physical"
+		lladdr FE:E1:BA:00:00:80
+	}
+	interface {
+		switch "virtual"
+		lladdr FE:E1:BA:00:00:00
+		# ip 10.0.0.10
+	}
+}
+
+vm "guix" {
+	disable
+	memory 1024M
+	boot device disk
+	disk "/home/lucas/var/vms/guix/guix.qcow2"
+	owner lucas
+	interface {
+		switch "physical"
+		lladdr FE:E1:BA:00:00:81
+	}
+	interface {
+		switch "virtual"
+		lladdr FE:E1:BA:00:00:01
+		# ip 10.0.0.11
+	}
+}
+
+vm "wagie1" {
+	disable
+	memory 1024M
+	boot device disk
+	cdrom "/home/lucas/var/vms/wagie/debian.iso"
+	disk "/home/lucas/var/vms/wagie/wagie.qcow2"
+	owner lucas
+	interface {
+		switch "physical"
+		lladdr FE:E1:BA:00:00:82
+	}
+	interface {
+		switch "virtual"
+		lladdr FE:E1:BA:00:00:02
+		# ip 10.0.0.12
+	}
+}
+.Ed
 .Sh ENVIRONMENT
 The following environment variables are set by the
 .Pa ~/.profile
