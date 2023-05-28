@@ -5,17 +5,15 @@
 # get file
 case "$#" in
 (1)
-	case "$1" in
-	(*/*)
+	if test -f "$1"
+	then
 		file="$1"
-		;;
-	(*)
-		file="$(man -w "$1" | head -n 1)"
-		;;
-	esac
+	else
+		file="$(man -w "$1" | tail -n 1)"
+	fi
 	;;
 (2)
-	file="$(man -ws "$1" "$2" | head -n 1)"
+	file="$(man -ws "$1" "$2" | tail -n 1)"
 	;;
 (*)
 	exit 1

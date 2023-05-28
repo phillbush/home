@@ -32,8 +32,10 @@ BINS = \
        ${BINDIR}/fetchnews \
        ${BINDIR}/mancache \
        ${BINDIR}/meme \
+       ${BINDIR}/readme \
        ${BINDIR}/samedir \
        ${BINDIR}/termdraw \
+       ${BINDIR}/todo \
        ${BINDIR}/www \
        ${BINDIR}/xfilesctl \
        ${BINDIR}/xman

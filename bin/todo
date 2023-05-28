@@ -1,0 +1,117 @@
+#!/bin/sh
+
+EDITOR="${EDITOR:-"${VISUAL:-"vi"}"}"
+PAGER="${PAGER:-"more"}"
+
+err() {
+	printf "todo: %s\n" "$@" >&2
+	exit 1
+}
+
+usage() {
+	printf "usage: todo [-cep] [dir]\n" >&2
+	exit 1
+}
+
+do_todo() {
+	<"$1" awk '
+	function get() {
+		if (goteof)
+			exit
+		if (ungot) {
+			ungot = 0
+			return 1
+		} else if ((getline line) != 1) {
+			line = ""
+			goteof = 1
+		}
+	}
+	function unget() {
+		ungot = 1
+	}
+	function printtask(task, indent) {
+		sub(/^\t*/, "", task)
+		canprint = 1
+		for (;;) {
+			get()
+			if (line !~ /^\t*(•|✓|✕)/)
+				break
+			match(line, /^\t+/)
+			if (RLENGTH <= indent) {
+				unget()
+				break
+			}
+			if (printtask(line, RLENGTH)) {
+				canprint = 0
+			}
+		}
+		if (canprint && task ~ /^•/) {
+			print task
+			return 1
+		} else {
+			return 0
+		}
+	}
+	BEGIN {
+		for (;;) {
+			get()
+			if (line ~ /^(•|✓|✕)/) {
+				printtask(line, 0)
+			}
+		}
+	}
+	'
+}
+
+do_cat() {
+	<"$1" sed 's,[[:cntrl:]], ,g'
+}
+
+do_edit() {
+	"$EDITOR" "$1"
+}
+
+do_page() {
+	"$PAGER" "$1"
+}
+
+case "$1" in
+("-c")
+	cmd=do_cat
+	shift
+	;;
+("-e")
+	cmd=do_edit
+	shift
+	;;
+("-p")
+	cmd=do_page
+	shift
+	;;
+(*)
+	cmd=do_todo
+	;;
+esac
+
+case "$#" in
+(1)
+	file="$1"
+	;;
+(0)
+	file="TODO"
+	;;
+(*)
+	usage
+	;;
+esac
+
+for file in ${file} ./{TODO,Todo,todo} ${HOME}/lib/{TODO,Todo,todo}
+do
+	if test -r "$file"
+	then
+		"$cmd" "$file"
+		exit 0
+	fi
+done
+
+err "could not find todo"

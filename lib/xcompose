@@ -117,7 +117,8 @@
 <Multi_key> <e> <u>                     : "€"
 <Multi_key> <less> <less>               : "⟨"
 <Multi_key> <greater> <greater>         : "⟩"
-<Multi_key> <O> <K>                     : "✓"
+<Multi_key> <o> <k>                     : "✓"
+<Multi_key> <n> <o>                     : "✕"
 <Multi_key> <minus> <n>                 : "–"   # EN DASH
 <Multi_key> <minus> <m>                 : "—"   # EM DASH
 <Multi_key> <o> <o>                     : "°"
