@@ -46,7 +46,7 @@ printf '%s\n' "$file" | entr -nrs "
 pid="$!"
 
 # open pdf file on zathura
-sleep 2
+sleep 3
 zathura "$tmp"
 
 # kill entr

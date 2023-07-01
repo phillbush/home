@@ -82,8 +82,8 @@ Xcursor.theme:                          ""
 *altselforeground:                      DARK1
 *cursorColor:                           FG
 *borderColor:                           WIDLIT
-*faceName:                              -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
-*font:                                  -misc-tadepe-medium-r-normal--16-150-75-75-c-80-iso10646-1
+*faceName:                              -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+*font:                                  -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
 
 !! Athena widgets
 ! Command:      Regular button (normally rectangular, but I set them as oval)
@@ -235,7 +235,8 @@ XLogo*background:                       BG
 XLogo*foreground:                       RED1
 
 !! xterm resources
-XTerm*font:                             -misc-tadepe-medium-r-normal--16-150-75-75-C-80-ISO10646-1
+XTerm*allowBoldFonts:                   false
+XTerm*font:                             -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
 XTerm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
 XTerm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
 XTerm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
@@ -345,23 +346,25 @@ shod.dockBorder:                        WIDLIT
 !shod.title.font:                        fixed
 !shod.title.foreground:                  FG
 !shod.titleWidth:                        17
-shod.CtrlMenu*dockpos:                  1
+shod.WMLaunchButton*dockpos:            1
+shod.WMLaunchButton*state:              shrunk, resized
+shod.CtrlMenu*dockpos:                  2
 shod.CtrlMenu*state:                    shrunk,resized
-shod.Paginator*dockpos:                 2
+shod.Paginator*dockpos:                 3
 shod.Paginator*state:                   shrunk,resized
-shod.Taskinator*dockpos:                3
+shod.Taskinator*dockpos:                4
 shod.Taskinator*state:                  extend,resized
-shod.wmapm*dockpos:                     4
-shod.WMPDArt*dockpos:                   5
-shod.bubblemon*dockpos:                 6
-shod.XLoad*dockpos:                     6
+shod.wmapm*dockpos:                     5
+shod.WMPDArt*dockpos:                   6
+shod.bubblemon*dockpos:                 7
+shod.XLoad*dockpos:                     7
 shod.XLoad*type:                        dockapp
 shod.XLoad*state:                       shrunk,resized
-shod.WMClock*dockpos:                   8
-shod.XClock*dockpos:                    5
+shod.WMClock*dockpos:                   9
+shod.XClock*dockpos:                    6
 shod.XClock*type:                       dockapp
 shod.XClock*state:                      shrunk,resized
-shod.XBattmon*dockpos:                  7
+shod.XBattmon*dockpos:                  8
 shod.XBattmon*type:                     dockapp
 shod.XBattmon*state:                    shrunk,resized
 shod.dockSpace:                         64
@@ -442,7 +445,10 @@ XFiles.fileIcons:                       \n\
 	~/prj/=code_dir\n\
 	~/tmp/=downloads_dir\n\
 	~/usr/=apps_dir\n\
-	~/var/=database_dir
+	~/var/mail/=mail_dir\n\
+	~/var/trash/=trash_dir\n\
+	~/var/=database_dir\n\
+	~/vid/=videos_dir
 
 !! XFilter
 xfilter.background:                     BG

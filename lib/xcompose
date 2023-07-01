@@ -417,6 +417,7 @@
 <Multi_key> <S> <U> : "ᵁ"
 <Multi_key> <S> <V> : "ⱽ"
 <Multi_key> <S> <W> : "ᵂ"
+<Multi_key> <S> <asterisk> <e> : "ᵋ"
 
 # Subscripts
 <dead_grave> <0> : "₀"

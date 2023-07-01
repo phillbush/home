@@ -5,7 +5,6 @@ set shell sh
 set shellopts '-eu'
 set ifs "\n"
 set previewer preview
-set cleaner unpreview
 set dirfirst
 set scrolloff 5
 set drawbox

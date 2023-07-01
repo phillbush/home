@@ -1,37 +1,11 @@
-_Apps {
-	_Terminal [!A-T:#16x16/term.xpm]                -- exec xterm
-	Terminal (_here) [!A-S-T:#16x16/term-here.xpm]  -- exec samedir
-	Terminal (_draw) [#16x16/term-draw.xpm]         -- exec termdraw
-	--
-	Take _Screenshot [#16x16/camera.xpm]            -- exec maim -d 3 -s "tmp/scrot-$(date +%Y-%m-%d-%H%M%S)"
-	File _Browser [#16x16/folder.xpm]               -- exec xfiles
-	_Netsurf                                        -- exec focusnext -c netsurf-gtk3 netsurf-gtk3
-	_Surf [#16x16/surf.xpm]                         -- exec surf seninha.org
-	Seamonkey                                       -- exec focusnext -c Seamonkey seamonkey
-	_Firefox [#16x16/firefox.xpm]                   -- exec focusnext -c Firefox firefox
-	_Chrome                                         -- exec focusnext -c Chromium chrome
-	_HexChat [#16x16/chat.xpm]                      -- exec focusnext hexchat hexchat
-	A_randr [#16x16/screen-size.xpm]                -- exec arandr
-	_DrawTerm                                       -- exec drawterm
-	_Games [#16x16/game.xpm] {
-		_DOOM [#16x16/doom.xpm]                 -- exec dsda-doom -pistolstart -iwad DOOM.WAD
-		DOOM II [#16x16/doom2.xpm]              -- exec dsda-doom -pistolstart -iwad DOOM2.WAD
-		_SIGIL [#16x16/sigil.xpm]               -- exec dsda-doom -pistolstart -iwad DOOM.WAD -file SIGIL.WAD
-		_Going Down [#16x16/goingdown.xpm]      -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file gd.wad
-		_Overboard [#16x16/overboard.xpm]       -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file overboard.wad
-		--
-		Battle for _Wesnoth [#16x16/hack.xpm]   -- exec wesnoth
-		_Chromium-BSU [#16x16/spaceship.xpm]    -- exec chromium-bsu
-		_Hedgewars [#16x16/bullets.xpm]         -- exec hedgewars
-		_NetHack [#16x16/hack.xpm]              -- exec nethack-3.6.6
-		_Pinball 3D [#16x16/pinball.xpm]        -- exec SpaceCadetPinball
-		_Spider [#16x16/solitaire.xpm]          -- exec spider
-		Super Tux _Kart [#16x16/race.xpm]       -- exec supertuxkart
-		TES III Morro_wind [#16x16/hack.xpm]    -- exec openmw
-	}
-}
+_Terminal [!A-T:#16x16/term.xpm]                -- exec xterm
+Terminal (_here) [!A-S-T:#16x16/term-here.xpm]  -- exec samedir
+Terminal (_draw) [#16x16/term-draw.xpm]         -- exec termdraw
+File _Browser [#16x16/folder.xpm]               -- exec xfiles
+Take _Screenshot [#16x16/camera.xpm]            -- exec maim -d 3 -s "tmp/scrot-$(date +%Y-%m-%d-%H%M%S)"
+--
 
-_Control {
+_Window [#16x16/window.xpm] {
 	Stic_k [!A-S-S : #16x16/window-stick.xpm]       -- exec shodc state -y
 	S_hade [!A-S-N : #16x16/window-shade.xpm]       -- exec shodc state -s
 	Minimi_ze [!A-S-Z : #16x16/window-minimize.xpm] -- exec shodc state -m
@@ -59,10 +33,10 @@ _Control {
 	}
 	--
 	_Focus {
-		Focus Column at _Left [!A-H]            -- exec shodc focus -L
-		Focus Column at _Right [!A-L]           -- exec shodc focus -R
-		Focus Row _Above [!A-K]                 -- exec shodc focus -T
-		Focus Row _Below [!A-J]                 -- exec shodc focus -B
+		Focus Column at _Left [!A-Left]         -- exec shodc focus -L
+		Focus Column at _Right [!A-Right]       -- exec shodc focus -R
+		Focus Row _Above [!A-Up]                -- exec shodc focus -T
+		Focus Row _Below [!A-Down]              -- exec shodc focus -B
 		Focus Previous Tab [!A-P]               -- exec shodc focus -cP
 		Focus Next Tab [!A-N]                   -- exec shodc focus -cN
 	}
@@ -73,33 +47,32 @@ _Control {
 	_Close [!A-S-Q : #16x16/window-close.xpm]       -- exec shodc close
 }
 
-_Files {
-	_News [#16x16/news.xpm]                         -- exec plumb -- "$*" {
-		find ~/var/news -type f -newer ~/lib/newstime |\
-		sed -E 's,	, ,g; s,.*/(.*/)([0-9]+\.)?(.*),\1\3	&,'
-	}
-	_Bookmarks [#16x16/bookmark.xpm]                -- exec plumb -- "$*" {
-		<~/lib/favs sed -E '/^[[:space:]]*(#|$)/d'
-	}
-	_Reading Now [#16x16/book.xpm]                  -- exec plumb -- "$*" {
-		<~/lib/read sed -E '/^[[:space:]]*(#|$)/d; s,.*/(.*)\.[^.]+,\1	&,'
-	}
+_News [#16x16/news.xpm]                         -- exec plumb -- "$*" {
+	find ~/var/news -type f -newer ~/lib/newstime |\
+	sed -E 's,	, ,g; s,.*/(.*/)([0-9]+\.)?(.*),\1\3	&,'
 }
+_Bookmarks [#16x16/bookmark.xpm]                -- exec plumb -- "$*" {
+	<~/lib/favs sed -E '/^[[:space:]]*(#|$)/d'
+}
+_Reading Now [#16x16/book.xpm]                  -- exec plumb -- "$*" {
+	<~/lib/read sed -E '/^[[:space:]]*(#|$)/d; s,.*/(.*)\.[^.]+,\1	&,'
+}
+Random _Meme [#16x16/pepe.xpm]                  -- exec meme
 
-_Music {
+_Music [#16x16/music.xpm] {
 	Pause/_Continue [#16x16/music-playpause.xpm]    -- exec mpc toggle
 	_Next song [#16x16/music-next.xpm]              -- exec mpc next
 	_Previous song [#16x16/music-prev.xpm]          -- exec mpc cdprev
 	--
 	Play_lists                                      -- mpc clear && mpc load "$*" && mpc play {
-		mpc lsplaylists | sed '/\.m3u$/d'
+		echo mus/*.m3u | sed '/\.m3u$/d'
 	}
 	_Song                                           -- mpc searchplay filename "$*" {
 		mpc playlist -f '[[[%artist% - [%album% - ]]%title%]|[%file%]]\t%file%'
 	}
 }
 
-_Help {
+_Help [#16x16/help.xpm] {
 	Section _1                                      -- xman 1 "$*" {
 		cat $HOME/var/cache/man.1
 	}
@@ -128,3 +101,27 @@ _Help {
 		cat $HOME/var/cache/man.9
 	}
 }
+
+--
+Seamonkey [#16x16/www.xpm]                      -- exec focusnext -c Seamonkey seamonkey
+_Firefox [#16x16/firefox.xpm]                   -- exec focusnext -c Firefox firefox
+_HexChat [#16x16/chat.xpm]                      -- exec focusnext hexchat hexchat
+A_randr [#16x16/screen-size.xpm]                -- exec arandr
+_Games [#16x16/game.xpm] {
+	_DOOM [#16x16/doom.xpm]                 -- exec dsda-doom -pistolstart -iwad DOOM.WAD
+	DOOM II [#16x16/doom2.xpm]              -- exec dsda-doom -pistolstart -iwad DOOM2.WAD
+	_SIGIL [#16x16/sigil.xpm]               -- exec dsda-doom -pistolstart -iwad DOOM.WAD -file SIGIL.WAD
+	TNT Evilution [#16x16/mt-pain.xpm]      -- exec dsda-doom -pistolstart -iwad TNT.WAD
+	_Going Down [#16x16/goingdown.xpm]      -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file gd.wad
+	_Overboard [#16x16/overboard.xpm]       -- exec dsda-doom -pistolstart -iwad DOOM2.WAD -file overboard.wad
+	--
+	Battle for _Wesnoth [#16x16/hack.xpm]   -- exec wesnoth
+	_Chromium-BSU [#16x16/spaceship.xpm]    -- exec chromium-bsu
+	_Hedgewars [#16x16/bullets.xpm]         -- exec hedgewars
+	_NetHack [#16x16/hack.xpm]              -- exec nethack-3.6.6
+	_Pinball 3D [#16x16/pinball.xpm]        -- exec SpaceCadetPinball
+	_Spider [#16x16/solitaire.xpm]          -- exec spider
+	Super Tux _Kart [#16x16/race.xpm]       -- exec supertuxkart
+	TES III Morro_wind [#16x16/hack.xpm]    -- exec openmw
+}
+

@@ -28,15 +28,20 @@ BINS = \
        ${BINDIR}/agenda \
        ${BINDIR}/cmpdir \
        ${BINDIR}/dir \
+       ${BINDIR}/edit \
        ${BINDIR}/fetch \
        ${BINDIR}/fetchnews \
        ${BINDIR}/mancache \
        ${BINDIR}/meme \
+       ${BINDIR}/open \
+       ${BINDIR}/preview \
        ${BINDIR}/readme \
        ${BINDIR}/samedir \
+       ${BINDIR}/startmenu \
        ${BINDIR}/termdraw \
        ${BINDIR}/todo \
        ${BINDIR}/www \
+       ${BINDIR}/xdg-open \
        ${BINDIR}/xfilesctl \
        ${BINDIR}/xman
 
@@ -77,7 +82,7 @@ TEDS = \
 all:
 	@echo no need to build
 
-install: dir env man bin lib wal ted
+install: dir env man bin lib wal ted skl
 
 dir: ${DIRS}
 ${DIRS}: $@
@@ -100,7 +105,7 @@ ${LIBS}: lib/${@:T}
 	install -D -m 644 lib/${@:T} $@
 
 skl: ${SKLS}
-${SKLS}: lib/skels/${@:T}
+${SKLS}: lib/skel/${@:T}
 	install -D -m 644 lib/skel/${@:T} $@
 
 wal: ${WALS}

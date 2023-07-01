@@ -49,10 +49,15 @@ xclipd &
 # window manager
 exec shod -d - <<-EOF
 	# menu system
-	ctrlmenu -dit -r "A-space" $RULESDIR/control &
+	ctrlmenu -ir "A-space" $RULESDIR/control &
 	pmenu -ex 4-3 <$RULESDIR/rootmenu &
 
 	# dockapps
+	wmlaunchbutton \
+		$RULESDIR/icons/start-inactive.xpm \
+		$RULESDIR/icons/start-hovered.xpm \
+		$RULESDIR/icons/start-active.xpm \
+		startmenu &
 	paginator -iw -g64x184 -l1x5 &
 	taskinator -dvihw -a _SHOD_CONTAINER_LIST &
 	#bubblemon &

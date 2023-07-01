@@ -2,10 +2,10 @@ PROG =
 OBJS = ${PROG:=.o} module.o
 HEAD = common.h
 SRCS = ${OBJS:.o=.c} ${HEAD}
-MANS = ${PROG:=.1}
+MAN = ${PROG:=.1}
 
-PREFIX = /usr/local
-MANPREFIX = ${PREFIX}/share/man
+PREFIX ?= /usr/local
+MANPREFIX ?= ${PREFIX}/share/man
 LOCALINC = /usr/local/include
 LOCALLIB = /usr/local/lib
 X11INC = /usr/X11R6/include
@@ -31,6 +31,10 @@ ${OBJS}: common.h
 tags: ${SRCS}
 	ctags ${SRCS}
 
+lint: ${SRCS}
+	-mandoc -T lint -W warning ${MAN}
+	-clang-tidy ${SRCS} -- -std=c99 ${DEFS} ${INCS} ${CPPFLAGS}
+
 clean:
 	rm -f ${OBJS} ${PROG} ${PROG:=.core} tags
 
@@ -38,10 +42,10 @@ install: all
 	mkdir -p ${bindir}
 	mkdir -p ${mandir}
 	install -m 755 ${PROG} ${bindir}/${PROG}
-	install -m 644 ${MANS} ${mandir}/${MANS}
+	install -m 644 ${MAN} ${mandir}/${MAN}
 
 uninstall:
 	rm ${bindir}/${PROG}
-	rm ${mandir}/${MANS}
+	rm ${mandir}/${MAN}
 
-.PHONY: all tags clean install uninstall
+.PHONY: all tags clean install uninstall lint

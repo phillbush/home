@@ -104,10 +104,6 @@ map <Leader><Leader> :Explore<C-M>
 " Let commands w, q and wq case insensitive
 command Q q
 command W w
-command Wq w
-command WQ w
-cabbrev wq w
-cabbrev wQ w
 
 " move vertically by visual line
 nnoremap j gj

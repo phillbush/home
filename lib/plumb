@@ -74,11 +74,16 @@ extension  imatches 'xpm|xbm'
 open       with     sh -c 'case "$#" in (1) set -- "$(dirname "$1")" ;; esac ; xbmbrowser "$@"' sh %file
 edit       with     gimp -- %file
 
+rules      for      gif
+protocol   matches  '(file)?'
+mime       matches  'image/gif'
+open       with     mpv --loop --autofit=1024x480 --no-terminal --force-window=yes -- %file
+
 rules      for      image
 protocol   matches  '(file)?'
 mime       matches  'image/.*'
-#open       with     feh --title '%n - feh' -- %file
-open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' sh %file
+open       with     feh --title '%n - feh' -- %file
+#open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' sh %file
 edit       with     gimp -- %file
 
 rules      for      man page

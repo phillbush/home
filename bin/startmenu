@@ -1,0 +1,4 @@
+#!/bin/sh
+# list entries in cwd or search for file given as argument
+
+ctrlmenu -tg "$BUTTON_GEOMETRY" "$HOME/lib/control"
