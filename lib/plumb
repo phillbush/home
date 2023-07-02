@@ -56,6 +56,36 @@ extension  imatches 'jpe?g|png|gif|xpm|xbm'
 open       with     feh --title '%n - feh' -- %data
 
 
+# archives
+
+MKDIR    = 'dir="${1%.*}"; mkdir -p "$dir" && '
+
+rules      for      gzip archive
+mime       matches  'application/(x-)?gzip'
+view       with     tar tzf %file
+unzip      with     sh -c  $MKDIR'tar xzvf "$1" -C "$dir"' plumb %file
+
+rules      for      bzip2 archive
+mime       matches  'application/(x-)?bzip2'
+view       with     tar tjf %file
+unzip      with     sh -c  $MKDIR'tar xjvf "$1" -C "$dir"' plumb %file
+
+rules      for      tar archive
+mime       matches  'application/(x-)?tar'
+view       with     tar tf %file
+unzip      with     sh -c  $MKDIR'tar xvf "$1" -C "$dir"' plumb %file
+
+rules      for      zip archive
+mime       matches  'application/(x-)?zip'
+view       with     unzip -l -- %file
+unzip      with     sh -c  $MKDIR'unzip -d "$dir" -- "$1"' plumb %file
+
+rules      for      7z archive
+mime       matches  'application/(x-)?7z(-compressed)?'
+view       with     7z l %file
+unzip      with     sh -c  $MKDIR'7z x -o"$dir" "$1"' plumb %file
+
+
 # local file rules
 
 rules      for      html file
@@ -83,7 +113,7 @@ rules      for      image
 protocol   matches  '(file)?'
 mime       matches  'image/.*'
 open       with     feh --title '%n - feh' -- %file
-#open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' sh %file
+#open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' plumb %file
 edit       with     gimp -- %file
 
 rules      for      man page
@@ -91,16 +121,19 @@ protocol   matches  '(man)?'
 extension  imatches '[0-9]'
 open       with     xman %file
 edit       with     $TERMCMD -e $EDITOR -- %file
+view       with     sh -c 'exec mandoc -Tascii -- "$@" | col -b | expand -t 8' plumb %file
 
 rules      for      text file
 mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
 open       with     $TERMCMD -e $EDITOR -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file
+view       with     cat -- %file
 
 rules      for      text file
 extension  imatches 'txt|md|awk|sh'
 open       with     $TERMCMD -e $EDITOR -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file
+view       with     cat -- %file
 
 
 # web page rules
