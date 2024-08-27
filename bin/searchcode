@@ -1,0 +1,91 @@
+#!/bin/sh
+#
+# Usage: searchcode [-LANG ...] QUERY ...
+# Searches QUERY on source code in given LANGuages from indexed repositories.
+# Depends on curl(1), json2tsv(1), POSIX awk(1), moreutils' ifne(1).
+# Depends on availability of searchcode.com's web API.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+isallnum() {
+	test "$#" -ne 1 && return 1
+	case "$1" in (*[!0-9]*) return 1 ;; esac
+	return 0
+}
+
+isallnum "$@" && {
+	# number argument; fetch code rather than search code
+	exec curl --silent --location --url "https://searchcode.com/codesearch/raw/$1/"
+	exit "$?"
+}
+
+unset l
+for arg do
+	shift
+	case "$arg" in
+	(-*)
+		l="$l lang:$arg"
+		;;
+	(*)
+		set -- "$@" "$arg"
+		;;
+	esac
+done
+
+test "$#" -eq 0 && {
+	printf "usage: %s [-c|-sh|-python|...] QUERY ...\n" "${0##*/}" >&2
+	exit 2
+}
+
+curl --silent --location \
+	--url "https://searchcode.com/api/codesearch_I/" \
+	--url-query "q=$*$l" | json2tsv | awk -F '\t' '
+	function show() {
+		if (id == "")
+			return 0
+		printf "%s: %s: %s\n%s", repo, file, id, code
+		name = repo = dir = file = lang = id = code = ""
+		return 1
+	}
+	$1 == ".results[]" {
+		if (show())
+			print ""
+		next
+	}
+	$1 == ".results[].id" {
+		id = $3
+		next
+	}
+	$1 == ".results[].repo" {
+		repo = $3
+		next
+	}
+	$1 == ".results[].name" {
+		name = $3
+		next
+	}
+	$1 == ".results[].location" {
+		dir = $3
+		next
+	}
+	$1 == ".results[].filename" {
+		file = $3
+		next
+	}
+	$1 == ".results[].language" {
+		lang = $3
+		next
+	}
+	substr($1, 1, 17) == ".results[].lines." {
+		code = sprintf("%s>%6s ", code, substr($1, 18))
+		gsub(/\\t/, "\t", $3)
+		gsub(/\\n/, "\n", $3)
+		gsub(/\\/, "", $3)
+		code = sprintf("%s%s\n", code, $3)
+		next
+	}
+	END {
+		show()
+	}
+' | ifne -n false

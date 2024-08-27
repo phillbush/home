@@ -1,20 +1,23 @@
 #!/bin/sh
-# termdraw: spawn a new terminal window inside a drawn rectangle
-# this file in public domain
+#
+# Usage: termdraw [ARGUMENT ...]
+# Opens xterm(1) with given ARGUMENTs inside user-drawn rectangle.
+# Depends on slop(1) and xterm(1).  X11 only.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.
+# No rights reserved (dedicated into Public Domain; use as you will).
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
-TERMCMD="${TERMCMD:-"xterm"}"
-FONT_W=8
-FONT_H=16
+GLYPH_WIDTH=8
+GLYPH_HEIGHT=16
+MIN_WIDTH=320
+MIN_HEIGHT=240
 
-data="$({
-	slop -f '%x %y %w %h'
-})" ||
-exit 1
-
-printf "%s" "$data" | {
-	read -r DRAW_X DRAW_Y DRAW_W DRAW_H
-	FINAL_W="$(( DRAW_W / FONT_W ))"
-	FINAL_H="$(( DRAW_H / FONT_H ))"
-
-	exec "$TERMCMD" -geometry "${FINAL_W}x${FINAL_H}+${DRAW_X}+${DRAW_Y}"
+slop -t 0 -f '%w %h %x %y' 2>&- | {
+	read -r w h x y 
+	test "$w" -lt "$MIN_WIDTH" && exit
+	test "$h" -lt "$MIN_HEIGHT" && exit
+	w="$(( w / GLYPH_WIDTH ))"
+	h="$(( h / GLYPH_HEIGHT ))"
+	exec "${TERMCMD:-xterm}" -geometry "${w}x${h}+${x}+${y}" "$@"
 }

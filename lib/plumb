@@ -1,18 +1,21 @@
-BROWSER = 'seamonkey'
+BROWSER = 'netsurf-gtk3'
 
 data       matches  '(([A-Za-z]+):(//)?)? *(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
 file       types    mime
+file       at       path
+
+
+rules      for      directory
+mime       matches  'inode/directory'
+open       with     xfiles -- %file
+
 
 # desktop rules
 
 rules      for      application
-protocol   matches  'exec'
-run        with     %file
-
-rules      for      application
 protocol   matches  'focus'
-run        with     focusnext -- %file
+run        with     focus %file
 
 rules      for      screenshot
 data       matches  'scrot'
@@ -29,21 +32,141 @@ run        with     shodc -- %file
 
 # multimedia rules
 
-rules      for      multimedia
-mime       matches  '(application/(octet-stream|ogg))|((video|audio)/.*)'
-open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- %file
+rules      for      music playlist
+path       matches  $HOME/mus/.*
+extension  imatches m3u
+open       with     sh -c 'mpc clear && mpc load "$@" && mpc play' plumb %path
+
+rules      for      playlist
+extension  imatches m3u
+open       with     mpv --playlist=%file
+
+rules      for      music
+path       matches  $HOME/mus/.*
+mime       matches  '(application/(octet-stream|ogg))|(audio/.*)'
+open       with     sh -c 'printf "%s\n" "$(realpath "$@")" | mpc insert ; mpc next ; mpc play' plumb %file
+info       with     mediainfo -- %file
+
+rules      for      audio
+mime       matches  '(application/(octet-stream|ogg))|(audio/.*)'
+open       with     mpv -- %file
+info       with     mediainfo -- %file
 
 rules      for      multimedia
-extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi|m3u'
-open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- %data
+mime       matches  'video/.*'
+open       with     mpv -- %file
+info       with     mediainfo -- %file
+
+rules      for      external multimedia file
+protocol   matches  '(gopher|http)s?'
+extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi'
+open       with     mpv -- %data
+
+
+# archives
+
+ZIPBEG   = 'for file ; do dir="${file%.*}" ; mkdir -p "$dir" && '
+ZIPEND   = ' ; done'
+
+rules      for      gzip archive
+mime       matches  'application/(x-)?gzip'
+info       with     tar tzf %file
+unzip      with     sh -c  $ZIPBEG'tar xzvf "$file" -C "$dir"'$ZIPEND plumb %file
+
+rules      for      bzip2 archive
+mime       matches  'application/(x-)?bzip2'
+info       with     tar tjf %file
+unzip      with     sh -c  $ZIPBEG'tar xjvf "$file" -C "$dir"'$ZIPEND plumb %file
+
+rules      for      tar archive
+mime       matches  'application/(x-)?tar'
+info       with     tar tf %file
+unzip      with     sh -c  $ZIPBEG'tar xvf "$file" -C "$dir"'$ZIPEND plumb %file
+
+rules      for      zip archive
+mime       matches  'application/(x-)?zip'
+info       with     unzip -l -- %file
+unzip      with     sh -c  $ZIPBEG'unzip -d "$dir" -- "$file"'$ZIPEND plumb %file
+
+rules      for      7z archive
+mime       matches  'application/(x-)?7z(-compressed)?'
+info       with     7z l %file
+unzip      with     sh -c  $ZIPBEG'7z x -o"$dir" "$file"'$ZIPEND plumb %file
+
+
+# local file rules
+
+rules      for      youtube link
+extension  imatches 'yt(dlp)?'
+path       matches  $HOME/var/news/.*
+open       with     mpv --ytdl-format=mp4+ba --playlist=%file
+
+rules      for      mediawiki file
+extension  imatches 'wiki|mediawiki'
+open       with     $TERMCMD -e sh -c 'cat "$@" | pandoc -f mediawiki -t markdown | less' plumb %file
+
+rules      for      paged document
+protocol   matches  '(file)?'
+mime       matches  '.*(pdf|postscript|eps|ps|epub)'
+open       with     zathura -- %file
+info       with     sh -c 'for file ; do pdftotext -layout -- "$file" - ; done' plumb %file
+
+rules      for      scanned document
+protocol   matches  '(file)?'
+mime       matches  '.*djvu'
+open       with     djview -zoom=width -continuous=yes -sidebyside=no -scrollbars=no -frame=yes -toolbar=no -menubar=no -statusbar=no -sidebar=no %file
+
+rules      for      pixmap
+protocol   matches  '(file)?'
+extension  imatches 'xpm|xbm'
+open       with     sh -c 'case "$#" in (1) set -- "$(dirname "$1")" ;; esac ; xbmbrowser "$@"' plumb %file
+edit       with     gimp -- %file
+
+rules      for      gif
+protocol   matches  '(file)?'
+mime       matches  'image/gif'
+open       with     mpv --loop -- %file
+info       with     sh -c 'anytopnm <"$1" | pnmscalefixed -w 50 | ppmtopgm | pgmtopbm | pbmtoascii' plumb %file
+
+rules      for      image
+protocol   matches  '(file)?'
+mime       matches  'image/.*'
+#open      with     feh -. --title '%n - feh' -- %file
+open       with     img %file
+edit       with     gimp -- %file
+info       with     sh -c 'anytopnm <"$1" | pnmscalefixed -w 50 | ppmtopgm | pgmtopbm | pbmtoascii' plumb %file
+
+rules      for      man page
+protocol   matches  '(man)?'
+extension  imatches '[0-9]'
+open       with     xman %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+info       with     sh -c 'exec mandoc -Tascii -- "$@" | col -b | expand -t 8' plumb %file
+
+rules      for      text file
+mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
+open       with     $TERMCMD -e $EDITOR -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+info       with     cat -- %file
+
+rules      for      text file
+extension  imatches 'txt|md|awk|sh|json'
+open       with     $TERMCMD -e $EDITOR -- %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+info       with     cat -- %file
+
+rules      for      html file
+mime       matches  'text/html'
+open       with     $BROWSER -- file://%file
+edit       with     $TERMCMD -e $EDITOR -- %file
 
 
 # external document rules
 
 rules      for      youtube video
-protocol   matches  '(ytdl|https?)?'
-file       matches  '(.*youtu.be/|.*/watch\?(.*&)?v=)?[A-Za-z0-9_-]{11}([&?].*)?'
-open       with     mpv --autofit=1024x480 --no-terminal --force-window=yes -- ytdl://%file
+protocol   matches  'ytdl|https?'
+file       matches  '((.+\.)?y(ew|ou)tu\.?be(\.com)?/.*)?([A-Za-z0-9_-]{11,})([&?].*)?'
+open       with     mpv --ytdl-format=mp4+ba -- ytdl://%file
 
 rules      for      external paged document
 protocol   matches  '(gopher|http)s?'
@@ -53,90 +176,7 @@ open       with     sh -c 'cd /tmp && curl -LOfsm 10 --max-filesize 10M -- "$@" 
 rules      for      image
 protocol   matches  '(gopher|http)s?'
 extension  imatches 'jpe?g|png|gif|xpm|xbm'
-open       with     feh --title '%n - feh' -- %data
-
-
-# archives
-
-MKDIR    = 'dir="${1%.*}"; mkdir -p "$dir" && '
-
-rules      for      gzip archive
-mime       matches  'application/(x-)?gzip'
-view       with     tar tzf %file
-unzip      with     sh -c  $MKDIR'tar xzvf "$1" -C "$dir"' plumb %file
-
-rules      for      bzip2 archive
-mime       matches  'application/(x-)?bzip2'
-view       with     tar tjf %file
-unzip      with     sh -c  $MKDIR'tar xjvf "$1" -C "$dir"' plumb %file
-
-rules      for      tar archive
-mime       matches  'application/(x-)?tar'
-view       with     tar tf %file
-unzip      with     sh -c  $MKDIR'tar xvf "$1" -C "$dir"' plumb %file
-
-rules      for      zip archive
-mime       matches  'application/(x-)?zip'
-view       with     unzip -l -- %file
-unzip      with     sh -c  $MKDIR'unzip -d "$dir" -- "$1"' plumb %file
-
-rules      for      7z archive
-mime       matches  'application/(x-)?7z(-compressed)?'
-view       with     7z l %file
-unzip      with     sh -c  $MKDIR'7z x -o"$dir" "$1"' plumb %file
-
-
-# local file rules
-
-rules      for      html file
-mime       matches  'text/html'
-open       with     $BROWSER -- file://%file
-edit       with     $TERMCMD -e $EDITOR -- %file
-
-rules      for      paged document
-protocol   matches  '(file)?'
-extension  imatches 'pdf|eps|ps|djvu'
-open       with     zathura -- %file
-
-rules      for      pixmap
-protocol   matches  '(file)?'
-extension  imatches 'xpm|xbm'
-open       with     sh -c 'case "$#" in (1) set -- "$(dirname "$1")" ;; esac ; xbmbrowser "$@"' sh %file
-edit       with     gimp -- %file
-
-rules      for      gif
-protocol   matches  '(file)?'
-mime       matches  'image/gif'
-open       with     mpv --loop --autofit=1024x480 --no-terminal --force-window=yes -- %file
-
-rules      for      image
-protocol   matches  '(file)?'
-mime       matches  'image/.*'
-open       with     feh --title '%n - feh' -- %file
-#open      with     sh -c 'f="$1" ; set -- ; n=0 ; for i in "$(dirname "$f")"/* ; do test -f "$i" || continue ; set -- "$@" "$i" ; n="$((n+1))" ; test "$f" -ef "$i" && m="$n" ; done ; nsxiv "$@" -a -b -s f -n "$m" 2>/dev/null' plumb %file
-edit       with     gimp -- %file
-
-rules      for      man page
-protocol   matches  '(man)?'
-extension  imatches '[0-9]'
-open       with     xman %file
-edit       with     $TERMCMD -e $EDITOR -- %file
-view       with     sh -c 'exec mandoc -Tascii -- "$@" | col -b | expand -t 8' plumb %file
-
-rules      for      text file
-mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
-open       with     $TERMCMD -e $EDITOR -- %file
-edit       with     $TERMCMD -e $EDITOR -- %file
-view       with     cat -- %file
-
-rules      for      text file
-extension  imatches 'txt|md|awk|sh'
-open       with     $TERMCMD -e $EDITOR -- %file
-edit       with     $TERMCMD -e $EDITOR -- %file
-view       with     cat -- %file
-
-
-# web page rules
+open       with     feh -. --title '%n - feh' -- %data
 
 rules      for      web page
 protocol   matches  'https?'

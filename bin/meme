@@ -1,4 +1,11 @@
 #!/bin/sh
+#
+# Usage: meme [DIR]
+# Open randomly sorted collection of memes from DIR (default: ~/mem).
+# Depends on moreutils' ifne, and mpv.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
 MEMEDIR="${MEMEDIR:-"$HOME/mem"}"
 case "$1" in

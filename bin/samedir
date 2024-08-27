@@ -1,18 +1,21 @@
 #!/bin/sh
-# samedir: open terminal $TERMCMD in the same directory of current window
+#
+# Usage: samedir [COMMAND [ARGUMENT ...]]
+# Runs COMMAND in active window's working directory.
+# Depends on cwdof (or any utility to get process' working directory).
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
-termcmd=${TERMCMD:-xterm}
-
-# get pid of sibling process of current window
-getpid()
-{
-	wpid="$(xprop -id $(xdotool getwindowfocus) _NET_WM_PID | sed 's/[^=]* = //')"
-	pstree -p "$wpid" | sed -n "/$wpid/,\${/$wpid/p;/ *\\-[-+]=/p;}" | tail -n 1 \
-	                  | sed "s/^[ 	]*.... \([0-9]*\) .*/\1/"
+err() {
+	printf "%s: %s\n" "${0##*/}" "$*" >&2
+	exit 1
 }
 
-pid=$(getpid)
-cwd=$(cwdof $pid)
-
-cd "$cwd"
-exec $termcmd
+win="$(xprop -root _NET_ACTIVE_WINDOW)" || err "could not get active window"
+win="${win##* }"
+pid="$(xprop -id "$win" _NET_WM_PID)" || err "could not get active window's process id"
+pid="${pid##* }"
+while children="$(pgrep -P "$pid")" ; do pid="${children%%[[:space:]]*}" ; done
+cd "$(cwdof "$pid")" || err "could not get active window's working directory"
+exec "$@"

@@ -1,0 +1,161 @@
+#!/bin/sh
+#
+# Usage: shodmenu TITLE
+# Invoked by shod(1) on user interaction; should open a context menu.
+# Depends on shod, xmenu.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
+
+IFS=
+TRASH="${TRASH:-"${XDG_DATA_HOME:-"$HOME/.local/share"}/Trash"}"
+
+err() {
+	printf "%s: %s\n" "${0##*/}" "$*" >&2
+	exit 1
+}
+
+changedir() {
+	win="$(xprop -root _NET_ACTIVE_WINDOW)" || err "could not get active window"
+	win="${win##* }"
+	pid="$(xprop -id "$win" _NET_WM_PID)" || err "could not get active window's process id"
+	pid="${pid##* }"
+	while children="$(pgrep -P "$pid")" ; do pid="${children%%[[:space:]]*}" ; done
+	cd "$(cwdof "$pid")" || err "could not get active window's working directory"
+}
+
+xfiles_goto() {
+	xprop \
+		-id "$WINDOWID" \
+		-format "_CONTROL_GOTO" 8u \
+		-set "_CONTROL_GOTO" "$1"
+	cd "$1"
+}
+
+random() {
+	case "$PWD" in
+	("$HOME/mem"*)
+		exec meme "$PWD"
+		return
+		;;
+	esac
+	set --
+	for file in *
+	do
+		test -f "$file" && set -- "$file" "$@"
+	done
+	case "$#" in
+	(0)
+		return
+		;;
+	(*)
+		shift "$(awk 'BEGIN{print int(ARGV[1]*rand())}' "$#")"
+		exec open "$1"
+		;;
+	esac
+}
+
+run() {
+	set -m
+	while read -r line
+	do
+		changedir
+		case "$line" in
+		(state:*)
+			state="${line#"state:"}"
+			shodc state "-$state" "$WINDOWID"
+			;;
+		(sendto:*)
+			desk="${line#"sendto:"}"
+			shodc sendto "$desk" "$WINDOWID"
+			;;
+		(xfiles:*)
+			cmd="${line#"xfiles:"}"
+			case "$cmd" in
+			(random)
+				random &
+				;;
+			(up)
+				xfiles_goto ".."
+				;;
+			(prev)
+				xfiles_goto "-"
+				;;
+			(next)
+				xfiles_goto "+"
+				;;
+			(home)
+				xfiles_goto "$HOME"
+				;;
+			(trash)
+				xfiles_goto "$TRASH/files"
+				;;
+			(empty)
+				if test -d "$TRASH"
+				then
+					rm -rf "$TRASH/files/"*
+					rm -rf "$TRASH/info/"*
+				fi
+				;;
+			esac
+			;;
+		(close)
+			shodc close "$WINDOWID"
+			;;
+		(term)
+			xterm &
+			;;
+		(xfiles)
+			xfiles &
+			;;
+		esac
+	done &
+}
+
+app() {
+	case "$class" in
+	(XFiles)
+		cat <<-EOF
+		IMG:star.xpm	Open Random File	xfiles:random
+		:
+		IMG:arrow-up.xpm	Go to Parent		xfiles:up
+		IMG:home.xpm		Go to Home		xfiles:home
+		IMG:arrow-left.xpm	Go to Previous Location	xfiles:prev
+		IMG:arrow-right.xpm	Go to Next Location	xfiles:next
+		IMG:trash.xpm	$(
+			case "$PWD" in
+			("$TRASH/files")
+				printf 'Empty Trash\txfiles:empty'
+				;;
+			(*)
+				printf 'Go to Trash Can\txfiles:trash'
+				;;
+			esac
+		)
+		:
+		EOF
+		;;
+	esac
+}
+
+class="$(xprop -notype -id "$WINDOWID" WM_CLASS | sed 's/^.*, "//;s/"$//')"
+exec xmenu -fp "$WINDOWPOS" -t "$WINDOWID" "$@" "${class:-Window} menu" <<EOF | run
+IMG:term.xpm			Open Terminal	term
+IMG:folder.xpm			Open File Browser	xfiles
+$(app)
+IMG:window-stick.xpm		Stick		state:y
+IMG:window-shade.xpm		Shade		state:s
+IMG:window-minimize.xpm		Minimize	state:m
+IMG:window-maximize.xpm		Maximize	state:M
+IMG:window-fullscreen.xpm	Fullscreen	state:f
+IMG:window-above.xpm		Above		state:a
+IMG:window-below.xpm		Below		state:b
+IMG:desktop.xpm			Send To
+	Desktop 1				sendto:1
+	Desktop 2				sendto:2
+	Desktop 3				sendto:3
+	Desktop 4				sendto:4
+	Desktop 5				sendto:5
+
+IMG:window-close.xpm		Close		close
+EOF

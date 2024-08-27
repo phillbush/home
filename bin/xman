@@ -1,53 +1,64 @@
 #!/bin/sh
-# xman - open manual as a PDF file on zathura(1),
-#        watching for changes on the manual file
+# xman: open manual as PDF in zathura(1), while watching for changes
+# requires zathura, troff (heirloom-doctools), ps2pdf (ghostscript),
+#          entr, sponge (moreutils)
 
-# get file
+TIMEOUT=8
+PDFOPEN=zathura
+
+# get roff file
 case "$#" in
 (1)
 	if test -f "$1"
 	then
-		file="$1"
+		man="$1"
 	else
-		file="$(man -w "$1" | tail -n 1)"
+		man="$(man -w "$1")" || exit $?
 	fi
 	;;
 (2)
-	file="$(man -ws "$1" "$2" | tail -n 1)"
+	man="$(man -ws "$1" "$2")" || exit $?
 	;;
 (*)
-	exit 1
+	echo "usage: xman [[section] manual | file]" >&2
+	exit 2
 	;;
 esac
-test -f "$file" || exit 1
 
-# get file format
-case "$(<"$file" sed -n '/^\.[^\\]/{p;q;}')" in
+# man could have returned a list of files; get first only
+man="${man%%
+*}"
+
+# get roff file format (man or mdoc)
+case "$(<"$man" sed -n '/^\.[^\\]/{p;q;}')" in
 (.Dd*|.Dt*) fmt="mdoc" ;;
 (*)         fmt="man"  ;;
 esac
 
-# make temp file
-tmp="$(mktemp)" || exit 1
-trap 'rm "$tmp"' EXIT
+# create future pdf file
+pdf="$(mktemp)" || exit $?
+trap '
+	rm -f "$pdf"
+	jobs -p | xargs -r kill
+' EXIT
 
-# create pdf file whenever manual file changes
-printf '%s\n' "$file" | entr -nrs "
+# postpone opening pdf file until it is converted once
+printf "%s\n" "$pdf" | entr -npz true && exec "$PDFOPEN" "$pdf" &
+pid="$!"
+
+# convert roff to pdf; rerun whenever roff file changes
+printf '%s\n' "$man" | entr -nrs "
 	{
 		printf '.fp 5 CW DejaVuSansMono\n'
-		cat \"$file\"
+		cat \"$man\"
 	} |
 	eqn |
 	tbl |
 	troff -\"$fmt\" - |
 	dpost |
-	ps2pdf -sPAPERSIZE=letter - >\"$tmp\"
+	ps2pdf -sPAPERSIZE=letter - |
+	sponge \"$pdf\"
 " &
-pid="$!"
 
-# open pdf file on zathura
-sleep 3
-zathura "$tmp"
-
-# kill entr
-kill "$pid"
+# wait for pdf viewer to close
+wait "$pid" || exit $?

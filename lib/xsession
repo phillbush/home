@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# Initialization script for X11 sessions.
+# Depends on, OpenBSD's Xenocara, xwallpaper, picom, etc.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.
+# No rights reserved.  Dedicated into Public Domain.  Use as you will.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
+
+# necessary for X 21.1.1
+xrandr --dpi 96
+
+# Load environment variables and xresources
+. ~/.profile
+xrdb -merge -load ~/.Xresources
+
+# Load keymap
+xkbcomp ~/.xkeymap $DISPLAY 2>/dev/null
+
+# fonts
+xset +fp ~/.fonts
+xset fp rehash
+xset b off
+
+# make mouse invisible after a brief period
+unclutter &
+
+# thinkpad trackpoint
+xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation" 1
+xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Button" 2
+xinput set-prop "/dev/wsmouse" "WS Pointer Wheel Emulation Axes" 6 7 4 5
+
+# synaptics touchpad
+synclient TapButton1=1
+synclient TapButton2=2
+synclient TapButton3=3
+synclient AccelFactor=0
+synclient HorizTwoFingerScroll=1
+
+# Set background
+xwallpaper --daemon --tile ~/.wallpaper.png
+
+# compositor
+picom \
+	--shadow --shadow-radius=15 --shadow-color="#3465A4" \
+	--use-ewmh-active-win --shadow-exclude=!focused \
+	--crop-shadow-to-monitor &
+
+# music daemon
+mpd
+
+# clipboard manager
+xclipd &
+
+# set up volume, monitor light, etc
+sndioctl output.level=1
+sndioctl app/mpd0.level=0.6
+#xbacklight -steps 1 -time 0 -set 70
+
+# window manager
+exec shod -d - <<-EOF
+	# menu system
+	sxhkd -c ~/.xkeybinds -r ~/.xsession-errors &
+	xclickroot -3 startmenu &
+	wmlaunchbutton \
+		~/.icons/start-inactive.xpm \
+		~/.icons/start-hovered.xpm \
+		~/.icons/start-active.xpm \
+		startmenu &
+
+	# dockapps
+	paginator -geometry 64x184 5 1 &
+	taskinator -dvihw -a _SHOD_CONTAINER_LIST &
+	bubblemon &
+	wmapm &
+	wmclock &
+	wmpdart &
+	#xload -nolabel -jumpscroll 1 -update 1 -geometry 100x40 &
+	#xclock -strftime "%H:%M" &
+
+	# notifications
+	xnotify -rw &
+EOF

@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+# Initialization script for login sessions.
+# It mostly set environment variables.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
+
+PATH="/usr/home/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/heirloom-doctools/bin:/usr/games"
+MANPATH="/usr/home/man:/usr/share/man:/usr/X11R6/man:/usr/local/man:/usr/local/heirloom-doctools/man"
+export PATH HOME TERM MANPATH
+
+# local installation directories
+export ENV="$HOME/.kshrc"
+
+# Locale and timezone
+export LANG="pt_BR.UTF-8"
+export LC_CTYPE="C.UTF-8"
+export LC_COLLATE="C.UTF-8"
+export TZ="America/Sao_Paulo"
+
+# Directories
+#export TMPDIR="/tmp"
+#export MAIL=$HOME/var/mail
+export PROJDIR="$HOME/prj"
+export MEMEDIR="$HOME/mem"
+export MUSICDIR="$HOME/mus/"
+export CACHEDIR="$HOME/var/cache"
+export NEWSDIR="$HOME/var/news"
+export RLWRAP_HOME="$HOME/var/history"
+export TRASH="$HOME/var/trash"
+export DOOMWADDIR="$HOME/var/games/doom/"
+export GNUPGHOME="$HOME/var/gpg"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.data"
+
+# seninha
+#export IRCNAME="seninha"
+#export IRCNICK="seninha"
+export GIT_PAGER=cat
+export GIT_COMMITTER_NAME="Lucas de Sena"
+export GIT_COMMITTER_EMAIL="lucas@seninha.org"
+export GIT_AUTHOR_NAME="Lucas de Sena"
+export GIT_AUTHOR_EMAIL="lucas@seninha.org"
+export GOT_AUTHOR="$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>"
+
+# Default programs
+export PAGER="less -i"
+export EDITOR="vim"
+export OPENER="open"
+export TERMCMD="xterm"
+export MENUCMD="pmenu"
+export BROWSER="dillo"
+export PROMPTCMD="xprompt"
+
+# Theme
+#export XENVIRONMENT="$HOME/theme/xresources"
+export TROFFONTS="/usr/local/share/fonts/freefont:/usr/local/share/fonts/linuxlibertine:/usr/X11R6/lib/X11/fonts/TTF"
+
+# GTK
+export GTK_IM_MODULE="xim"
+
+# Nethack
+export NETHACKOPTIONS="windowtype:X11,name:matador,!autopickup,color,lit_corridor,hilite_pet,hilite_pile,herecmd_menu,hitpointbar,menucolors,clicklook,extmenu,mouse_support,showexp"
+
+# no dbus
+export DBUS_SESSION_BUS_ADDRESS=no
+
+# XFiles
+export XFILES_THUMBNAILDIR="$CACHEDIR/thumbnail"
+
+# mpd
+export MPD_HOST="$HOME/.config/mpd/socket"
+
+umask 022

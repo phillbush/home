@@ -1,0 +1,21 @@
+alt + t
+	exec $TERMCMD
+
+alt + shift + t
+	exec samedir $TERMCMD
+
+# {sticky,shade,minimize,maximize,fullscreen,below,above}
+alt + shift + {s,n,z,w,f,b,a}
+	shodc state -{y,s,m,M,f,b,a}
+
+alt + {_,shift + }{1,2,3,4,5}
+	shodc {goto,sendto} {1,2,3,4,5}
+
+alt + {Left,Right,Up,Down}
+	shodc focus -{L,R,T,B}
+
+alt + {p,n}
+	shodc focus -c{P,N}
+
+alt + shift + q
+	shodc close

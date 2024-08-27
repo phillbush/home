@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec plumb -a cat -- "$1" 2>/dev/null

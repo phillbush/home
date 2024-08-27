@@ -22,6 +22,8 @@
 # - File management core utilities (rm, mkdir, mv, cp, etc).
 # - Sed and AWK.
 
+IFS=
+
 # set this to false to not open dialogs asking for confirmation
 ask=false
 
@@ -117,6 +119,10 @@ copy() {
 	}
 }
 
+class() {
+	xprop -notype -id "$1" WM_CLASS | sed 's/^.*, "//;s/"$//'
+}
+
 # move files here if user confirms dialog
 move() {
 	dialog "Move files to $PWD?" "$@" && {
@@ -126,6 +132,12 @@ move() {
 			mv -v "$file" "$uniquepath"
 		done
 	}
+	shodc list | while read -r win
+	do case "$(class "$win")" in
+	(XFiles)
+		changedir "." "$win"
+		;;
+	esac done &
 }
 
 # link files here if user confirms dialog
@@ -227,7 +239,7 @@ snarf() {
 	esac
 	# send URIs to clipboard
 	printf 'file://%s\r\n' "$@" |\
-	xclip -selection clipboard -in -target "text/uri-list" &
+	xclipin -t "text/uri-list" &
 }
 
 # paste file whose paths are on clipboard
@@ -236,7 +248,7 @@ paste() {
 	shift 1
 	{
 		# get URIs from clipboard
-		xclip -selection clipboard -out -target "text/uri-list"
+		xclipout -t "text/uri-list"
 		echo
 	} | sed 's,^file://,,' | tr -d '\r' | {
 		set --
@@ -299,26 +311,26 @@ rename() {
 	mv -- "$@" "$tempdir" || exit 1
 	while read -r target
 	do
+		test "$#" -gt 0 || break
 		source="$tempdir/${1##*/}"
-		if test -z "$target"
-		then
+		case "$target" in
+		("")
 			trash "$source"
-		else
-			case "$target" in
-			(*/*)
-				mkdir -p "${target%/*}"
-				;;
-			esac
-			case "$target" in
-			(/*|./*|../*)
-				;;
-			(*)
-				target="$PWD/$target"
-				;;
-			esac
-			setuniquepath "$target"
-			mv -- "$source" "$uniquepath"
-		fi
+			continue
+			;;
+		("~/"*)
+			target="$HOME/${target#"~/"}"
+			mkdir -p "${target%/*}"
+			;;
+		(*/*)
+			mkdir -p "${target%/*}"
+			;;
+		(*)
+			target="$PWD/$target"
+			;;
+		esac
+		setuniquepath "$target"
+		mv -- "$source" "$uniquepath"
 		shift
 	done <"$tempfile"
 	{
@@ -343,6 +355,12 @@ makedir() {
 
 # open random file in current directory
 random() {
+	case "$PWD" in
+	("$HOME/mem"*)
+		meme "$PWD"
+		return
+		;;
+	esac
 	set --
 	for file in *
 	do
@@ -361,7 +379,15 @@ random() {
 
 # change current directory of XFiles window
 changedir() {
-	xprop -id "$WINDOWID" -format "_CONTROL_GOTO" 8u -set "_CONTROL_GOTO" "$1"
+	case "$#" in
+	(2)
+		win="$2"
+		;;
+	(*)
+		win="$WINDOWID"
+		;;
+	esac
+	xprop -id "$win" -format "_CONTROL_GOTO" 8u -set "_CONTROL_GOTO" "$1"
 }
 
 # prompt for file to open or directory to go to
@@ -414,10 +440,7 @@ paste
 	move
 	link
 go up
-open
-	xfiles
-	term
-	random
+mkdir
 $(case "$PWD" in ("$TRASH/files") printf 'empty trash' ;; (*) printf 'trash can' ;; esac)
 EOF
 	} | menu | {
@@ -434,6 +457,9 @@ EOF
 			;;
 		("go next")
 			changedir "+"
+			;;
+		("mkdir")
+			makedir
 			;;
 		("copy")
 			paste "cp" "$@"
@@ -476,8 +502,22 @@ filemenu() {
 		cat <<-EOF
 		rename
 		snarf
-		trash
-		edit
+		$(case "$1$#" in
+		(*.core1)
+			echo delete
+			;;
+		(*)
+			echo trash
+			;;
+		esac)
+		$(case "$1$#" in
+		(*.tar1|*.gz1|*.zip1|*.rar1)
+			echo unzip
+			;;
+		(*)
+			echo edit
+			;;
+		esac)
 		EOF
 		;;
 	esac | menu | {
@@ -498,8 +538,14 @@ filemenu() {
 		("untrash")
 			untrash "$@"
 			;;
+		("unzip")
+			plumb -unzip -- "$@" &
+			;;
 		("edit")
-			plumb -e -- "$1" &
+			plumb -e -- "$@" &
+			;;
+		("open all")
+			plumb -o -- "$@" &
 			;;
 		esac
 	}

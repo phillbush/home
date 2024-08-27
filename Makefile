@@ -1,117 +1,87 @@
-LIBDIR = ${HOME}/lib
-SKLDIR = ${HOME}/lib/skel
-WALDIR = ${HOME}/lib/papes
-TEDDIR = ${HOME}/lib/teddy
-BINDIR = ${HOME}/usr/home/bin
-MANDIR = ${HOME}/usr/home/man
+BINDIR = /usr/home/bin
+MANDIR = /usr/home/man
+ICODIR = ${HOME}/.icons
 
 DIRS = \
-       ${HOME}/prj \
-       ${HOME}/tmp \
-       ${HOME}/var/cache \
-       ${HOME}/var/history \
-       ${HOME}/var/mail \
-       ${HOME}/var/trash \
-       ${LIBDIR} \
-       ${SKLDIR} \
-       ${WALDIR} \
-       ${BINDIR} \
-       ${MANDIR}
-
-ENVS = ${HOME}/.profile
-
-MANS = \
-       ${MANDIR}/man7/painframe.7 \
-       ${MANDIR}/man7/text.7
-
-BINS = \
-       ${BINDIR}/agenda \
-       ${BINDIR}/cmpdir \
-       ${BINDIR}/dir \
-       ${BINDIR}/edit \
-       ${BINDIR}/fetch \
-       ${BINDIR}/fetchnews \
-       ${BINDIR}/mancache \
-       ${BINDIR}/meme \
-       ${BINDIR}/open \
-       ${BINDIR}/preview \
-       ${BINDIR}/readme \
-       ${BINDIR}/samedir \
-       ${BINDIR}/startmenu \
-       ${BINDIR}/termdraw \
-       ${BINDIR}/todo \
-       ${BINDIR}/www \
-       ${BINDIR}/xdg-open \
-       ${BINDIR}/xfilesctl \
-       ${BINDIR}/xman
+	${HOME}/prj \
+	${HOME}/tmp \
+	${HOME}/var/cache \
+	${HOME}/var/history \
+	${HOME}/var/mail \
+	${HOME}/var/trash \
+	${BINDIR} \
+	${ICODIR} \
+	${MANDIR}
 
 LIBS = \
-       ${LIBDIR}/Xresources \
-       ${LIBDIR}/control \
-       ${LIBDIR}/exrc \
-       ${LIBDIR}/favs \
-       ${LIBDIR}/kshrc \
-       ${LIBDIR}/lfrc \
-       ${LIBDIR}/menu \
-       ${LIBDIR}/news \
-       ${LIBDIR}/plumb \
-       ${LIBDIR}/read \
-       ${LIBDIR}/rootmenu \
-       ${LIBDIR}/vimrc \
-       ${LIBDIR}/xcompose \
-       ${LIBDIR}/xinitrc \
-       ${LIBDIR}/xkeymap
+	${HOME}/.XCompose \
+	${HOME}/.Xresources \
+	${HOME}/.kshrc \
+	${HOME}/.mailcap \
+	${HOME}/.muttrc \
+	${HOME}/.news \
+	${HOME}/.plumb \
+	${HOME}/.profile \
+	${HOME}/.vimrc \
+	${HOME}/.wallpaper.png \
+	${HOME}/.xkeybinds \
+	${HOME}/.xkeymap \
+	${HOME}/.xsession
 
-SKLS = \
-       ${SKLDIR}/Makefile \
-       ${SKLDIR}/man.1 \
-       ${SKLDIR}/mdoc.1 \
-       ${SKLDIR}/ms.ms \
-       ${SKLDIR}/postscript.ps \
-       ${SKLDIR}/scheme \
-       ${SKLDIR}/sicp
+ICOS = \
+	${ICODIR}/start-active.xpm \
+	${ICODIR}/start-hovered.xpm \
+	${ICODIR}/start-inactive.xpm \
 
-WALS = \
-       ${WALDIR}/blac.png \
-       ${WALDIR}/blue.png \
-       ${WALDIR}/doom.png
+MANS = \
+	${MANDIR}/man8/home.8 \
+	${MANDIR}/man8/rember.8
 
-TEDS = \
-       ${TEDDIR}/puffy.png
+BINS = \
+	${BINDIR}/fetchnews \
+	${BINDIR}/focus \
+	${BINDIR}/img \
+	${BINDIR}/meme \
+	${BINDIR}/open \
+	${BINDIR}/record \
+	${BINDIR}/samedir \
+	${BINDIR}/save \
+	${BINDIR}/searchcode \
+	${BINDIR}/shodmenu \
+	${BINDIR}/startmenu \
+	${BINDIR}/termdraw \
+	${BINDIR}/termbin \
+	${BINDIR}/vidtogif \
+	${BINDIR}/walk \
+	${BINDIR}/xdg-open \
+	${BINDIR}/xfilesctl \
+	${BINDIR}/xman
 
 all:
 	@echo no need to build
 
-install: dir env man bin lib wal ted skl
+install: dir man bin lib ico cron
+.PHONY:  dir man bin lib ico cron all install
+
+cron: lib/crontab
+	@crontab -l | cmp - lib/crontab >/dev/null || ( set -x ; crontab lib/crontab )
 
 dir: ${DIRS}
 ${DIRS}: $@
 	mkdir -p -- $@
 
-env: ${ENVS}
-${ENVS}: profile
-	install -D -m 755 profile $@
+lib: ${LIBS}
+${LIBS}: lib/${@:T:.%=%}
+	install -m 644 lib/${@:T:.%=%} $@
+
+ico: ${ICOS}
+${ICOS}: ico/${@:T}
+	install -m 644 ico/${@:T} $@
 
 man: ${MANS}
-${MANS}: man/${@:T}
-	install -D -m 644 man/${@:T} $@
+${MANS}: doc/${@:T}
+	install -m 644 doc/${@:T} $@
 
 bin: ${BINS}
 ${BINS}: bin/${@:T}
-	install -D -m 755 bin/${@:T} $@
-
-lib: ${LIBS}
-${LIBS}: lib/${@:T}
-	install -D -m 644 lib/${@:T} $@
-
-skl: ${SKLS}
-${SKLS}: lib/skel/${@:T}
-	install -D -m 644 lib/skel/${@:T} $@
-
-wal: ${WALS}
-${WALS}: lib/papes/${@:T}
-	install -D -m 644 lib/papes/${@:T} $@
-
-ted: ${TEDS}
-${TEDS}: lib/teddy/${@:T}
-	install -D -m 644 lib/teddy/${@:T} $@
+	install -m 755 bin/${@:T} $@

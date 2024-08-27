@@ -1,3 +1,5 @@
 #!/bin/sh
+# usage: open [file ...]
+# plumb FILEs with "open" action
 
-exec plumb -o -- "$@"
+exec plumb -open -- "$@"

@@ -1,0 +1,139 @@
+.Dd July 23, 2024
+.Dt REMBER 8
+.Os
+.Sh NAME
+.Nm rember
+.Nd quick reference for stuff I will forgor
+.Sh EXAMPLES
+.Ss Whatsapp
+URLs to force Zapzap® to use its webapp rather than ask for the desktop application:
+.Bl -bullet -compact -width ""
+.It
+.Lk https://web.whatsapp.com/accept?code=GROUP_ID
+.It
+.Lk https://web.whatsapp.com/send?phone=PHONE
+.El
+.
+.Ss Archives
+In web.archive.org, add an
+.Qq Dv "if_"
+after the date to remove that annoying topbar that is bad rendered in old/non-js browsers.
+.Bl -bullet -compact -width ""
+.It
+.Lk "https://web.archive.org/web/20010911081300/example.org"
+.Pq with topbar
+.It
+.Lk "https://web.archive.org/web/20010911081300if_/example.org"
+.Pq plain site; no topbar
+.El
+.
+.Pp
+Other web archives:
+.Bl -bullet -compact -width ""
+.It
+.Lk "https://desuarchive.org"
+.Pq "for /g/ and a few other 4chun boards"
+.It
+.Lk "https://archive.today"
+.It
+.Lk "https://wiki.archiveteam.org"
+.Pq "wiki of archives" .
+.El
+.
+.Ss Recursive webdump
+Recursivelly find and download all
+.Xr jpeg 5
+photos linkable from Stallman's website homepage:
+.Bd -literal -offset indent
+$ wget -r -nc -np -A jpg,jpeg https://stallman.org
+.Ed
+.Pp
+.Bl -tag -width "XXXXX" -compact
+.It Fl A , R
+Comma-separated list of accepted/rejected file patterns or suffixes.
+.It Fl nc
+Ignore already downloaded files (no-clobber).
+.It Fl nd
+(Optional) do not create directory hierarchy when retrieving recursively.
+.It Fl np
+Do not ever ascend to the parent directory when retrieving recursively
+(no-parent).
+.It Fl r
+Recursive.
+.El
+.
+.Ss Wiki dump
+Save an article from wikipedia (or other mediawiki site) in mediawiki format.
+Use
+.Xr pandoc 1
+to convert from
+.Fl f Cm mediawiki
+to
+.Fl t Cm plain
+text.
+Check
+.Lk "https://www.mediawiki.org/wiki/Help:Export"
+for more information.
+.Bd -literal -offset indent -compact
+$ curl "https://en.wikipedia.org/w/index.php" \e
+	--data-urlencode action=raw \e
+	--data-urlencode title="Cock and ball torture"
+.Ed
+.
+.Ss Hacking
+Generate patch in
+.Xr mbox 5
+format between the git commits
+.Ic "HEAD^\)"
+.Po
+.Ic HEAD Ns "'s"
+parent
+.Pc
+and
+.Ic HEAD :
+.Bd -literal -offset indent -compact
+$ git format-patch --stdout HEAD^..HEAD | save file.diff
+.Ed
+.
+.Pp
+Generate patch:
+.Bd -literal -offset indent -compact
+$ diff -up path/to/original-dir/ path/to/modified-dir/
+.Ed
+.Bl -tag -width Ds -compact
+.It Fl p
+Prefix sections with header (function prototypes in C).
+.It Fl u
+Unified contextual diff format.
+.El
+.
+.Pp
+Apply patch (replace
+.Qq Dv 1
+with the number of leading directory from path to strip):
+.Bd -literal -offset indent -compact
+$ patch -p1 <path/to/patch.diff
+.Ed
+.
+.Ss Compare file hierarchy
+Compare the tree (file hierarchy) rooted in
+.Pa /foo/peepee
+with the tree rooted in
+.Pa /bar/poopoo :
+for files with the same name and size:
+.Bd -literal -offset indent -compact
+$ mtree -c -k size -p /foo/peepee | mtree -p /bar/poopoo
+.Ed
+.
+.Ss Using arduino makefile
+I have an Arduino MEGA on my drawer which may never see the light of sun again.
+To play with it (before puting it away for one more year again), install
+.Pa devel/arduino-makefile
+and write this Makefile:
+.Bd -literal -offset indent -compact
+BOARD_TAG = mega
+BOARD_SUB = atmega2560
+include /usr/local/share/arduino-makefile/Arduino.mk
+.Ed
+.Sh SEE ALSO
+.Xr home 8

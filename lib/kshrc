@@ -1,434 +1,223 @@
 #!/bin/ksh
-# ~/.session -- set up ksh terminal session
+#
+# Usage: . ~/.kshrc
+# Initialization script for interactive ksh(1) sessions.
+# Depends only on OpenBSD base utilities.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.
+# No rights reserved.  Dedicated into Public Domain.  Use as you will.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-if command -v doas >/dev/null
-then
-	DOAS='doas'
-else
-	DOAS='sudo'
-fi
+. /etc/ksh.kshrc
+. "$HOME/.profile"
 
-# load global kshrc
-[[ -x /etc/ksh.kshrc ]] && . /etc/ksh.kshrc
+# run given command on background
+run() (
+	trap : HUP
+	exec 1>/dev/null 2>/dev/null 0</dev/null
+	exec "$@" &
+)
 
-# check if command exists and set list of completions for it
-complete() {
-	if type "$1" >/dev/null
-	then
-		typeset cmd="$1"
-		typeset num="$2"
-		shift 2
-		set -A "complete_${cmd}${num:+"_$num"}" -- "$@"
-	fi
-}
-
-# search history; rerun a command or grep for a command
-hist() {
-	# NAME
-	#      hist - list commands or search for commands in history
-	#
-	# SYNOPSIS
-	#      hist [arg...]
-	#      hist - [arg...]
-	#
-	# DESCRIPTION
-	#      In the first form, the hist function lists the commands
-	#      in the history that matches the given argument (or lists
-	#      all commands, if no argument is passed).
-	#
-	#      In the second form, the hist function also lists commands
-	#      as in the previous form, but inserts a number before each
-	#      command.  It then prompts the user for a number and rerun
-	#      the command listed after this number.  If the user enters
-	#      a number preceded with the character "e", the $EDITOR is
-	#      called to edit the command before rerun it.
-
-	case "$1" in
-	-)
-		# rerun a command
-		shift
-		fc -l 1 | fgrep "$1" || return 0
-		read -r n || return 0
-		case "$n" in
-		"")
-			return 0
-			;;
-		e*)
-			n="${n#"e"}"
-			fc $n
-			;;
-		*)
-			fc -s $n
-			;;
-		esac
-		;;
-	*)
-		# list history grepping for given argument
-		fc -ln 1 | fgrep "$1" || return 0
-		;;
-	esac
-}
-
-# run previous non-doas command with doas; or retry previous doas command
+# run given command with doas; or re-run previous command with doas(1)
 fuck() {
-	typeset n=$(fc -l 1 | egrep -v '^[0-9]+[ ]*fuck' | tail -n 1 | cut -d'	' -f1)
-	fc -e "ed -s" "$n" <<-EOF
-		,v/^${DOAS}/s/^/${DOAS} /
-		w
-	EOF
-}
-
-# list entries in directory stack
-dirs() {
-	typeset i=0
-	typeset d="$PWD"
-	typeset n="${#DIRSTACK[@]}"
-	while (( i <= n ))
-	do
-		[ n -gt 0 ] && printf "%d\t" "$i"
-		case "$d/" in
-		("$HOME"/*)
-			printf "%s\n" "~${d#"${HOME}"}"
-			;;
-		(*)
-			printf "%s\n" "$d"
-			;;
-		esac
-		d="${DIRSTACK[$((i++))]}"
-	done
-}
-
-# set environment variables according to pwd
-setenv() {
-	case "$PWD" in
-	("$PROJDIR"/*)
-		#export DEBUG="-g -O0 -Wall -Wextra -Wdouble-promotion -Wconversion"
-		export DEBUG="-g -O0 -Wall -Wextra"
-		export PREFIX="$HOME/usr/local"
-		export MANPREFIX="$PREFIX/man"
-		;;
-	(*)
-		unset DEBUG
-		unset PREFIX
-		unset MANPREFIX
-		;;
-	esac
-	complete make "" $(make -qp 2>/dev/null | sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}')
-}
-
-# change directory
-cd() {
-	# NAME
-	#      cd - change directory and manage directory stack
-	#
-	# SYNOPSIS
-	#      cd path
-	#      cd ....[/path]
-	#      cd ..[word]
-	#      cd -[123456789]
-	#      cd -
-	#      cd + [path...]
-	#      cd +[123456789]
-	#
-	# DESCRIPTION
-	#      The cd function overwrides the cd builtin command with a
-	#      more powerful syntax.  The argument can be a directory or
-	#      a regular file (in which case it is considered the
-	#      directory which it resides in).  This function also sets
-	#      the completion for the make(1) command according to the
-	#      Makefile in the current directory, and prints the first
-	#      few lines of a README, if it exists in the directory.
-	#
-	#      In the first form, changes directory to the given path.
-	#
-	#      In the second format (the argument begins with a certain
-	#      number of dots), changes to a directory up in the
-	#      hierarchy.  For example, 'cd ..' goes to the parent
-	#      directory, 'cd ...' goes to the parent's parent
-	#      directory, 'cd .../foo' goes to the directory foo in the
-	#      parent's parent directory.
-	#
-	#      In the third form (the argument is two dots followed by a
-	#      word), changes to the first directory up in the hierarchy
-	#      containing a given word.  For example, if the current
-	#      directory is '/home/user/tmp/foo/bar', running 'cd ..tmp'
-	#      goes to '/home/user/tmp'.
-	#
-	#      In the fourth form (the argument is a hyphen before a
-	#      number), changes to the N-th directory on the stack and
-	#      removes it from the stack.  For example, 'cd -4' goes to
-	#      the fourth directory on the stack.
-	#
-	#      In the fifth form (the argument is a single hyphen), goes
-	#      to the previous directory.
-	#
-	#      In the sixth form (the first argument is a plus), adds
-	#      the current directory (or the directories passed as next
-	#      arguments) to the end of the directory stack.
-	#
-	#      In the seventh and final form (the argument is a plus
-	#      before a number), moves the N-th directory on the stack
-	#      to the beginning of the stack.  For example, 'cd +4'
-	#      moves the fourth directory on the stack to its beginning.
-	#
-	#      The directory stack is printed after each invocation.
-	#
-	# SEE ALSO
-	#      dirs
-
-	if [ "$#" -eq 0 ]
+	test "$#" -gt 0 && {
+		doas -- "$@" 
+		return
+	}
+	typeset n="$(
+		fc -l 1 |
+		sed -En '
+			/^[[:digit:]]+[[:space:]]+fuck/!h
+			${
+				g
+				s/[[:space:]].*//
+				p
+			}
+		'
+	)"
+	if test -z "$n"
 	then
-		set -- "$HOME"
-	elif [ "$#" -gt 1 ] && [ "$1" != "+" ]
-	then
-		echo "$0: cd: improper argument" >&2
-		return 1
+		echo "ksh: fuck: no command to retry" >&2
+		return 127
 	fi
+	fc -e "sed -i '/^doas/!s/^/doas /'" "$n"
+}
+
+# extend cd with two forms for going up; and set completions for make(1)
+cd() {
+	case "$#" in
+	(0) set -- "$HOME" ;;
+	(1)                ;;
+	(*) set -- "$*"    ;;
+	esac
 	case "$1" in
-	+)
-		shift
-		case "$#" in
-		0)
-			set -A tmp -- "$PWD"
-			;;
-		*)
-			for i
-			do
-				typeset d="$( { command cd "$i" || { [ -e "$i" ] && command cd "$(dirname "$i")" ; } ; } >/dev/null 2>&1 && echo $PWD || echo "")"
-				[ -z "$d" ] && unset tmp && echo "$0: cd: $i: unknown file" >&2 && return 1
-				set -A tmp -- "${tmp[@]}" "$d"
-			done
-		esac
-		set -A DIRSTACK -- "${tmp[@]}" "${DIRSTACK[@]}"
-		unset tmp
-		dirs
-		return
-		;;
-	-)
-		;;
-	+*[!0-9]*|-*[!0-9]*)
-		return 1
-		;;
-	+*)             # rotate entries
-		typeset n=$(( ${1#"+"} - 1 ))
-		[ -z "${DIRSTACK[$n]}" ] && return
-		set -- "${DIRSTACK[$n]}"
-		unset DIRSTACK[$n]
-		set -A DIRSTACK -- "$PWD" "${DIRSTACK[@]}"
-		;;
-	-*)             # remove entry
-		typeset n=$(( ${1#"-"} - 1 ))
-		[ -z "${DIRSTACK[$n]}" ] && return
-		unset DIRSTACK[$n]
-		set -A DIRSTACK -- "${DIRSTACK[@]}"
-		dirs
-		return
-		;;
-	..|../*)        # regular dot-dot directory
-		;;
-	.+(.)?(/*))     # dot-dot-dot...
-		typeset pre=${1%%/*}
-		case "$1" in
-		*/*) typeset pos=${1#*/} ;;
-		*)   typeset pos="" ;;
-		esac
-		typeset n=${#pre}
-		set -- "$PWD"
-		while (( n-- > 1 ))
+	(.+(.)?(/*))
+		# go up this much dots, then to PATH:   cd ..../foo/bar
+		set -- "$1" "$PWD"
+		while true
 		do
 			case "$1" in
-			/) break ;;
-			*) set -- "$(dirname "$1")" ;;
+			(..*) set -- "${1#.}" "${2%/*}" ;;
+			(*)   break                     ;;
 			esac
 		done
-		set -- "$1/$pos"
+		set -- "$2/${1#*/}"
 		;;
-	..*)            # dot-dot plus name
+	(..*)
+		# go up to first directory with NAME:   cd ..NAME
 		set -- "${PWD%"${PWD##*"${1#".."}"}"}"
 		;;
 	esac
-	{
-		command cd "$1" || {
-			[ -e "$1" ] && command cd "$(dirname "$1")"
-		}
-	} >/dev/null 2>&1 || {
-		echo "$0: cd: $1: bad directory" >&2 && return 1
-	}
-	setenv
-	dirs
+	command cd "$1" >/dev/null || return 1
+	set -A complete_make -- $(
+		exec 2>/dev/null
+		make -qp |
+		sed -n '/^[A-Za-z][^ :]* *:/{s/\([^: ]*\).*/\1/p;}'
+	)
+	case "$PWD/" in
+	("$HOME"/*)
+		printf "%s\n" "~${PWD#"${HOME}"}"
+		;;
+	(*)
+		printf "%s\n" "$PWD"
+		;;
+	esac
 	return 0
 }
 
-# less-intrusive rm -i; a la gnu rm -I
-rm() {
-	while [ "$#" -gt 0 ]
-	do
-		case "$1" in
-		--)
-			shift
-			break
-			;;
-		-*)
-			set -A opts -- "${opts[@]}" "$1"
-			shift
-			;;
-		*)
-			break
-			;;
-		esac
-	done
-	case "$opts" in
-	*f*)
-		command rm "${opts[@]}" "$@"
-		;;
-	*)
-		if [ "$#" -gt 3 ]
-		then
-			printf "remove %s files? " "$#" >&2
-			read -r answer || return
-			case "$answer" in
-			[yY]*)
-				command rm "${opts[@]}" "$@"
-				;;
-			esac
-		else
-			for i in "$@"
-			do
-				if [ -d "$i" ]
-				then
-					printf "recursively remove %s/? " "${i%/}" >&2
-					read -r answer || return
-					case "$answer" in
-					[yY]*)
-						command rm "${opts[@]}" "$i"
-						;;
-					esac
-				else
-					printf "remove %s? " "$i" >&2
-					read -r answer || return
-					case "$answer" in
-					[yY]*)
-						command rm "${opts[@]}" "$i"
-						;;
-					esac
-				fi
-			done
-		fi
-		;;
-	esac
-	unset answer
-	unset opts
-	unset i
-	return $?
+# read stdin into temp file; run args on file; write file to stdout
+pee() {
+	test "$#" -eq 0 && set -- cat
+	typeset tmp="$(mktemp)"
+	test -n "$tmp" && test -w "$tmp" && test -r "$tmp" || {
+		rm "$tmp" 2>/dev/null
+		return 1
+	}
+	cat >"$tmp" && "$@" "$tmp" <>/dev/tty >&0 2>&0 && cat "$tmp"
+	rm "$tmp" 2>/dev/null
 }
 
-# tee to terminal
-see() {
-	tee /dev/tty
-}
-
-# colon separated list of directories used by the cd command
-CDPATH=".:$HOME:$HOME/proj:$HOME/files"
-
-# history options
-HISTFILE="$HOME/var/history/ksh.hist"
-HISTSIZE=10000
-
-# fc editor
-FCEDIT="${VISUAL:-${EDITOR:-"vi"}}"
-
-# options
-set -o emacs            # emacs mode for ^U and ^K keybindings, etc
-set -o braceexpand      # enable brace expansion
-
-# aliases
-alias :q=exit           # vi exit
-alias :Q=exit           # vi exit, wrong version
-alias cp="cp -Riv"      # recursive, interactive, verbose cp
-alias mv="mv -iv"       # interactive, verbose mv
-alias rm='rm -rv'       # recursive, verbose rm
-alias mkdir='mkdir -p'  # create intermediate directories as required
-alias ls='ls -1Fh'      # append file indicator to entries, print human readable sizes
-alias lc='ls -C'        # columnated ls
-alias ll='ls -l'        # long list ls
-alias la='lc -A'        # list all ls
-alias lla='ll -A'       # list all, long list ls
-alias hex='hexdump -C'  # sane hexdump
-alias od='od -cAx'      # sane od
-alias df='df -h'        # df with human readable sizes
-alias du='du -hc'       # du with human readable sizes and grand total
-alias doas="${DOAS} "   # doas <- sudo
-alias dira='dir -a'     # list all dir (our colortree function, see above)
-alias da='dir -a'       # list all dir (our colortree function, see above)
-alias l='less'          # lazyman less
-alias v='vim'           # lazyman vim
-alias c='cd'            # lazyman cd
-alias d='dir'           # lazyman dir
-alias r='readme'        # lazyman readme
-alias mkae='make'
-alias makemake='make'
-alias scheme='rlwrap -q\" chibi-scheme'         # interactive scheme REPL
-
-# completions
-complete skel 1 $(\ls -1F "$SKEL" | sed 's/\*$//')       # skel is a template system I created
-complete sysctl "" $(sysctl | sed 's/[ =].*//')
-complete rcctl 1 disable enable get ls order set restart start stop
-complete rcctl 2 $(rcctl ls all)
-complete git 1 $(git --list-cmds=main)
-complete kill 1 -9 -HUP -INFO -KILL -TERM
-complete pkill 1 -9 -HUP -INFO -KILL -TERM
-complete ssh "" $(test -r "$HOME/.ssh/config" && awk '$1 == "Host" {print $2}' "$HOME/.ssh/config")
-complete ifconfig 1 $(ifconfig | grep '^[a-z]' | cut -d: -f1)
-complete vmctl 1 console load reload start stop reset status send receive
-pgrep -q vmd && complete vmctl "" $(vmctl status | awk '!/NAME/{print $NF}')
-
-# set prompt and window title
-PS1='$(
-	# set _cwd to $PWD, replacing $HOME with ~
-	case "$PWD/" in
-	("$HOME"/*)
-		_cwd="~${PWD#"${HOME}"}"
+# check if command exists and, if so, set its completable arguments
+complete() {
+	typeset cmd="$1"
+	shift
+	command -v "$cmd" >/dev/null || return
+	case "$1" in
+	([1-9])
+		typeset arg="_$1"
+		shift
 		;;
 	(*)
-		_cwd="$PWD"
+		typeset arg=""
+		shift
 		;;
 	esac
+	set -A complete_"${cmd}${arg}" -- "$@"
+}
 
-	# set _tty to the name of tty, trim any /dev/ at the beginning
-	_tty=$(tty)
-	_tty=${_tty#/dev/}
+{
+	complete sysctl $(sysctl | sed 's,[= ].*,,')
+	complete rcctl 1 disable enable get ls order set restart start stop
+	complete rcctl 2 $(rcctl ls all)
+	complete vmd 1 console load reload start stop reset status send receive
+	complete vmd $(vmctl status | awk '!/NAME/{print $NF}')
+	complete got 1 init import clone fetch checkout update status log diff \
+		blame tree ref branch tag add remove revert commit cherrypick \
+		backout rebase histedit integrate stage unstage cat info
+} 2>/dev/null
 
-	# set _host to the host name of the machine
-	# set _title to "$_cwd - $_tty"; prefix it with "$_host:" if I am not on my laptop
-	if test -z "$SSH_CONNECTION"
-	then
-		_host=""
-		_title="$_cwd - $_tty"
-	else
-		_host="$(hostname)"
-		_title="$_host:$_cwd - $_tty"
-	fi
+# force emacs[1] keybindings even when $VISUAL is set to a vi-like editor
+# [1]: That's actually UNIX keybindings; see <https://unix-kb.cat-v.org>.
+set -o emacs
+set -o braceexpand
+bind '^H'=delete-word-backward
 
-	# set _color to red if we are root, or to white if we are a normal user
-	if [ $(id -u) -eq 0 ]
-	then
-		_color="1;31m"
-	else
-		_color="1m"
-	fi
+# history
+FCEDIT="${VISUAL:-${EDITOR:-"vi"}}"
+HISTFILE="$HOME/var/history/ksh.hist"
+HISTSIZE=10000
+HISTCONTROL="ignoredups:ignorespace"
+alias history="fc -l 1"
+alias redo="fc -e :"
 
-	# return prompt
-	printf "\\\\[\e[0m\\\\]"                # clear formatting
-	printf "\\\\[\e]0;%s\a\\\\]" "$_title"  # set window title
-	printf "\n"                             # print blank line before prompt
-	printf "\\\\[\e[%s\\\\]" "$_color"      # set color to red if root, white otherwise
-	printf "%s ❯ " "$_host"                 # set left prompt
-	printf "\\\\[\e[0m\\\\]"                # clear formatting
+# file management (be verbose and interactive)
+alias rm='rm -vi'
+alias mv='mv -vi'
+alias cp='cp -viR'
+alias mkdir='mkdir -p'
+
+# binary file dump
+alias hex='hexdump -C'
+alias od='od -cAx'
+
+# human-readable sizes
+alias df='df -h'
+alias du='du -hc'
+
+# lazyman aliases
+alias ls='ls -1Fh'
+alias lc='ls -C'
+alias ll='ls -l'
+alias calc='bc -l'
+
+# commands with command as argument (for futher alias expension)
+alias xargs='tr "\n" "\0" | xargs -0 '
+alias doas='doas '
+alias fuck='fuck '
+alias timeout='timeout '
+alias apply='apply '
+
+# case
+alias grep='egrep'
+alias fgrep='fgrep -i'
+
+# pipeline utils
+# PROTIP: Running "doas foo >/root/file" does not write into /root/file.
+#         If that's what you want; use "foo | doas save secret" instead.
+# PROTIP: Use "doas cat secret | foo" rather than "doas foo secret" for
+#         priviledge separation (useless cat is not useless).
+# PROTIP: Use "foo | see | bar" to see what is going on in the pipeline.
+# PROTIP: Avoid redirection operators (<, >, >>) on interactive shells!
+alias overwrite='save -f --'
+alias append='save -a --'
+alias saveas='save -b --'
+alias see='tee /dev/tty'
+alias vee='pee "${EDITOR:-"${VISUAL:-"vi"}"}" --'
+alias lee='pee "${PAGER:-"less"}" --'
+
+# typos
+alias mkae='make'
+alias makemake='make'
+
+# prompt is "\n HOST ❯ " (red if root; HOST if ssh; also set window title)
+PS1='$(
+	case "$(id -u)" in
+		(0) color="1;31m" ;;
+		(*) color="1m"    ;;
+	esac
+	case "$PWD/" in
+		("$HOME"/*) cwd="~${PWD#"${HOME}"}" ;;
+		(*)         cwd="$PWD"              ;;
+	esac
+	term='"$(tty | sed s,^/dev/,,)"'
+	host='"${SSH_CONNECTION:+"$(hostname)"}"'
+	title="$host${host:+:}$cwd - $term"
+	printf "\e[0m\e]0;%s\a\n%s \e[%s❯ \e[0m" "$title" "$host" "$color"
 )'
 
-# print previous command's non-zero exit status, bold and red, after it exits
+# 2nd prompt is " ❮ " (red if root, white otherwise)
+PS2="$(
+	case "$(id -u)" in
+		(0) color="1;31m" ;;
+		(*) color="1m"    ;;
+	esac
+	printf "\e[0m \e[%s❮ \e[0m" "$color"
+)"
+
+# print last command's exit status, if non-zero
 trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
 
-export GPG_TTY=$(tty)
+# run cd function above just to set completion for make(1)
+cd . >/dev/null 2>&1
 
-setenv
+export GPG_TTY="$(tty)"

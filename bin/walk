@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# Usage: walk [-adfx | -n COUNT] FILE ... |  CMD
+# Walk recursively list FILE (default ./)
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+usage() {
+	printf "usage: %s [-dfx | -COUNT] FILE ...\n" "${0##*/}" >&2
+	exit 2
+}
+
+hide=1 filter= min= max=
+while getopts adfn:x opt
+do case "$opt" in
+(a)
+	hide=
+	;;
+([dfx])
+	filter="$opt"
+	;;
+(n)
+	if test -z "$max"
+	then
+		max="$OPTARG"
+	else
+		min="$max"
+		max="$OPTARG"
+	fi
+	;;
+(*)
+	usage
+	;;
+esac done
+shift "$((OPTIND - 1))"
+
+test "$#" -eq 0 && set -- .
+for arg
+do
+	set -- "$@" -f "$arg"
+	shift
+done
+set -- "$@" --
+
+case "$filter" in
+("")
+	;;
+(d)
+	set -- "$@" -type d
+	;;
+(f)
+	set -- "$@" -type f
+	;;
+(x)
+	set -- "$@" -type f -perm -111
+	;;
+(*)
+	exit 1
+	;;
+esac
+test -n "$min" && set -- "$@" -mindepth "$min"
+test -n "$max" && set -- "$@" -maxdepth "$max"
+test -n "$hide" && set -- "$@" -not -path "*/.*"
+
+exec find "$@"

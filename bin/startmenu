@@ -1,4 +1,20 @@
 #!/bin/sh
-# list entries in cwd or search for file given as argument
+#
+# Usage: startmenu
+# Invoked by start button dockapp to create a desktop menu.
+# Depends on πmenu.
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
-ctrlmenu -tg "$BUTTON_GEOMETRY" "$HOME/lib/control"
+cmd="$(pmenu <<-EOF
+	files	xfiles "$HOME"
+	mail	xterm -e mutt
+	scrot	maim -s -- "$HOME/tmp/scrot.png"
+	xterm	termdraw
+	chat	focus hexchat
+	meme	meme
+	EOF
+)"
+
+sh -c "exec $cmd" &

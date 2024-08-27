@@ -61,14 +61,7 @@
 *color15:                               LIGHT1
 
 !! cursors
-! X11 looks for cursors on the directory $path/$theme/cursors.
-!
-! I put my cursors at $HOME/lib/cursors. There are two ways I can do
-! that: I can set path to "$HOME" and theme to "lib", so X11 concats all
-! three pieces to "$HOME/lib/cursors"; or I can set path to "$HOME/lib"
-! and theme to the empty string.  Xterm seems to prefer the latter.
-Xcursor.path:                           $HOME/lib
-Xcursor.theme:                          ""
+Xcursor.theme:                          "default"
 
 !! general
 *background:                            BG
@@ -81,7 +74,7 @@ Xcursor.theme:                          ""
 *altforeground:                         DARK1
 *altselforeground:                      DARK1
 *cursorColor:                           FG
-*borderColor:                           WIDLIT
+*borderColor:                           #000000
 *faceName:                              -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
 *font:                                  -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
 
@@ -242,10 +235,15 @@ XTerm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-
 XTerm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
 XTerm*faceName:
 !XTerm*faceName:                         Input Mono-12
-XTerm*background:                       BG
+XTerm*background:                       FloralWhite
+XTerm*foreground:                       Black
+XTerm*cursorColor:                      Black
+XTerm*cursorBar:                        True
+XTerm*cursorBlink:                      True
 XTerm*locale:                           UTF-8
 XTerm*termName:                         xterm-256color
 XTerm*visualBell:                       False
+XTerm*bellIsUrgent:                     True
 XTerm*scrollBar:                        False
 XTerm*rightScrollBar:                   True
 XTerm*allowMouseOps:                    True
@@ -255,11 +253,18 @@ XTerm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,9
 XTerm*eightBitInput:                    False
 XTerm*on2Clicks:                        word
 XTerm*on3Clicks:                        line
+XTerm*fullscreen:                       never
 XTerm.vt100.translations:               #override \
                                         Ctrl<Key>minus: smaller-vt-font() \n\
                                         Ctrl<Key>plus:  larger-vt-font() \n\
                                         <Key>Delete:    string(0x1b) string("[3~") \n\
-                                        Ctrl<Key>0:     set-vt-font(d)
+                                        Ctrl<Key>0:     set-vt-font(d) \n\
+                                        Ctrl<Key>Tab:   set-altscreen(toggle) \n\
+                                        Shift<Key>Prior: scroll-back(1, halfpage) \n\
+                                        Shift<Key>Next: scroll-forw(1, halfpage) \n\
+                                        Shift<Key>Up:   scroll-back(1, line) \n\
+                                        Shift<Key>Down: scroll-forw(1, line)
+
 
 !! xterm for presentation
 xterm2*faceName:                        Input Mono-20
@@ -270,47 +275,48 @@ xterm2*cursorColor:                     #000000
 !! XCalc
 ! Works on default OpenBSD XCalc, which has more buttons than the
 ! default GNU/Linux XCalc.
-!XCalc*geometry: 350x460
-!XCalc.ti.background:                    BG
-!XCalc.ti.bevel.background:              DARK
-!XCalc.ti.bevel.screen.borderColor:      DARK
-!XCalc.ti.bevel.screen.background:       DARK
-!XCalc.ti.bevel.screen.DEC.background:   DARK
-!XCalc.ti.bevel.screen.DEC.foreground:   FG
-!XCalc.ti.bevel.screen.DEG.background:   DARK
-!XCalc.ti.bevel.screen.DEG.foreground:   FG
-!XCalc.ti.bevel.screen.GRAD.background:  DARK
-!XCalc.ti.bevel.screen.GRAD.foreground:  FG
-!XCalc.ti.bevel.screen.RAD.background:   DARK
-!XCalc.ti.bevel.screen.RAD.foreground:   FG
-!XCalc.ti.bevel.screen.INV.background:   DARK
-!XCalc.ti.bevel.screen.INV.foreground:   FG
-!XCalc.ti.bevel.screen.LCD.background:   DARK
-!XCalc.ti.bevel.screen.LCD.foreground:   FG
-!XCalc.ti.bevel.screen.LCD.shadowWidth:  0
-!XCalc.ti.bevel.screen.M.background:     DARK
-!XCalc.ti.bevel.screen.M.foreground:     FG
-!XCalc.ti.bevel.screen.P.background:     DARK
-!XCalc.ti.bevel.screen.P.foreground:     FG
-!XCalc.ti.Command.foreground:            FG
-!XCalc.ti.Command.background:            DARKLIGHT
-!XCalc.ti.button5.background:            BLUELIGHT
-!XCalc.ti.button35.background:           REDLIGHT
-!XCalc.ti.button40.background:           REDLIGHT
-!XCalc.ti.button45.background:           REDLIGHT
-!XCalc.ti.button50.background:           REDLIGHT
-!XCalc.ti.button55.background:           REDLIGHT
-!XCalc.ti.button37.background:           LIGHT
-!XCalc.ti.button38.background:           LIGHT
-!XCalc.ti.button39.background:           LIGHT
-!XCalc.ti.button42.background:           LIGHT
-!XCalc.ti.button43.background:           LIGHT
-!XCalc.ti.button44.background:           LIGHT
-!XCalc.ti.button47.background:           LIGHT
-!XCalc.ti.button48.background:           LIGHT
-!XCalc.ti.button49.background:           LIGHT
-!XCalc.ti.button52.background:           LIGHT
-!XCalc*Cursor:                           hand2
+XCalc*geometry: 350x460
+XCalc*font:                             -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+XCalc.ti.background:                    BG
+XCalc.ti.bevel.background:              DARK
+XCalc.ti.bevel.screen.borderColor:      DARK
+XCalc.ti.bevel.screen.background:       DARK
+XCalc.ti.bevel.screen.DEC.background:   DARK
+XCalc.ti.bevel.screen.DEC.foreground:   FG
+XCalc.ti.bevel.screen.DEG.background:   DARK
+XCalc.ti.bevel.screen.DEG.foreground:   FG
+XCalc.ti.bevel.screen.GRAD.background:  DARK
+XCalc.ti.bevel.screen.GRAD.foreground:  FG
+XCalc.ti.bevel.screen.RAD.background:   DARK
+XCalc.ti.bevel.screen.RAD.foreground:   FG
+XCalc.ti.bevel.screen.INV.background:   DARK
+XCalc.ti.bevel.screen.INV.foreground:   FG
+XCalc.ti.bevel.screen.LCD.background:   DARK
+XCalc.ti.bevel.screen.LCD.foreground:   FG
+XCalc.ti.bevel.screen.LCD.shadowWidth:  0
+XCalc.ti.bevel.screen.M.background:     DARK
+XCalc.ti.bevel.screen.M.foreground:     FG
+XCalc.ti.bevel.screen.P.background:     DARK
+XCalc.ti.bevel.screen.P.foreground:     FG
+XCalc.ti.Command.foreground:            FG
+XCalc.ti.Command.background:            DARK1
+XCalc.ti.button5.background:            BLUE1
+XCalc.ti.button35.background:           RED1
+XCalc.ti.button40.background:           RED1
+XCalc.ti.button45.background:           RED1
+XCalc.ti.button50.background:           RED1
+XCalc.ti.button55.background:           RED1
+XCalc.ti.button37.background:           DARK1
+XCalc.ti.button38.background:           DARK1
+XCalc.ti.button39.background:           DARK1
+XCalc.ti.button42.background:           DARK1
+XCalc.ti.button43.background:           DARK1
+XCalc.ti.button44.background:           DARK1
+XCalc.ti.button47.background:           DARK1
+XCalc.ti.button48.background:           DARK1
+XCalc.ti.button49.background:           DARK1
+XCalc.ti.button52.background:           DARK1
+XCalc*Cursor:                           hand2
 
 !! XClock
 XClock*update:                          1
@@ -327,18 +333,18 @@ XClock*render:                          True
 !XClock*secondColor:                     rgba:50/93/30/6f
 
 !! shod
-shod.activeBackground:                  SELMID
-shod.activeTopShadowColor:              SELLIT
-shod.activeBottomShadowColor:           SELHVY
-shod.inactiveBackground:                WIDMID
-shod.inactiveTopShadowColor:            WIDLIT
-shod.inactiveBottomShadowColor:         WIDHVY
+*activeBackground:                      SELMID
+*activeTopShadowColor:                  SELLIT
+*activeBottomShadowColor:               SELHVY
+*inactiveBackground:                    WIDMID
+*inactiveTopShadowColor:                WIDLIT
+*inactiveBottomShadowColor:             WIDHVY
+*urgentBackground:                      #CC0000
+*urgentTopShadowColor:                  #EF2929
+*urgentBottomShadowColor:               #A40000
 shod.dockBackground:                    WIDMID
 shod.dockBorder:                        WIDLIT
-!shod.urgent.background:                 #CC0000
-!shod.urgent.topShadowColor:             #EF2929
-!shod.urgent.bottomShadowColor:          #A40000
-!shod.borderWidth:                       6
+shod.borderWidth:                       8
 !shod.notifGap:                          3
 !shod.notifGravity:                      NE
 !shod.shadowThickness:                   2
@@ -357,9 +363,9 @@ shod.Taskinator*state:                  extend,resized
 shod.wmapm*dockpos:                     5
 shod.WMPDArt*dockpos:                   6
 shod.bubblemon*dockpos:                 7
-shod.XLoad*dockpos:                     7
-shod.XLoad*type:                        dockapp
-shod.XLoad*state:                       shrunk,resized
+!shod.XLoad*dockpos:                     7
+!shod.XLoad*type:                        dockapp
+!shod.XLoad*state:                       shrunk,resized
 shod.WMClock*dockpos:                   9
 shod.XClock*dockpos:                    6
 shod.XClock*type:                       dockapp
@@ -383,29 +389,21 @@ taskinator.inactiveTopShadowColor:      WIDLIT
 taskinator.inactiveBottomShadowColor:   WIDHVY
 
 !! Paginator
-paginator.background:                   WIDMID
-paginator.selbackground:                DARK1
-paginator.separator:                    DARK1
-paginator.activeBackground:             SELMID
-paginator.activeTopShadowColor:         SELLIT
-paginator.activeBottomShadowColor:      SELHVY
-paginator.inactiveBackground:           WIDMID
-paginator.inactiveTopShadowColor:       WIDLIT
-paginator.inactiveBottomShadowColor:    WIDHVY
-paginator.numColumns:                   1
-paginator.numRows:                      0
-paginator.orientation:                  Vertical
-paginator.startingCorner:               TopLeft
+Paginator.desktopBackground:            WIDMID
+Paginator.activeDesktopBackground:      DARK1
+Paginator.frameShadowThickness:         0
+Paginator.separatorColor:               WIDLIT
 
 !! XNotify
-xnotify.geometry:                       230x0
-xnotify.imageWidth:                     64
-xnotify.padding:                        1
-xnotify.background:                     BG
-xnotify.foreground:                     FG
-xnotify.alignment:                      left
-xnotify.shrink:                         false
-xnotify.wrap:                           true
+XNotify.geometry:                       230x0
+XNotify.imageWidth:                     64
+XNotify.padding:                        8
+XNotify.background:                     BG
+XNotify.foreground:                     FG
+XNotify.alignment:                      left
+XNotify.shrink:                         true
+XNotify.wrap:                           true
+XNotify.opacity:                        0.8
 
 !! CtrlMenu
 ctrlmenu*alignment:                     ALIGN_LEFT
@@ -434,19 +432,22 @@ xpdf*bottomShadowColor:                 WIDHVY
 !! XFiles
 !XFiles.enableStatusBar:                 FALSE
 XFiles.background:                      BG
+XFiles.opacity:                         0.8
 XFiles.fileIcons:                       \n\
 	*.c=code\n\
 	*.h=code\n\
 	~/doc/=documents_dir\n\
-	~/lib/=config_dir\n\
 	~/mem/=meme_dir\n\
 	~/mus/=music_dir\n\
 	~/mnt/=mount_dir\n\
 	~/prj/=code_dir\n\
 	~/tmp/=downloads_dir\n\
-	~/usr/=apps_dir\n\
+	~/app/=apps_dir\n\
+	~/app/Games/=games_dir\n\
+	~/usr/=home_dir\n\
 	~/var/mail/=mail_dir\n\
 	~/var/trash/=trash_dir\n\
+	~/var/games/=games_dir\n\
 	~/var/=database_dir\n\
 	~/vid/=videos_dir
 

@@ -1,3 +1,5 @@
 #!/bin/sh
+# usage: open [file ...]
+# plumb FILEs with "open" action
 
-exec plumb -o -- "$@" 2>/dev/null
+exec plumb -open -- "$@" #1>/dev/null 2>/dev/null 0</dev/null

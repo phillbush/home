@@ -1,190 +1,103 @@
 " /.vimrc -- Vim rc file
+"
+" Initialization script for vim.
+" Vim sucks. I want to move to something else.
+"
+" © 2024 Lucas de Sena <lucas at seninha dot org>.
+" No rights reserved.  Dedicated into Public Domain.  Use as you will.
+" THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-" Save cache to $CACHEDIR if it exists
+runtime ftplugin/man.vim
+set nocompatible noautochdir nomodeline encoding=utf8
+
+"" cache directory for swap, backup, undo, etc; except for temporary files
 if (!empty($CACHEDIR))
 	call mkdir($CACHEDIR . "/vim/swap", "p")
 	call mkdir($CACHEDIR . "/vim/backup", "p")
 	call mkdir($CACHEDIR . "/vim/undo", "p")
-	call mkdir($CACHEDIR . "/vim/viminfo", "p")
 	set directory=$CACHEDIR/vim/swap
 	set backupdir=$CACHEDIR/vim/backup
 	set undodir=$CACHEDIR/vim/undo
 	set viminfo+=n$CACHEDIR/vim/viminfo
 endif
+set undofile backup writebackup
+set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
+autocmd BufNewFile,BufReadPre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/* setlocal noswapfile noundofile viminfo=
 
-set backup
-set writebackup
+"" status interface; document identification; etc
+set laststatus=0 title showcmd showmode
+set nonumber nocursorline
+set ruler rulerformat=%30(%=%l/%L:%c%V\ hex:%B\ %p%%\ %#ModeMsg#%(\ %M\ %)%)
+set scrolloff=5
 
-" basic settings
-set title
-set encoding=utf8
-set hidden                              " hide buffers, don't close
-set autoread                            " reload on external file changes
-set nocompatible                        " enable Vi improvements, required for plugins
-set noautochdir                         " some plugins requires this option be off
-set modelines=0                         " for security reasons
-set nomodeline                          " for security reasons
-set undofile                            " persist the undo tree for each file
-"set mouse=a                             " enable mouse
-set wildmenu                            " command line completion
-set backspace=indent,eol,start          " backspace
-set scrolloff=5                         " scrolling; make some content visible when scrolling
-"set clipboard=autoselect                " enable clipboard
-set lazyredraw                          " redraw only when we need to
-set background=dark
+"" input behavior
+set backspace=indent,eol,nostop
+set virtualedit=block           " place cursor on no text (eg' after EOL)
+set noexpandtab
+set tabstop=8 softtabstop=8 shiftwidth=8
 
-" Virtual edit: Position cursor where there isn't text (e.g. after EOL)
-set virtualedit=block                   " allow virtual edit in Visual Block Mode only
+"" searching
+set incsearch hlsearch smartcase
 
-" Searching
-set incsearch                           " show where the pattern matches as it was typed so far
-set hlsearch                            " highlight the search matching text
-set smartcase                           " try to be smart about case when searching
-
-" list of directories to be searched for tags, names, etc
-set path=.,include,../include,../../include,/usr/include,/usr/X11R6/include/,/usr/local/include/,,
-
-" statusline and ruler
-set laststatus=0                        " do not show statusline
-set showcmd                             " show a command as it is being typed
-set showmode                            " show current mode
-set ruler                               " show ruler
-set rulerformat=%30(%=%l/%L:%c%V\ hex:%B\ %p%%\ %#ModeMsg#%(\ %M\ %)%)
-
-" Line indentification
-set nonumber                            " do not show line number
-set cursorline                          " highlight the screen line of the cursor
-
-" Tabulation
-set noexpandtab                         " if on, <Tab>/<BS> inserts/deletes 'softtabstop' spaces instead of Tabulation
-set smarttab                            " if on, <Tab> inserts 'shiftwidth' at beginning of line and 'tabstop' elsewhere
-set softtabstop=8                       " number of spaces to fill/delete at once
-set shiftwidth=8                        " number of columns of a shift (if zero, equals to tabstop)
-set tabstop=8                           " number of columns of a tabulation
-
-" how text is displayed
+"" how text is displayed
 set nowrap
-set showmatch                           " show matching brackets
-set showbreak=↳\                        " wrapping character
-set listchars=tab:․\ ,trail:․           " string to use for the :list command
-set list                                " display unprintable characters
+set showmatch                           " highlight matching brackets
+set showbreak=↳\                        " what to display when wrapping
+set list listchars=tab:.\ ,trail:.      " display unprintable characters
 
-" Indention
-set copyindent                          " copy the structure of the existing lines indent when autoindenting a new line
-set autoindent                          " copy indent from current line when starting a new line 
-set preserveindent                      " when changing the indent of the curent line, preserve as much of the indent structure as possible
-set smartindent                         " start indentation automatically, when inserting newline after a '{' for example
-
-" Completion
-set complete=.,w,b,u,k,kspell,t,i,d,    " controls where the completions are searched
-set completeopt=longest,menuone         " control how the completion occurs
-set omnifunc=syntaxcomplete#Complete    " set the complete function
-
-" Text formatting
-set textwidth=72                        " wrap line after 72 chracters
+"" automatic text formating and indention
+set nocopyindent noautoindent nopreserveindent
+set smartindent
+set textwidth=72
 set formatoptions=cqjr
 set comments=s1:/*,mb:*,ex:*/,:;,://,b:#,:%,:XCOMM,nb:>,nfb:--,nfb:•,nfb:·,fb:→,nb:│,nb:\|,nb:\"
 
-" folding
-set foldenable
-set foldminlines=1
-set foldopen=hor,insert,mark,search,undo
-"set foldmethod=expr
-set foldtext=getline(v:foldstart).'\ '  " The text shown in closed folds
+"" remap retard default key commands
+noremap 0 ^|     " to non-blank beginning of line (<ZERO>)
+noremap ) 0|     " to beginning of line (<SHIFT-ZERO>)
+noremap - $|     " to end of line (<HYPHEN>, cuz it's after <ZERO>)
+noremap _ _|     " to non-blank end of line (<SHIFT-ZERO>)
+noremap k gk|    " move up by visual/virtual line
+noremap j gj|    " move down by visual/virtual line
+noremap W b|     " if <W> is word forward, <SHIFT-W> should be word backward
+noremap E ge|    " if <E> is end of word forward, <SHIFT-E> should be end of word backward
+noremap Y y$|    " if <SHIFT-ANY> does <ANY> until end of line, why <SHIFT-Y> does not?
+noremap U <C-R>| " if <U> undoes, <SHIFT-U> should redo
+noremap gu U
 
-" netrw
-let g:netrw_banner = 0          " Hide banner
-let g:netrw_liststyle = 3       " Tree directory listing
-let g:netrw_sort_by = "name"    " Tree directory listing
-let g:netrw_sort_sequence = ""
-let g:netrw_browse_split = 0
-let g:netrw_winsize = 20
-map <Leader><Leader> :Explore<C-M>
-
-" Let commands w, q and wq case insensitive
-command Q q
-command W w
-
-" move vertically by visual line
-nnoremap j gj
-nnoremap k gk
-
-" highlight last inserted text
-nnoremap gv `[v`]
-
-" remap b to q
-noremap q :bn<C-M>
-noremap Q :bp<C-M>
+"" macros; I never use them, set them to <B>, as I can mistype <Q> for quiting
 noremap b @
 noremap B q
+noremap q :bn<C-M>
+noremap Q :bp<C-M>
 
-" line motion
-noremap 0 ^
-noremap ) 0
-noremap - $
-noremap _ _
+"" complation and behavior of <Tab> in insert mode
+set completeopt=menuone,noinsert complete=.,k,t,i,d
+function! TabWrapper()
+	let col  = virtcol('.') - 1
+	let char = getline('.')[col('.') - 2]
 
-" object motion
-noremap W b
-noremap E ge
-
-" mark motion
-noremap m '
-noremap M `
-noremap gm m
-
-" Operators: Operate to end of line
-noremap Y y$
-
-" Undo: Map <u> to undo; <U> to redo; and <gU> reverse line
-noremap gu U
-noremap U <C-R>
-
-" traverse undo tree
-nnoremap <Leader>u g-
-nnoremap <Leader>U g+
-
-" clipboard
-noremap <Leader>y "+y
-noremap <Leader>Y "+Y
-noremap <Leader>p "+p
-noremap <Leader>P "+P
-
-" Jumplist
-noremap H <C-O>
-noremap L <C-I>
-
-" Changelist
-noremap go  g;
-noremap gi  g,
-
-" text completion
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-inoremap <C-F> <C-X><C-F>
-inoremap <C-N> <C-X><C-N>
-inoremap <C-D> <C-X><C-D>
-inoremap <C-Space> <C-P>
-
-" Tab: insert Tab for indenting, space elsewhere; do completion and folding
-function! TabWrapper(shift)
-	let col = col('.') - 1
-	let vcol = virtcol('.') - 1
-	if !vcol || getline('.')[col - 1] =~ '	'
+	" cursor at beginning of line or at tab; insert tab
+	if col == 0 || char == "\t"
 		return "	"
-	elseif getline('.')[col -1] =~ '^\s*$'
-		return repeat(" ", &softtabstop - (vcol % &softtabstop))
-	elseif (a:shift)
-		return "\<C-P>"
-	else
-		return "\<C-N>"
 	endif
-endfunction
-inoremap <tab> <c-r>=TabWrapper(0)<CR>
-inoremap <S-tab> <c-r>=TabWrapper(1)<CR>
-noremap <Tab>   za
-noremap <S-Tab> zm
 
-" folding functions
+	" cursor at space; insert spaces until next tabstop
+	if char == " "
+		return repeat(" ", &softtabstop - (col % &softtabstop))
+	endif
+
+	" do completion
+	return "\<C-N>"
+endfunction
+inoremap <expr> <Tab>   complete_info()['mode'] != "" ? "\<C-N>" : "\<C-R>=TabWrapper()\<CR>"
+inoremap <expr> <S-Tab> complete_info()['mode'] != "" ? "\<C-P>" : "\<S-Tab>"
+inoremap <expr> <Esc>   complete_info()['mode'] != "" ? "\<C-E>" : "\<Esc>"
+inoremap <expr> <CR>    complete_info()['mode'] != "" ? "\<C-Y>" : "\<CR>"
+
+" folding and behavior of <Tab> in normal mode
+noremap <Tab>   za
+noremap <expr> <S-Tab> &foldlevel ? "zM" : "zR"
 function! CommentFolding(lnum)
 endfunction
 function! TxtFolding(lnum)
@@ -223,109 +136,38 @@ function! CFolding(lnum)
 	return '='
 endfunction
 set foldexpr=TxtFolding(v:lnum)
-
-" file type detections
-filetype plugin indent on
-autocmd FileType c,cpp,yacc,lex,awk,sh,go set foldexpr=CFolding(v:lnum) foldmethod=expr
-autocmd Bufenter *.s set syntax=scheme lisp expandtab
-autocmd FileType scheme set lisp expandtab
+set foldenable
+set foldlevelstart=99
+set foldminlines=1
+set foldopen=hor,insert,mark,search,undo
+set foldtext=getline(v:foldstart).'\ '
+filetype on
+autocmd FileType c,cpp,yacc,lex,awk,sh,bc set foldexpr=CFolding(v:lnum) foldmethod=expr
 autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
-autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t comments=nfb:*,:;,://,b:#,:%,:XCOMM,nb:>,nfb:--,nfb:•,nfb:·,fb:→,nb:│,nb:\|,nb:\"
+autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t
 autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t | endif
 
-" Syntax highlighting
-syntax on
-autocmd FileType c,cpp,yacc,lex,awk,sh,go syntax match MyConstant /\<[A-Z_][A-Z0-9_][A-Z0-9_]\+\>/
-hi Comment      ctermfg=8       ctermbg=None    cterm=None
-hi PreProc      ctermfg=8       ctermbg=None    cterm=None
-hi String       ctermfg=7       ctermbg=None    cterm=Bold,Italic
-hi Title        ctermfg=7       ctermbg=None    cterm=Bold,Italic
-hi MyConstant   ctermfg=9       ctermbg=None    cterm=None
-hi Constant     ctermfg=9       ctermbg=None    cterm=None
-hi Special      ctermfg=15      ctermbg=None    cterm=None
-hi Identifier   ctermfg=15      ctermbg=None    cterm=None
-hi Statement    ctermfg=15      ctermbg=None    cterm=None
-hi Conditional  ctermfg=15      ctermbg=None    cterm=None
-hi Repeat       ctermfg=15      ctermbg=None    cterm=None
-hi Structure    ctermfg=15      ctermbg=None    cterm=None
-hi Function     ctermfg=15      ctermbg=None    cterm=None
-hi Operator     ctermfg=15      ctermbg=None    cterm=None
-hi Type         ctermfg=15      ctermbg=None    cterm=None
-hi Error        ctermfg=11      ctermbg=9       cterm=None
-hi TODO         ctermfg=9       ctermbg=11      cterm=Bold
-hi Folded       ctermfg=15      ctermbg=none    cterm=None
-hi Underlined   ctermfg=7                       cterm=None
-hi NonText      ctermfg=8                       cterm=None
-hi SpecialKey   ctermfg=8                       cterm=None
-hi Visual                                       cterm=None
-hi Cursor                                       cterm=Reverse
-hi CursorLine                   ctermbg=0       cterm=None
-hi Search       ctermfg=0       ctermbg=11      cterm=None
-hi Directory    ctermfg=None    ctermbg=None    cterm=Bold,Italic
-hi ErrorMsg     ctermfg=11      ctermbg=9       cterm=Bold
-hi WarningMsg   ctermfg=None    ctermbg=None    cterm=Reverse,Bold
-hi ModeMsg      ctermfg=None    ctermbg=None    cterm=Reverse,Bold
-hi Pmenu        ctermfg=None    ctermbg=0       cterm=None
-hi PmenuSel     ctermfg=None    ctermbg=0       cterm=Reverse,Bold
-hi PmenuSbar    ctermfg=8       ctermbg=8       cterm=None
-hi PmenuThumb   ctermfg=15      ctermbg=15      cterm=None
-hi FoldColumn   ctermfg=8       ctermbg=None    cterm=None
-hi SignColumn   ctermfg=9       ctermbg=None    cterm=None
-hi LineNr       ctermfg=8       ctermbg=None    cterm=Bold
-hi CursorLineNr ctermfg=15      ctermbg=0       cterm=Bold
-hi StatusLine   ctermfg=11      ctermbg=4       cterm=Bold
-hi StatusLineNC ctermfg=12      ctermbg=7       cterm=none
-hi VertSplit    ctermfg=4       ctermbg=4       cterm=None
-hi TabLine      ctermfg=8       ctermbg=4       cterm=None
-hi TabLineSel   ctermfg=12      ctermbg=0       cterm=None
-hi TabLineFill  ctermfg=15      ctermbg=4       cterm=None
-
-" filetype sintax highlighting
-let c_no_curly_error    = 1
-let c_no_bracket_error  = 1
-let g:is_posix          = 1
-
-" Prevent various Vim features from keeping the contents of pass(1) password
-" files (or any other purely temporary files) in plaintext on the system.
-"
-" Either append this to the end of your .vimrc, or install it as a plugin with
-" a plugin manager like Tim Pope's Pathogen.
-"
-" Author: Tom Ryder <tom@sanctum.geek.nz>
-
-" Don't backup files in temp directories or shm
-if exists('&backupskip')
-    set backupskip+=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*
-endif
-
-" Don't keep swap files in temp directories or shm
-if has('autocmd')
-    augroup swapskip
-        autocmd!
-        silent! autocmd BufNewFile,BufReadPre
-            \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*
-            \ setlocal noswapfile
-    augroup END
-endif
-
-" Don't keep undo files in temp directories or shm
-if has('persistent_undo') && has('autocmd')
-    augroup undoskip
-        autocmd!
-        silent! autocmd BufWritePre
-            \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*
-            \ setlocal noundofile
-    augroup END
-endif
-
-" Don't keep viminfo for files in temp directories or shm
-if has('viminfo')
-    if has('autocmd')
-        augroup viminfoskip
-            autocmd!
-            silent! autocmd BufNewFile,BufReadPre
-                \ /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*
-                \ setlocal viminfo=
-        augroup END
-    endif
-endif
+"" no syntax highlighting; only highlight interface elements
+"" (vim sucks; need to manually unset every highlight group to remove its shitty default colors)
+syntax region  Ignore start=+“+ skip=+\\\\\|\\”+ end=+”+ oneline
+syntax region  Ignore start=+"+ skip=+\\\\\|\\"+ end=+"+ oneline
+syntax region  Ignore start=+'+ skip=+\\\\\|\\'+ end=+'+ oneline
+syntax region  Ignore start=+\(^\|\s\)\(\* \|#\|//\|\*/\|/\*\|"\)+ end=+$+ oneline
+syntax match   Ignore "[^[:space:]]*|[^[:space:]]*"
+autocmd FileType c,cpp,yacc,lex,awk,sh,bc syntax match Constant /\<[_[:upper:][:digit:]]\{3,}\>/
+hi Ignore       NONE
+hi CursorLine   NONE
+hi Folded       NONE
+hi Constant     NONE ctermfg=red
+hi SpecialKey   NONE ctermfg=gray
+hi EndOfBuffer  NONE ctermfg=gray
+hi Pmenu        NONE ctermbg=gray
+hi Search       NONE ctermbg=yellow
+hi IncSearch    NONE ctermbg=yellow
+hi CurSearch    NONE ctermbg=yellow
+hi PmenuSel     NONE cterm=reverse
+hi Visual       NONE cterm=reverse
+hi MatchParen   NONE cterm=underline
+hi Cursor       NONE cterm=reverse
+hi StatusLine   NONE cterm=reverse,bold
+hi ModeMsg      NONE cterm=reverse,bold

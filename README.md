@@ -1,6 +1,6 @@
 # Dotfiles etc
 
-Read the manual at `./man/home.7` for more information.
+Read the manual at `./doc/home.8` for more information.
 
 ## Theme
 
@@ -11,20 +11,13 @@ Icons are created by me (plus a few Haiku icons).
 
 ## Demo
 
-Clean:
-![clean](./clean.png)
-
-Dirty:
-![dirty](./dirty.png)
-
-Menus:
-![menus](./menus.png)
+![demo](./demo.png)
 
 ## See Also
 
-* [shod](https://github.com/phillbush/shod).
-* [fmutils](https://github.com/phillbush/fmutils).
-* [wmpdart](https://github.com/phillbush/wmpdart).
-* [ctrlmenu](https://github.com/phillbush/ctrlmenu).
 * [paginator](https://github.com/phillbush/paginator).
-
+* [shod](https://github.com/phillbush/shod).
+* [wmpdart](https://github.com/phillbush/wmpdart).
+* [xfiles](https://github.com/phillbush/xfiles).
+* [xmenu](https://github.com/phillbush/xmenu).
+* [πmenu](https://github.com/phillbush/pmenu).

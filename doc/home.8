@@ -1,0 +1,448 @@
+.Dd August 26, 2024
+.Dt HOME 8
+.Os
+.Sh NAME
+.Nm home
+.Nd introduction to maintenance and operation of seninha's personal computer
+.Sh SYNOPSIS
+.Bd -literal
+OpenBSD sabia amd64 ThinkPad T430 23501M2
+.Ed
+.Sh DESCRIPTION
+.Ss Hardware
+On the T430,
+a serial Ultrabay Enhanced HDD Adapter was installed in place of the original DVD optical drive
+.Pq https://thinkwiki.org/wiki/Ultrabay .
+.Pp
+On the T430,
+a classic (xx20) keyboard was installed in place of the original chiclete-style keyboard,
+by sanding down the nubs to fit in the palmrest
+.Pq https://thinkwiki.org/wiki/Upgrading_T430_Keyboard .
+I have not flashed the BIOS to make the keyboard work from boot yet;
+but I use xkbcomp(1) to set the keymap on X11.
+.Po
+NOTE:
+The classic keyboard died;
+I had to move back to the chiclete one
+.Pc .
+.Pp
+On the T430,
+a black faux leather vinyl adhesive was wrapped around the top lid.
+.Ss Operating system
+The administrator user, created at instalation,
+must be in the following groups and login class.
+Run
+.Xr usermod 8
+to configure, and
+.Xr userinfo 8
+to make sure.
+.Bl -tag -compact -width "XXXXXXXXX"
+.It Dv _shutdown
+Group for machine power (shutdown) privileges.
+.It Dv dialer
+Group for terminal devices privileges.
+.It Dv operator
+Group for machine disk privileges.
+.It Dv wheel
+Group for administrative privileges.
+.It Dv wobj
+Group for building privileges.
+.It Dv staff
+Login class for higher resources usage.
+.El
+.Pp
+.Pa /etc/doas.conf :
+.Dl permit persist keepenv :wheel
+.Pp
+Installed packages:
+.Bd -literal
+ImageMagick             hexchat                 quirks
+armagetronad            isync                   rlwrap
+bubblemon-dockapp       keepassxc               sfeed
+clang-tools-extra       links+                  shellcheck
+dillo                   maim                    supertuxkart
+djview4                 mblaze                  tdesktop
+dsda-doom               mediainfo               uim
+entr                    megatools               unclutter
+feh                     moreutils               ungoogled-chromium
+ffmpegthumbnailer       mpc                     unifont
+freefont-ttf            mpd                     vim
+gbdfed                  mpv                     wmapm
+gimp                    msmtp                   wmclock
+git-x11                 mutt                    wpa_supplicant
+gnupg                   nsxiv                   xbmbrowser
+got                     picom                   zathura-djvu
+graphviz                pkglocatedb             zathura-pdf-mupdf
+gv                      poppler-utils           zathura-ps
+heirloom-doctools       qemu
+.Ed
+.Pp
+.Pa /etc/rc.conf.local :
+.Bd -literal -offset indent
+apmd_flags=-L -z 15
+dhcpd_flags=
+httpd_flags=
+sndiod_flags=-s default -m play,rec,mon -s mon
+sshd_flags=NO
+xenodm_flags=
+.Ed
+.Pp
+.Pa /etc/sysctl.conf :
+.Bd -literal -offset indent
+kern.audio.record=1
+kern.video.record=1
+net.inet.ip.forwarding=1
+net.inet6.ip6.forwarding=1
+.Ed
+.Ss Interactive shell
+I use
+.Xr ksh 1
+as interactive shell.
+It is initialized by the following scripts:
+.Bl -bullet -compact -width ""
+.It
+.Pa /etc/ksh.kshrc
+.It
+.Pa $HOME/.profile
+.It
+.Pa $HOME/.kshrc
+.El
+.Pp
+The following commands are provided on interactive shells only:
+.Bl -tag -width COMMAND -compact
+.It Ic cp , mv , rm
+Aliases for interactive and verbose forms of file management commands.
+.It Ic fuck
+Re-runs previous non-doas command with
+.Xr doas 1
+or retry previous doas command.
+.It Ic lc , ls , ll
+Columnated/single-line/long-format directory listing.
+.It Ic run
+Run command in background, ignoring its standard and error outputs.
+.It Ic see
+Shows what is passing through a pipe
+.Pq Ql "foo | see | bar" .
+.El
+.Pp
+The built-in command
+.Ic cd
+is replaced with a homonym function which adds the following features:
+.Bl -bullet -compact -width ""
+.It
+.Sq Ql "cd ..../foo/bar"
+goes up that much dots, and then
+.Pa foo/bar .
+.It
+.Sq Ql "cd ..proj"
+goes up to the first directory containing
+.Dq Sy proj
+in its name.
+.It
+When changing into a directory with a
+.Pa Makefile ,
+set its targets as completions for
+.Xr make 1 .
+.El
+.Ss X11 session
+I use
+.Xr shod 1
+as X11 window manager.
+Its main feature is the ability to tile and tab windows inside floating containers.
+Shod can be controlled via mouse (by drag-and-dropping windows' titlebars)
+and via X11 client messages (through a client called
+.Xr shodc 1 ) .
+Shod also displays a dock where dockapps can be placed.
+.Pp
+I use a variation of the Brazilian ABNT-2 layout which lacks the physical key for the
+.Sy "slash/question"
+symbol.
+It is configured in
+.Pa "~/.xkeymap"
+and set with
+.Xr xkbcomp 1 .
+Rather than a four level key symbol system (Normal, Shift, AltGr, Shift+AltGr)
+I use only two layers of key symbols, complemented with dead keys
+(for Portuguese symbols I use regularly, like accented letters and cedilla),
+and the compose key
+(for drawing characters, greek letters, mathematical symbols, ligatures, etc).
+.Pp
+The following illustrations describes the normal and shifted key symbols.
+Postscript versions of those ilustrations can be generated with
+.Xr xkbrint 1 .
+.bp
+.Bd -literal -offset indent
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬────────┐
+│esc│ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │ 0 │ - │ = │ bkspc  │
+├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬──────┤
+│ tab │ q │ w │ e │ r │ t │ y │ u │ i │ o │ p │ ' │ [ │enter │
+├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐     │
+│ ctrl │ a │ s │ d │ f │ g │ h │ j │ k │ l │ / │ ~ │ ] │     │
+├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴─────┤
+│shft│ \e │ z │ x │ c │ v │ b │ n │ m │ , │ . │ ; │ shift     │
+├───┬┴───┼───┼───┼───┴───┴───┴───┴───┼───┼───┼───┼───┬───┬───┤
+│fn │caps│win│alt│       space       │mlt│hom│end│pup│up │pdw│
+└───┴────┴───┴───┴───────────────────┴───┴───┴───┼───┼───┼───┤
+                                                 │lft│dw │rgt│
+                                                 └───┴───┴───┘
+┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬────────┐
+│esc│ ! │ " │ # │ $ │ % │ @ │ & │ * │ ( │ ) │ _ │ + │ bkspc  │
+├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬──────┤
+│ tab │ Q │ W │ E │ R │ T │ Y │ U │ I │ O │ P │ ` │ { │enter │
+├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐     │
+│ ctrl │ A │ S │ D │ F │ G │ H │ J │ K │ L │ ? │ ^ │ } │     │
+├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴───┴─────┤
+│shft│ | │ Z │ X │ C │ V │ B │ N │ M │ < │ > │ : │ shift     │
+├───┬┴───┼───┼───┼───┴───┴───┴───┴───┼───┼───┼───┼───┬───┬───┤
+│fn │caps│win│alt│       space       │mlt│hom│end│pup│up │pdw│
+└───┴────┴───┴───┴───────────────────┴───┴───┴───┼───┼───┼───┤
+                                                 │lft│dw │rgt│
+                                                 └───┴───┴───┘
+.Ed
+.Ss Network
+I aggregate both the wired
+.Xr em 4
+interface and the wireless
+.Xr iwn 4
+interfaces on a
+.Xr trunk 4
+failover interface which connects to the first one which is available.
+I also create a
+.Xr vether 4
+virtual network for connecting with virtual machines,
+and two
+.Xr bridge 4
+interfaces for forwarding traffic to virtual machines
+(one from the aggregator interface,
+and the other from the virtual interface).
+For the
+.Xr bridge 4
+interfaces to work, I enable IP forwarding at
+.Xr systcl.conf 5 ,
+and configure a NAT at
+.Xr pf.conf 5 .
+.Pp
+.Pa /etc/hostname.em0 :
+.Bd -literal -offset indent
+up
+.Ed
+.Pp
+.Pa /etc/hostname.iwn0 :
+.Bd -literal -offset indent
+join "my nwid" wpakey "my password"
+up
+.Ed
+.Pp
+.Pa /etc/hostname.trunk0 :
+.Bd -literal -offset indent
+trunkproto failover
+trunkport em0
+trunkport iwn0
+inet autoconf
+inet6 autoconf
+.Ed
+.Pp
+.Pa /etc/hostname.vether0 :
+.Bd -literal -offset indent
+inet 10.0.0.1 255.255.255.0
+up
+.Ed
+.Pp
+.Pa /etc/hostname.bridge0 :
+.Bd -literal -offset indent
+add trunk0
+up
+.Ed
+.Pp
+.Pa /etc/hostname.bridge1 :
+.Bd -literal -offset indent
+add vether0
+up
+.Ed
+.Pp
+.Pa /etc/sysctl.conf :
+.Bd -literal -offset indent
+net.inet.ip.forwarding=1
+net.inet6.ip6.forwarding=1
+.Ed
+.Pp
+.Pa /etc/pf.conf :
+.Bd -literal -offset indent
+match out on egress from vether0:network to any nat-to (egress)
+.Ed
+.Sh ENVIRONMENT
+The following environment variables are set by the
+.Pa ~/.profile
+script.
+.Bl -tag -width Ds
+.It Ev CACHEDIR
+Cache directory.
+(Set to
+.Pa "$HOME/var/cache" . )
+.It Ev ENV
+Path to ksh's rc file.
+(Set to
+.Pa "$HOME/.kshrc" . )
+.It Ev EDITOR
+Default editor program.
+(Set to
+.Pa "vim" . )
+.It Ev GNUPGHOME
+Configuration directory for
+.Xr gpg 1 .
+(Set to
+.Pa "$HOME/var/gpg" . )
+.It Ev LANG , LC_CTYPE , LC_COLLATE
+Locale
+(Set to
+.Dq Sy pt_BR.UTF-8 ,
+except for encoding and collation/ordering,
+which is
+.Dq Sy C.UTF-8 . )
+.It Ev MANPATH
+Path to look for manual pages.
+.It Ev OPENER
+Default file opener program.
+(Set to
+.Pa "plumb" . )
+.It Ev PAGER
+Default pager program.
+(Set to
+.Pa "less" . )
+.It Ev TERMCMD
+Default terminal emulator program.
+(Set to
+.Pa "xterm" . )
+.It Ev TZ
+Timezone.
+(Set to
+.Sy "America/Sao_Paulo" . )
+.It Ev VISUAL
+Default editor program.
+(Set to
+.Pa "vim" . )
+.It Ev XDG_CACHE_HOME
+xdg shit
+(Set to
+.Pa "$HOME/.cache" . )
+.It Ev XDG_CONFIG_HOME
+xdg shit
+(Set to
+.Pa "$HOME/.config" . )
+.It Ev XDG_DATA_HOME
+xdg shit
+(Set to
+.Pa "$HOME/.data" . )
+.El
+.Sh FILES
+This is a personal computer;
+there is no human user or operator orther than me.
+Thus, I make no point to keep files only at my
+.Ev $HOME
+directory:
+I save files elsewhere, when needed.
+.Bl -tag -width Ds
+.It Pa /home/
+That's my
+.Ev $HOME
+directory
+(why should be a single directory there
+.Pq Pa /home/seninha/
+for the single user?).
+Each project has a subdirectory in it.
+For example,
+.Pa /home/shod/
+is for
+.Xr shod 1 ;
+.Pa /home/c/
+is for notes on The C Programming Language; etc.
+.It Pa /home/doc/
+Directory where I archive documents.
+It contains mostly non-fiction books and videos of lectures.
+But I also archive there RPG books and fiction (both in book and movie formats).
+.It Pa /home/mem/
+Meme directory.
+.It Pa /home/mus/
+Music directory.
+Organized as
+.Pa "ARTIST/YEAR - ALBUM/TRACK - TITLE.flac" .
+.It Pa /home/tmp/
+Directory where I dump stuff.
+It contains mostly downloaded files.
+I try to keep it clean, but most of the time it is a mess.
+.It Pa /usr/home/
+Hierarchy for personal utilities and applications.
+Different from the
+.Pa /usr/local/
+hierarchy, this one is owned by the
+.Sy operator
+group, which I am part of;
+so I can add files to it without super-user powers.
+.It Pa /usr/home/bin
+.Ev $PATH
+entry with executables for personal utilities and applications.
+.It Pa /usr/home/man
+.Ev $MANPATH
+entry with manuals for personal utilities and applications.
+.It Pa /var/
+Directory for files managed automatically by applications.
+.El
+.Sh SEE ALSO
+.Xr afterboot 8 ,
+.Xr intro 8 ,
+.Xr security 8 ,
+for introduction on system maintenance and operation.
+.Pp
+.Xr crash 8 ,
+.Xr dump 8 ,
+.Xr restore 8 ,
+for system backup/recovery.
+.Pp
+.Xr netstart 8 ,
+.Xr rc 8 ,
+.Xr rc.conf 8 ,
+.Xr rc.d 8 ,
+.Xr rc.shutdown 8 ,
+.Xr rcctl 8 ,
+for services and daemons.
+.Sh TODO
+.Bl -bullet -compact -width ""
+.It
+Describe my mail/news workflow.
+.It
+Describe my text editor workflow.
+.It
+Describe backup workflow.
+.It
+Describe theme.
+.It
+Replace cursor theme with a more complete one.
+(The one I am using does not have all cursors for drag-and-dropping.)
+.It
+Replace monospace font/typeface with one
+with wide unicode range and consistent math symbols.
+Also scalable.
+.It
+Replace wallpaper and colorscheme for shod (window border and dock)
+with ones that matches the beige-ish light color of XTerm.
+.It
+Rewrite shod.
+.It
+In
+.Xr taskinator 1 :
+show window name; and
+group windows by application (like in BeOS/Haiku).
+.It
+Write a dockapp application for drag-and-drop target.
+.It
+Add a system monitor desklet
+.Po
+maybe
+.Xr conky 1 ?
+.Pc
+.It
+Use
+.Xr pidgin 1
+(or another libpurple client)
+to replace hexchat, telegram and whatnot.
+.El
