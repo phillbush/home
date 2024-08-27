@@ -1212,6 +1212,8 @@
 <dead_tilde> <e>                        : "ẽ"   U1EBD # LATIN SMALL LETTER E WITH TILDE
 <dead_tilde> <ecircumflex>              : "ễ"   U1EC5 # LATIN SMALL LETTER E WITH CIRCUMFLEX AND TILDE
 <dead_tilde> <i>                        : "ĩ"   U0129 # LATIN SMALL LETTER I WITH TILDE
+<dead_tilde> <J>                        : "J̃"
+<dead_tilde> <j>                        : "j̃"
 <dead_tilde> <n>                        : "ñ"   ntilde # LATIN SMALL LETTER N WITH TILDE
 <dead_tilde> <o>                        : "õ"   otilde # LATIN SMALL LETTER O WITH TILDE
 <dead_tilde> <ocircumflex>              : "ỗ"   U1ED7 # LATIN SMALL LETTER O WITH CIRCUMFLEX AND TILDE

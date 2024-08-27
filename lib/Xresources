@@ -254,14 +254,15 @@ XTerm*eightBitInput:                    False
 XTerm*on2Clicks:                        word
 XTerm*on3Clicks:                        line
 XTerm*fullscreen:                       never
+XTerm*alternateScroll:                  True
 XTerm.vt100.translations:               #override \
                                         Ctrl<Key>minus: smaller-vt-font() \n\
                                         Ctrl<Key>plus:  larger-vt-font() \n\
                                         <Key>Delete:    string(0x1b) string("[3~") \n\
                                         Ctrl<Key>0:     set-vt-font(d) \n\
                                         Ctrl<Key>Tab:   set-altscreen(toggle) \n\
-                                        Shift<Key>Prior: scroll-back(1, halfpage) \n\
-                                        Shift<Key>Next: scroll-forw(1, halfpage) \n\
+                                        <Key>Prior:     scroll-back(1, halfpage) \n\
+                                        <Key>Next:      scroll-forw(1, halfpage) \n\
                                         Shift<Key>Up:   scroll-back(1, line) \n\
                                         Shift<Key>Down: scroll-forw(1, line)
 

@@ -15,10 +15,8 @@ fi
 
 shodc list | while read -r winid
 do
-	if xprop -id "$winid" "$property" | fgrep -i "$name"
+	if xprop -id "$winid" WM_CLASS | fgrep -i "$*"
 	then
 		exec shodc focus "$winid"
-		exit 1
 	fi
-done
-exec "${@:-$window}"
+done || exec "${@:-$window}"
