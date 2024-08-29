@@ -260,7 +260,6 @@ XTerm.vt100.translations:               #override \
                                         Ctrl<Key>plus:  larger-vt-font() \n\
                                         <Key>Delete:    string(0x1b) string("[3~") \n\
                                         Ctrl<Key>0:     set-vt-font(d) \n\
-                                        Ctrl<Key>Tab:   set-altscreen(toggle) \n\
                                         <Key>Prior:     scroll-back(1, halfpage) \n\
                                         <Key>Next:      scroll-forw(1, halfpage) \n\
                                         Shift<Key>Up:   scroll-back(1, line) \n\
@@ -363,6 +362,8 @@ shod.Taskinator*dockpos:                4
 shod.Taskinator*state:                  extend,resized
 shod.wmapm*dockpos:                     5
 shod.WMPDArt*dockpos:                   6
+shod.mpv.dockplayer*type:               dockapp
+shod.mpv.dockplayer*dockpos:            6
 shod.bubblemon*dockpos:                 7
 !shod.XLoad*dockpos:                     7
 !shod.XLoad*type:                        dockapp

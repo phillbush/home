@@ -1,4 +1,4 @@
-BROWSER = 'netsurf-gtk3'
+BROWSER = 'dillo'
 
 data       matches  '(([A-Za-z]+):(//)?)? *(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
@@ -41,11 +41,11 @@ rules      for      playlist
 extension  imatches m3u
 open       with     mpv --playlist=%file
 
-rules      for      music
-path       matches  $HOME/mus/.*
-mime       matches  '(application/(octet-stream|ogg))|(audio/.*)'
-open       with     sh -c 'printf "%s\n" "$(realpath "$@")" | mpc insert ; mpc next ; mpc play' plumb %file
-info       with     mediainfo -- %file
+#rules      for      music
+#path       matches  $HOME/mus/.*
+#mime       matches  '(application/(octet-stream|ogg))|(audio/.*)'
+#open       with     sh -c 'printf "%s\n" "$(realpath "$@")" | mpc insert ; mpc next ; mpc play' plumb %file
+#info       with     mediainfo -- %file
 
 rules      for      audio
 mime       matches  '(application/(octet-stream|ogg))|(audio/.*)'
@@ -110,6 +110,11 @@ protocol   matches  '(file)?'
 mime       matches  '.*(pdf|postscript|eps|ps|epub)'
 open       with     zathura -- %file
 info       with     sh -c 'for file ; do pdftotext -layout -- "$file" - ; done' plumb %file
+
+rules      for      paged document
+protocol   matches  '(file)?'
+extension  matches  'pdf|eps|ps|epub'
+open       with     zathura -- %file
 
 rules      for      scanned document
 protocol   matches  '(file)?'

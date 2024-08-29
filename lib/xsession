@@ -46,15 +46,11 @@ picom \
 	--use-ewmh-active-win --shadow-exclude=!focused \
 	--crop-shadow-to-monitor &
 
-# music daemon
-mpd
-
 # clipboard manager
 xclipd &
 
 # set up volume, monitor light, etc
 sndioctl output.level=1
-sndioctl app/mpd0.level=0.6
 #xbacklight -steps 1 -time 0 -set 70
 
 # window manager
@@ -74,9 +70,11 @@ exec shod -d - <<-EOF
 	bubblemon &
 	wmapm &
 	wmclock &
-	wmpdart &
-	#xload -nolabel -jumpscroll 1 -update 1 -geometry 100x40 &
-	#xclock -strftime "%H:%M" &
+	mpv --no-config --x11-name=dockplayer --geometry=57x57 \
+		--force-window=immediate --cursor-autohide=no --keep-open=yes \
+		--shuffle --drag-and-drop=replace --volume=50 \
+		--script-opts=osc-idlescreen=no,osc-visibility=never \
+		mus/chill.m3u &
 
 	# notifications
 	xnotify -rw &

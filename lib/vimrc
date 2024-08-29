@@ -71,6 +71,10 @@ noremap B q
 noremap q :bn<C-M>
 noremap Q :bp<C-M>
 
+"" typos
+command W w
+command Q q
+
 "" complation and behavior of <Tab> in insert mode
 set completeopt=menuone,noinsert complete=.,k,t,i,d
 function! TabWrapper()
