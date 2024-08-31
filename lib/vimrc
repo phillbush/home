@@ -76,7 +76,8 @@ command W w
 command Q q
 
 "" complation and behavior of <Tab> in insert mode
-set completeopt=menuone,noinsert complete=.,k,t,i,d
+set path=.,/usr/include,/usr/X11R6/include,/usr/local/include,,
+set completeopt=menuone complete=.,k,t,i,d
 function! TabWrapper()
 	let col  = virtcol('.') - 1
 	let char = getline('.')[col('.') - 2]

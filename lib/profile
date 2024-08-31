@@ -46,8 +46,9 @@ export GIT_AUTHOR_EMAIL="lucas@seninha.org"
 export GOT_AUTHOR="$GIT_AUTHOR_NAME <$GIT_AUTHOR_EMAIL>"
 
 # Default programs
-export PAGER="less -i"
-export EDITOR="vim"
+export LESS="--QUIET --ignore-case"
+export PAGER="less"
+export VISUAL="vim"
 export OPENER="open"
 export TERMCMD="xterm"
 export MENUCMD="pmenu"

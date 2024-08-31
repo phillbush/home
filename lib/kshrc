@@ -121,9 +121,10 @@ complete() {
 	complete rcctl 2 $(rcctl ls all)
 	complete vmd 1 console load reload start stop reset status send receive
 	complete vmd $(vmctl status | awk '!/NAME/{print $NF}')
-	complete got 1 init import clone fetch checkout update status log diff \
-		blame tree ref branch tag add remove revert commit cherrypick \
-		backout rebase histedit integrate stage unstage cat info
+	complete got 1 add backout blame branch cat checkout cherrypick \
+	clone commit diff fetch histedit import info init integrate log \
+	merge patch rebase ref remove revert send stage status tag tree \
+	unstage update
 } 2>/dev/null
 
 # force emacs[1] keybindings even when $VISUAL is set to a vi-like editor
