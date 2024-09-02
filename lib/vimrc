@@ -7,7 +7,6 @@
 " No rights reserved.  Dedicated into Public Domain.  Use as you will.
 " THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-runtime ftplugin/man.vim
 set nocompatible noautochdir nomodeline encoding=utf8
 
 "" cache directory for swap, backup, undo, etc; except for temporary files
@@ -80,7 +79,9 @@ set path=.,/usr/include,/usr/X11R6/include,/usr/local/include,,
 set completeopt=menuone complete=.,k,t,i,d
 function! TabWrapper()
 	let col  = virtcol('.') - 1
-	let char = getline('.')[col('.') - 2]
+	let end = charcol('.') - 1
+	let line = getline('.')
+	let char = line[end - 1]
 
 	" cursor at beginning of line or at tab; insert tab
 	if col == 0 || char == "\t"
@@ -92,8 +93,19 @@ function! TabWrapper()
 		return repeat(" ", &softtabstop - (col % &softtabstop))
 	endif
 
-	" do completion
-	return "\<C-N>"
+	" get start of potential filename
+	let start = end
+	while start > 0 && line[start - 1] =~ '\f'
+		let start -= 1
+	endwhile
+
+	if start >= 0 && line[start:end] =~ '^\(\~\|\.\|\.\.\)\?/'
+		" filename begins with / or ~/ or ./ or ../
+		return "\<C-X>\<C-F>"
+	else
+		" do regular completion
+		return "\<C-N>"
+	endfi
 endfunction
 inoremap <expr> <Tab>   complete_info()['mode'] != "" ? "\<C-N>" : "\<C-R>=TabWrapper()\<CR>"
 inoremap <expr> <S-Tab> complete_info()['mode'] != "" ? "\<C-P>" : "\<S-Tab>"
