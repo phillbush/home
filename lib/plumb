@@ -1,4 +1,6 @@
 BROWSER = 'dillo'
+EDITOR = vim
+PAGER = less
 
 data       matches  '(([A-Za-z]+):(//)?)? *(.*)' into _ protocol _ file
 file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
@@ -148,22 +150,22 @@ open       with     xman %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 info       with     sh -c 'exec mandoc -Tascii -- "$@" | col -b | expand -t 8' plumb %file
 
+rules      for      html file
+mime       matches  'text/html'
+open       with     $TERMCMD -e sh -c 'cat "$@" | webdump | less' plumb %file
+edit       with     $TERMCMD -e $EDITOR -- %file
+
 rules      for      text file
 mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
-open       with     $TERMCMD -e $EDITOR -- %file
+open       with     $TERMCMD -e $PAGER -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 info       with     cat -- %file
 
 rules      for      text file
 extension  imatches 'txt|md|awk|sh|json'
-open       with     $TERMCMD -e $EDITOR -- %file
+open       with     $TERMCMD -e $PAGER -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 info       with     cat -- %file
-
-rules      for      html file
-mime       matches  'text/html'
-open       with     $BROWSER -- file://%file
-edit       with     $TERMCMD -e $EDITOR -- %file
 
 
 # external document rules

@@ -18,6 +18,7 @@ LIBS = \
 	${HOME}/.Xresources \
 	${HOME}/.kshrc \
 	${HOME}/.mailcap \
+	${HOME}/.mpdconf \
 	${HOME}/.muttrc \
 	${HOME}/.news \
 	${HOME}/.plumb \

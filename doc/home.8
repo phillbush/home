@@ -416,9 +416,6 @@ Describe backup workflow.
 .It
 Describe theme.
 .It
-Replace cursor theme with a more complete one.
-(The one I am using does not have all cursors for drag-and-dropping.)
-.It
 Replace monospace font/typeface with one
 with wide unicode range and consistent math symbols.
 Also scalable.
@@ -427,6 +424,16 @@ Replace wallpaper and colorscheme for shod (window border and dock)
 with ones that matches the beige-ish light color of XTerm.
 .It
 Rewrite shod.
+.It
+Rewrite xprompt.
+.It
+In
+.Xr paginator 1 :
+implement XDND protocol partially,
+so dragging over a desktop miniature changes the desktop,
+so it can be dropped over a window a different desktop from the drag origin.
+(The same can be applied to
+.Xr taskinator 1 ) .
 .It
 In
 .Xr taskinator 1 :

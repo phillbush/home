@@ -97,6 +97,66 @@ pee() {
 	rm "$tmp" 2>/dev/null
 }
 
+# colorize output of compilers, builders and diff'ers
+colorize() {
+	test "$#" -eq 0 && return
+	if test -t 1 && test -t 2
+	then
+		"$@" 2>&1 >/dev/tty | awk -v cmd="$1" '
+		BEGIN {
+			REVERSE = "\x1b[7m"
+			RED = "\x1b[31m"
+			GREEN = "\x1b[32m"
+			YELLOW = "\x1b[33m"
+			BLUE = "\x1b[34m"
+			PURPLE = "\x1b[35m"
+			RESET = "\x1b[0m"
+		}
+		$1 == "@@" && $4 == "@@" {
+			$1 = BLUE "@@"
+			$4 = "@@" RESET
+			print
+			next
+		}
+		$1 == "+++" {
+			$1 = GREEN $1 RESET
+			print
+			next
+		}
+		$1 == "---" {
+			$1 = RED $1 RESET
+			print
+			next
+		}
+		substr($0, 1, 1) == "+" {
+			printf "%s+%s%s\n", GREEN, RESET, substr($0, 2)
+			next
+		}
+		substr($0, 1, 1) == "-" {
+			printf "%s-%s%s\n", RED, RESET, substr($0, 2)
+			next
+		}
+		substr($1, length($1), 1) == ":" && $2 == "error:" {
+			$2 = RED $2 RESET
+			print
+			next
+		}
+		substr($1, length($1), 1) == ":" && $2 == "warning:" {
+			$2 = PURPLE $2 RESET
+			print
+			next
+		}
+		substr($1, length($1), 1) == ":" && $2 == "note:" {
+			$2 = BLUE $2 RESET
+			print
+			next
+		}
+		1'
+	else
+		"$@"
+	fi
+}
+
 # check if command exists and, if so, set its completable arguments
 complete() {
 	typeset cmd="$1"
@@ -140,6 +200,7 @@ HISTSIZE=10000
 HISTCONTROL="ignoredups:ignorespace"
 alias history="fc -l 1"
 alias redo="fc -e :"
+alias reset="tput reset"
 
 # file management (be verbose and interactive)
 alias rm='rm -vi'
@@ -168,9 +229,15 @@ alias fuck='fuck '
 alias timeout='timeout '
 alias apply='apply '
 
-# case
+# grep
 alias grep='egrep'
 alias fgrep='fgrep -i'
+
+# colorization
+alias got='colorize got'
+alias make='colorize make'
+alias cc='colorize cc'
+alias diff='colorize diff'
 
 # pipeline utils
 # PROTIP: Running "doas foo >/root/file" does not write into /root/file.
@@ -193,7 +260,7 @@ alias makemake='make'
 # prompt is "\n HOST ❯ " (red if root; HOST if ssh; also set window title)
 PS1='$(
 	case "$(id -u)" in
-		(0) color="1;31m" ;;
+		(0) color="31m" ;;
 		(*) color="1m"    ;;
 	esac
 	case "$PWD/" in
@@ -209,14 +276,14 @@ PS1='$(
 # 2nd prompt is " ❮ " (red if root, white otherwise)
 PS2="$(
 	case "$(id -u)" in
-		(0) color="1;31m" ;;
+		(0) color="31m" ;;
 		(*) color="1m"    ;;
 	esac
 	printf "\e[0m \e[%s❮ \e[0m" "$color"
 )"
 
 # print last command's exit status, if non-zero
-trap 'printf "\e[1;31mEXIT: %s\e[0m\n" "$?"' ERR
+trap 'printf "\e[31mEXIT: %s\e[0m\n" "$?"' ERR
 
 # run cd function above just to set completion for make(1)
 cd . >/dev/null 2>&1

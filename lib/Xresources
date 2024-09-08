@@ -1,135 +1,123 @@
-!! Light colors
-#define LIGHT                           #FFFFFF
-#define LIGHT0                          #707880
-#define LIGHT1                          #C5C8C6
-#define FG                              LIGHT
+#define DARK_MODE_WORKAREA      0
+#define DARK_MODE_CONTROLLER    1
 
-!! Foreground colors
-#define DARK                            #0A0A0A
-#define DARK0                           #232323
-#define DARK1                           #7E7E7E
-#define BG                              DARK
+#if DARK_MODE_WORKAREA
+*XmText.background:                     Gray5
+*XmText.foreground:                     White
+*XmTextField.background:                Gray5
+*XmTextField.foreground:                White
+*XmDrawingArea.background:              Gray5
+*XmDrawingArea.foreground:              White
+*XmList.background:                     Gray5
+*XmList.foreground:                     White
+XTerm*background:                       Gray5
+XTerm*foreground:                       White
+XTerm*cursorColor:                      White
+XTerm*color0:                           #C5C8C6
+XTerm*color1:                           #EF2929
+XTerm*color2:                           #8AE234
+XTerm*color3:                           #FCE94F
+XTerm*color4:                           #729FCF
+XTerm*color5:                           #AD7FA8
+XTerm*color6:                           #33E2E2
+XTerm*color7:                           #707880
+XTerm*color8:                           #7E7E7E
+XTerm*color9:                           #CC0000
+XTerm*color10:                          #4E9A06
+XTerm*color11:                          #C4A000
+XTerm*color12:                          #3465A4
+XTerm*color13:                          #75507B
+XTerm*color14:                          #059A9A
+XTerm*color15:                          #232323
+#else
+*XmText.background:                     FloralWhite
+*XmText.foreground:                     Black
+*XmTextField.background:                FloralWhite
+*XmTextField.foreground:                Black
+*XmDrawingArea.background:              FloralWhite
+*XmDrawingArea.foreground:              Black
+*XmList.background:                     FloralWhite
+*XmList.foreground:                     Black
+XTerm*background:                       FloralWhite
+XTerm*foreground:                       Black
+XTerm*cursorColor:                      Black
+XTerm*color0:                           #232323
+XTerm*color1:                           #CC0000
+XTerm*color2:                           #4E9A06
+XTerm*color3:                           #C4A000
+XTerm*color4:                           #3465A4
+XTerm*color5:                           #75507B
+XTerm*color6:                           #059A9A
+XTerm*color7:                           #7E7E7E
+XTerm*color8:                           #707880
+XTerm*color9:                           #EF2929
+XTerm*color10:                          #8AE234
+XTerm*color11:                          #FCE94F
+XTerm*color12:                          #729FCF
+XTerm*color13:                          #AD7FA8
+XTerm*color14:                          #33E2E2
+XTerm*color15:                          #C5C8C6
+#endif
 
-!! Selected widget colors
-#define SELLIT                          #729FCF
-#define SELMID                          #3465A4
-#define SELHVY                          #204A87
-#define SELBG                           SELMID
-#define SELFG                           FG
+#if DARK_MODE_CONTROLLER
+*foreground:                            white
+*background:                            #2D2D2D
+*separatorColor:                        #4C4C4C
+*borderColor:                           #4C4C4C
+*topShadowColor:                        #4C4C4C
+*bottomShadowColor:                     #0A0A0A
+*internalBorderColor:                   #4C4C4C
+*inactiveBackground:                    #2D2D2D
+*inactiveTopShadowColor:                #4C4C4C
+*inactiveBottomShadowColor:             #0A0A0A
+shod.dockBackground:                    #2D2D2D
+shod.dockBorder:                        #4C4C4C
+#else
+*foreground:                            black
+*background:                            #F5F5DC
+*separatorColor:                        #C5C8C6
+*borderColor:                           #C5C8C6
+*topShadowColor:                        #C5C8C6
+*bottomShadowColor:                     #707880
+*internalBorderColor:                   #C5C8C6
+*inactiveBackground:                    #F5F5DC
+*inactiveTopShadowColor:                #C5C8C6
+*inactiveBottomShadowColor:             #707880
+shod.dockBackground:                    #F5F5DC
+shod.dockBorder:                        #C5C8C6
+#endif
 
-!! Common widget colors
-#define WIDLIT                          #737373
-#define WIDMID                          #313131
-#define WIDHVY                          #101010
-#define WIDBG                           WIDMID
-#define WIDFG                           FG
-
-!! Terminal colors
-#define RED0                            #cc0000
-#define RED1                            #ef2929
-#define GREEN0                          #4e9a06
-#define GREEN1                          #8ae234
-#define YELLOW0                         #c4a000
-#define YELLOW1                         #fce94f
-#define BLUE0                           #3465a4
-#define BLUE1                           #729fcf
-#define CYAN0                           #059a9a
-#define CYAN1                           #33e2e2
-#define PURPLE0                         #75507b
-#define PURPLE1                         #ad7fa8
-
-!! Widths in pixels
-#define BUTTONWIDTH                     17
-#define BORDERWIDTH                     6
-
-!! terminal colors
-*color0:                                DARK0
-*color8:                                DARK1
-*color1:                                RED0
-*color9:                                RED1
-*color2:                                GREEN0
-*color10:                               GREEN1
-*color3:                                YELLOW0
-*color11:                               YELLOW1
-*color4:                                BLUE0
-*color12:                               BLUE1
-*color5:                                PURPLE0
-*color13:                               PURPLE1
-*color6:                                CYAN0
-*color14:                               CYAN1
-*color7:                                LIGHT0
-*color15:                               LIGHT1
-
-!! cursors
+!! General widgets
 Xcursor.theme:                          "default"
-
-!! general
-*background:                            BG
-*foreground:                            FG
-*middleShadowColor:                     WIDMID
-*topShadowColor:                        WIDLIT
-*bottomShadowColor:                     WIDHVY
-*selforeground:                         SELFG
-*selbackground:                         SELBG
-*altforeground:                         DARK1
-*altselforeground:                      DARK1
-*cursorColor:                           FG
-*borderColor:                           #000000
-*faceName:                              -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+*menuCursor:                            left_ptr
 *font:                                  -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+*faceName:                              -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+*shadowThickness:                       2
+*highlightThickness:                    1
+*selectColor:                           #3465A4
+*activeBackground:                      #3465A4
+*activeTopShadowColor:                  #729FCF
+*activeBottomShadowColor:               #204A87
+*urgentBackground:                      #CC0000
+*urgentTopShadowColor:                  #EF2929
+*urgentBottomShadowColor:               #A40000
+*scrollTtyOutput:                       True
 
 !! Athena widgets
-! Command:      Regular button (normally rectangular, but I set them as oval)
-! MenuButton:   Button that spawns a menu, similar to Command
-! Toggle:       Button that toggles
-! Radio:        Button that toggles
-! Grip:         Rectangle used to reposition objects (usually Paneds)
-! Paned:        Resizeable container box widget
-! Box:          Fixed-size container box widget?
-! Form:         Automatic-size container box widget?
-! Label:        String container
-! SimpleMenu:   Menu
-! ScrollBar:    Scroll bar
-*shadowWidth:                           2
-*shapeStyle:                            oval
-*Command.highlightThickness:            1
-*Command.background:                    WIDHVY
-*MenuButton.background:                 WIDHVY
-*Toggle.background:                     WIDHVY
-*Radio.background:                      WIDHVY
-*Grip.foreground:                       WIDHVY
-*Grip.background:                       WIDHVY
-*Grip.borderColor:                      WIDLIT
-*Grip.height:                           5
-*Grip.width:                            5
-*Grip.borderWidth:                      1
-*Text.background:                       BG
-*displayList:                           foreground gray30;\
-                                        draw-lines +1,-1,-1,-1,-1,+1;\
-                                        foreground gray85;\
-                                        draw-lines -1,+0,+0,+0,+0,-1
-*Paned.cursor:                          left_ptr
-*Paned.betweenCursor:                   left_ptr
-*Paned.verticalGripCursor:              sb_v_double_arrow
-*Paned.verticalBetweenCursor:           sb_v_double_arrow
-*Paned.upperCursor:                     sb_v_double_arrow
-*Paned.lowerCursor:                     sb_v_double_arrow
-*Paned.horizontalGripCursor:            sb_h_double_arrow
-*Paned.horizontalBetweenCursor:         sb_h_double_arrow
-*Paned.rightCursor:                     sb_h_double_arrow
-*Paned.leftCursor:                      sb_h_double_arrow
-*Paned.internalBorderColor:             WIDLIT
-*Paned.background:                      WIDHVY
-*Box.background:                        WIDHVY
-*Form.background:                       WIDHVY
-*Label.background:                      WIDHVY
-*Label.justify:                         right
+#define SHADOW_3D                       foreground gray30;draw-lines +1,-1,-1,-1,-1,+1;\
+                                        foreground gray85;draw-lines -1,+0,+0,+0,+0,-1
+*Command.displayList:                   SHADOW_3D
+*Toggle.displayList:                    SHADOW_3D
+*Radio.displayList:                     SHADOW_3D
+*MenuButton.displayList:                SHADOW_3D
+*Repeater.displayList:                  SHADOW_3D
+*Paned*borderWidth:                     0
+*Form*borderWidth:                      0
+*Box*borderWidth:                       0
+*Paned*showGrip:                        False
+*Scrollbar.thickness:                   17
 *Scrollbar.scrollBar:                   True
-*Scrollbar.scrollTtyOutput:             False
 *Scrollbar.scrollKey:                   True
-*Scrollbar.background:                  WIDHVY
-*Scrollbar.foreground:                  WIDLIT
-*Scrollbar.thickness:                   BUTTONWIDTH
 *Scrollbar.scrollDCursor:               left_ptr
 *Scrollbar.scrollHCursor:               left_ptr
 *Scrollbar.scrollLCursor:               left_ptr
@@ -140,15 +128,25 @@ Xcursor.theme:                          "default"
                                         <Btn1Motion>:   MoveThumb() NotifyThumb() \n\
                                         <Btn1Up>:       EndScroll()
 
-!! Use XFT on Motif widgets
-*renderTable:                           mono
+!! Motif widgets
+*renderTable:                           variable
+*renderTable.variable.fontName:         FreeSans
+*renderTable.variable.fontSize:         10
+*renderTable.variable.fontType:         FONT_IS_XFT
 *renderTable.mono.fontName:             InputMonoNarrow
 *renderTable.mono.fontSize:             9
 *renderTable.mono.fontStyle:            Regular
 *renderTable.mono.fontType:             FONT_IS_XFT
-
-!! Motif widgets
-*shadowThickness:                       2
+*enableBtn1Transfer:                    button2_adjust
+*enableButtonTab:                       True
+*enableMenuInCascade:                   True
+*enableDefaultButton:                   True
+*enableEtchedInMenu:                    True
+*enableToggleColor:                     True
+*enableToggleVisual:                    True
+*enableThinThickness:                   True
+*enableMultiKeyBindings:                False
+*enableDragIcon:                        False
 *tearOffModel:                          TEAR_OFF_ENABLED
 *XmPushButton.navigationType:           TAB_GROUP
 *XmToggleButton.navigationType:         TAB_GROUP
@@ -156,26 +154,9 @@ Xcursor.theme:                          "default"
 *XmToggleButton.indicatorType:          ONE_OF_MANY_ROUND
 *XmToggleButtonGadget.indicatorOn:      INDICATOR_CHECK_BOX
 *XmToggleButtonGadget.indicatorType:    ONE_OF_MANY_ROUND
-*ApplicationShell*background:           WIDMID
-*ApplicationShell*topShadowColor:       WIDLIT
-*ApplicationShell*bottomShadowColor:    WIDHVY
-*XmMainWindow*background:               WIDMID
-*XmMainWindow*topShadowColor:           WIDLIT
-*XmMainWindow*bottomShadowColor:        WIDHVY
-*XmText.background:                     BG
-*XmText.foreground:                     FG
-*XmTextField.background:                BG
-*XmTextField.foreground:                FG
-*XmDrawingArea.background:              BG
-*XmDrawingArea.foreground:              FG
-*XmList.background:                     BG
-*XmList.foreground:                     FG
 *XmScrollBar*sliderMark:                round_mark
 *XmScrollBar*showArrows:                None
 *XmSash.traversalOn:                    False
-
-!! Motif widgets
-! (the resources below were not tested, I may edit them later)
 *XmList.baseTranslations:       #augment \n\
                                 <Btn5Down>: ListNextPage() \n\
                                 <Btn4Down>: ListPrevPage()
@@ -223,31 +204,31 @@ Xcursor.theme:                          "default"
                                 Ctrl<Key>f:     forward-character()\n\
                                 Ctrl<Key>w:     delete-previous-word()
 
-!! XLogo
-XLogo*background:                       BG
-XLogo*foreground:                       RED1
+NetHack*textSink*background:            Red
+NetHack*double_tile_size:               True
+NetHack*message_line:                   True
+NetHack*message_lines:                  5
+NetHack*autofocus:                      True
+NetHack*slow:                           True
+NetHack*tombstone:                      rip.xpm
+NetHack*map*rows:                       10
+NetHack*map*columns:                    20
 
-!! xterm resources
-XTerm*allowBoldFonts:                   false
-XTerm*font:                             -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
-XTerm*boldFont:                         -misc-tadepe-bold-r-normal--16-150-75-75-C-80-ISO10646-1
-XTerm*font6:                            -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
-XTerm*boldFont6:                        -misc-tadepe-medium-r-normal--32-320-72-72-C-160-ISO10646-1
+XTerm*allowBoldFonts:                   False
 XTerm*faceName:
-!XTerm*faceName:                         Input Mono-12
-XTerm*background:                       FloralWhite
-XTerm*foreground:                       Black
-XTerm*cursorColor:                      Black
 XTerm*cursorBar:                        True
 XTerm*cursorBlink:                      True
 XTerm*locale:                           UTF-8
 XTerm*termName:                         xterm-256color
 XTerm*visualBell:                       False
-XTerm*bellIsUrgent:                     True
+XTerm*bellIsUrgent:                     False
 XTerm*scrollBar:                        False
 XTerm*rightScrollBar:                   True
 XTerm*allowMouseOps:                    True
 XTerm*forceBoxChars:                    False
+XTerm*backarrowKeyIsErase:              True
+XTerm*deleteIsDEL:                      True
+XTerm*precompose:                       False
 XTerm*internalBorder:                   5
 XTerm*charClass:                        33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 XTerm*eightBitInput:                    False
@@ -265,138 +246,16 @@ XTerm.vt100.translations:               #override \
                                         Shift<Key>Up:   scroll-back(1, line) \n\
                                         Shift<Key>Down: scroll-forw(1, line)
 
-
-!! xterm for presentation
-xterm2*faceName:                        Input Mono-20
-xterm2*background:                      #FFFFAA
-xterm2*foreground:                      #000000
-xterm2*cursorColor:                     #000000
-
-!! XCalc
-! Works on default OpenBSD XCalc, which has more buttons than the
-! default GNU/Linux XCalc.
-XCalc*geometry: 350x460
-XCalc*font:                             -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
-XCalc.ti.background:                    BG
-XCalc.ti.bevel.background:              DARK
-XCalc.ti.bevel.screen.borderColor:      DARK
-XCalc.ti.bevel.screen.background:       DARK
-XCalc.ti.bevel.screen.DEC.background:   DARK
-XCalc.ti.bevel.screen.DEC.foreground:   FG
-XCalc.ti.bevel.screen.DEG.background:   DARK
-XCalc.ti.bevel.screen.DEG.foreground:   FG
-XCalc.ti.bevel.screen.GRAD.background:  DARK
-XCalc.ti.bevel.screen.GRAD.foreground:  FG
-XCalc.ti.bevel.screen.RAD.background:   DARK
-XCalc.ti.bevel.screen.RAD.foreground:   FG
-XCalc.ti.bevel.screen.INV.background:   DARK
-XCalc.ti.bevel.screen.INV.foreground:   FG
-XCalc.ti.bevel.screen.LCD.background:   DARK
-XCalc.ti.bevel.screen.LCD.foreground:   FG
-XCalc.ti.bevel.screen.LCD.shadowWidth:  0
-XCalc.ti.bevel.screen.M.background:     DARK
-XCalc.ti.bevel.screen.M.foreground:     FG
-XCalc.ti.bevel.screen.P.background:     DARK
-XCalc.ti.bevel.screen.P.foreground:     FG
-XCalc.ti.Command.foreground:            FG
-XCalc.ti.Command.background:            DARK1
-XCalc.ti.button5.background:            BLUE1
-XCalc.ti.button35.background:           RED1
-XCalc.ti.button40.background:           RED1
-XCalc.ti.button45.background:           RED1
-XCalc.ti.button50.background:           RED1
-XCalc.ti.button55.background:           RED1
-XCalc.ti.button37.background:           DARK1
-XCalc.ti.button38.background:           DARK1
-XCalc.ti.button39.background:           DARK1
-XCalc.ti.button42.background:           DARK1
-XCalc.ti.button43.background:           DARK1
-XCalc.ti.button44.background:           DARK1
-XCalc.ti.button47.background:           DARK1
-XCalc.ti.button48.background:           DARK1
-XCalc.ti.button49.background:           DARK1
-XCalc.ti.button52.background:           DARK1
-XCalc*Cursor:                           hand2
-
-!! XClock
-XClock*update:                          1
 XClock*face:                            Pixel LCD7:size=10
 XClock*analog:                          False
+XClock*brief:                           True
 XClock*buffer:                          True
 XClock*render:                          True
-!XClock*geometry:                        210x210+1020+12
-!XClock*render:                          1
-!XClock*majorColor:                      rgba:f0/f0/19/7b
-!XClock*minorColor:                      rgba:a0/c0/f0/c0
-!XClock*hourColor:                       rgba:c9/66/11/72
-!XClock*minuteColor:                     rgba:00/82/9f/72
-!XClock*secondColor:                     rgba:50/93/30/6f
 
-!! shod
-*activeBackground:                      SELMID
-*activeTopShadowColor:                  SELLIT
-*activeBottomShadowColor:               SELHVY
-*inactiveBackground:                    WIDMID
-*inactiveTopShadowColor:                WIDLIT
-*inactiveBottomShadowColor:             WIDHVY
-*urgentBackground:                      #CC0000
-*urgentTopShadowColor:                  #EF2929
-*urgentBottomShadowColor:               #A40000
-shod.dockBackground:                    WIDMID
-shod.dockBorder:                        WIDLIT
-shod.borderWidth:                       8
-!shod.notifGap:                          3
-!shod.notifGravity:                      NE
-!shod.shadowThickness:                   2
-!shod.snapProximity:                     8
-!shod.title.font:                        fixed
-!shod.title.foreground:                  FG
-!shod.titleWidth:                        17
-shod.WMLaunchButton*dockpos:            1
-shod.WMLaunchButton*state:              shrunk, resized
-shod.CtrlMenu*dockpos:                  2
-shod.CtrlMenu*state:                    shrunk,resized
-shod.Paginator*dockpos:                 3
-shod.Paginator*state:                   shrunk,resized
-shod.Taskinator*dockpos:                4
-shod.Taskinator*state:                  extend,resized
-shod.wmapm*dockpos:                     5
-shod.WMPDArt*dockpos:                   6
-shod.mpv.dockplayer*type:               dockapp
-shod.mpv.dockplayer*dockpos:            6
-shod.bubblemon*dockpos:                 7
-!shod.XLoad*dockpos:                     7
-!shod.XLoad*type:                        dockapp
-!shod.XLoad*state:                       shrunk,resized
-shod.WMClock*dockpos:                   9
-shod.XClock*dockpos:                    6
-shod.XClock*type:                       dockapp
-shod.XClock*state:                      shrunk,resized
-shod.XBattmon*dockpos:                  8
-shod.XBattmon*type:                     dockapp
-shod.XBattmon*state:                    shrunk,resized
-shod.dockSpace:                         64
-shod.dockWidth:                         65
-shod.dockGravity:                       EF
-shod.numOfDesktops:                     5
-
-!! Paginator
-taskinator.background:                  WIDMID
-taskinator.foreground:                  FG
-taskinator.activeBackground:            SELMID
-taskinator.activeTopShadowColor:        SELLIT
-taskinator.activeBottomShadowColor:     SELHVY
-taskinator.inactiveBackground:          WIDMID
-taskinator.inactiveTopShadowColor:      WIDLIT
-taskinator.inactiveBottomShadowColor:   WIDHVY
-
-!! Paginator
-Paginator.desktopBackground:            WIDMID
-Paginator.activeDesktopBackground:      DARK1
+Paginator.desktopBackground:            #2D2D2D
+Paginator.activeDesktopBackground:      Gray23
 Paginator.frameShadowThickness:         0
-Paginator.separatorColor:               WIDLIT
 
-!! XNotify
 XNotify.geometry:                       230x0
 XNotify.imageWidth:                     64
 XNotify.padding:                        8
@@ -407,32 +266,7 @@ XNotify.shrink:                         true
 XNotify.wrap:                           true
 XNotify.opacity:                        0.8
 
-!! CtrlMenu
-ctrlmenu*alignment:                     ALIGN_LEFT
-ctrlmenu*background:                    WIDMID
-
-!! Pmenu
-pmenu.background:                       BG
-pmenu.foreground:                       FG
-pmenu.selbackground:                    SELMID
-pmenu.selforeground:                    SELFG
-pmenu.border:                           WIDLIT
-pmenu.separator:                        WIDLIT
-
-!! xv
-xv*background:                          #b2c0dc
-xv*foreground:                          #000000
-
-!! xpdf
-xpdf.geometry:                          650x820
-xpdf.fullscreen:                        True
-xpdf.fullscreenMode:                    True
-xpdf*background:                        WIDMID
-xpdf*topShadowColor:                    WIDLIT
-xpdf*bottomShadowColor:                 WIDHVY
-
-!! XFiles
-!XFiles.enableStatusBar:                 FALSE
+XFiles.enableStatusBar:                 False
 XFiles.background:                      BG
 XFiles.opacity:                         0.8
 XFiles.fileIcons:                       \n\
@@ -453,7 +287,28 @@ XFiles.fileIcons:                       \n\
 	~/var/=database_dir\n\
 	~/vid/=videos_dir
 
-!! XFilter
-xfilter.background:                     BG
-xfilter.geometry:                       800x30
-xfilter.font:                           monospace:size=12
+shod.borderWidth:                       8
+shod.WMLaunchButton*dockpos:            1
+shod.WMLaunchButton*state:              shrunk,resized
+shod.CtrlMenu*dockpos:                  2
+shod.CtrlMenu*state:                    shrunk,resized
+shod.Paginator*dockpos:                 3
+shod.Paginator*state:                   shrunk,resized
+shod.Taskinator*dockpos:                4
+shod.Taskinator*state:                  extend,resized
+shod.wmapm*dockpos:                     5
+shod.WMPDArt*dockpos:                   6
+shod.mpv.dockplayer*type:               dockapp
+shod.mpv.dockplayer*dockpos:            6
+shod.bubblemon*dockpos:                 7
+shod.WMClock*dockpos:                   9
+shod.XClock*dockpos:                    6
+shod.XClock*type:                       dockapp
+shod.XClock*state:                      shrunk,resized
+shod.XBattmon*dockpos:                  8
+shod.XBattmon*type:                     dockapp
+shod.XBattmon*state:                    shrunk,resized
+shod.dockSpace:                         64
+shod.dockWidth:                         65
+shod.dockGravity:                       EF
+shod.numOfDesktops:                     5
