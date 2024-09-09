@@ -111,6 +111,7 @@ Xcursor.theme:                          "default"
 *Radio.displayList:                     SHADOW_3D
 *MenuButton.displayList:                SHADOW_3D
 *Repeater.displayList:                  SHADOW_3D
+*SimpleMenu.displayList:                SHADOW_3D
 *Paned*borderWidth:                     0
 *Form*borderWidth:                      0
 *Box*borderWidth:                       0
@@ -124,9 +125,13 @@ Xcursor.theme:                          "default"
 *Scrollbar.scrollRCursor:               left_ptr
 *Scrollbar.scrollUCursor:               left_ptr
 *Scrollbar.scrollVCursor:               left_ptr
-*Scrollbar.translations:                <Btn1Down>:     StartScroll(Forward) \n\
+*Scrollbar.translations:                <Btn4Down>:     StartScroll(Backward) \n\
+                                        <Btn5Down>:     StartScroll(Forward) \n\
+                                        <Btn1Down>:     StartScroll(Continuous) \n\
                                         <Btn1Motion>:   MoveThumb() NotifyThumb() \n\
-                                        <Btn1Up>:       EndScroll()
+                                        <BtnUp>:        NotifyScroll(Proportional) EndScroll()
+*Viewport.useBottom:                    True
+*Viewport.useRight:                     True
 
 !! Motif widgets
 *renderTable:                           variable
@@ -204,6 +209,11 @@ Xcursor.theme:                          "default"
                                 Ctrl<Key>f:     forward-character()\n\
                                 Ctrl<Key>w:     delete-previous-word()
 
+NetHack*background:                     White
+NetHack*foreground:                     Black
+NetHack*fancy_status*background:        Wheat
+NetHack*fancy_status.status_attributes*background:      Beige
+NetHack*status_info*foreground:         Sienna
 NetHack*textSink*background:            Red
 NetHack*double_tile_size:               True
 NetHack*message_line:                   True
@@ -259,15 +269,13 @@ Paginator.frameShadowThickness:         0
 XNotify.geometry:                       230x0
 XNotify.imageWidth:                     64
 XNotify.padding:                        8
-XNotify.background:                     BG
-XNotify.foreground:                     FG
 XNotify.alignment:                      left
 XNotify.shrink:                         true
 XNotify.wrap:                           true
 XNotify.opacity:                        0.8
 
 XFiles.enableStatusBar:                 False
-XFiles.background:                      BG
+XFiles.background:                      Gray5
 XFiles.opacity:                         0.8
 XFiles.fileIcons:                       \n\
 	*.c=code\n\

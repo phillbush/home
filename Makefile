@@ -39,6 +39,7 @@ MANS = \
 	${MANDIR}/man8/rember.8
 
 BINS = \
+	${BINDIR}/cmpdir \
 	${BINDIR}/fetchnews \
 	${BINDIR}/focus \
 	${BINDIR}/img \

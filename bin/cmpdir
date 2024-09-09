@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Usage: cmpdir DIR1 DIR2
+# Compares the file hierarchy rooted in DIR1 with the one rooted in DIR2.
+# Depends on BSD's mtree(1).
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+usage() {
+	printf "usage: %s DIR1 DIR2\n" "${0##*/}" >&2
+	exit 2
+}
+
+test "$#" -eq 2 || usage
+mtree -c -k cksum -p "$1" | mtree -p "$2"

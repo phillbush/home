@@ -102,7 +102,7 @@ colorize() {
 	test "$#" -eq 0 && return
 	if test -t 1 && test -t 2
 	then
-		"$@" 2>&1 >/dev/tty | awk -v cmd="$1" '
+		"$@" 2>&1 | awk -v cmd="$1" '
 		BEGIN {
 			REVERSE = "\x1b[7m"
 			RED = "\x1b[31m"
@@ -221,6 +221,7 @@ alias ls='ls -1Fh'
 alias lc='ls -C'
 alias ll='ls -l'
 alias calc='bc -l'
+alias diff='diff -up'
 
 # commands with command as argument (for futher alias expension)
 alias xargs='tr "\n" "\0" | xargs -0 '

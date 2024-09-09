@@ -37,7 +37,7 @@ run        with     shodc -- %file
 rules      for      music playlist
 path       matches  $HOME/mus/.*
 extension  imatches m3u
-open       with     sh -c 'mpc clear && mpc load "$@" && mpc play' plumb %path
+open       with     sh -c 'mpc clear && mpc load "$@" && mpc shuffle && mpc play' plumb %path
 
 rules      for      playlist
 extension  imatches m3u

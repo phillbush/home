@@ -64,7 +64,7 @@ export TROFFONTS="/usr/local/share/fonts/freefont:/usr/local/share/fonts/linuxli
 export GTK_IM_MODULE="xim"
 
 # Nethack
-export NETHACKOPTIONS="windowtype:X11,name:matador,!autopickup,color,lit_corridor,hilite_pet,hilite_pile,herecmd_menu,hitpointbar,menucolors,clicklook,extmenu,mouse_support,showexp"
+export NETHACKOPTIONS="windowtype:X11,name:matador,!autopickup,color,lit_corridor,hilite_pet,hilite_pile,herecmd_menu,hitpointbar,menucolors,clicklook,extmenu,mouse_support,showexp,pettype=dog"
 
 # no dbus
 export DBUS_SESSION_BUS_ADDRESS=no

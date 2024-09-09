@@ -8,3 +8,8 @@ replaygain_preamp "0"
 replaygain_missing_preamp "0"
 volume_normalization "yes"
 filesystem_charset "UTF-8"
+audio_output {
+	type		"sndio"
+	name		"sndio output"
+	mixer_type	"hardware"
+}

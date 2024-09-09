@@ -52,11 +52,6 @@ mpd
 # clipboard manager
 xclipd &
 
-# set up volume, monitor light, etc
-sndioctl output.level=1
-sndioctl app/mpd0.level=0.6
-#xbacklight -steps 1 -time 0 -set 70
-
 # window manager
 exec shod -d - <<-EOF
 	# menu system
