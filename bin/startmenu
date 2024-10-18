@@ -7,14 +7,11 @@
 # © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
-cmd="$(pmenu <<-EOF
-	files	xfiles "$HOME"
-	mail	xterm -e mutt
-	scrot	maim -s -- "$HOME/tmp/scrot.png"
-	xterm	termdraw
-	chat	focus hexchat
-	meme	meme
-	EOF
-)"
-
-sh -c "exec $cmd" &
+pmenu <<EOF | sh &
+files	exec xfiles "$HOME"
+mail	exec xterm -geometry 140x40 -e mutt
+scrot	exec maim -s -- "$HOME/tmp/scrot.png"
+xterm	exec termdraw
+chat	exec focus hexchat
+meme	exec meme
+EOF

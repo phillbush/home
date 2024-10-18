@@ -7,7 +7,7 @@
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
 usage() {
-	printf "usage: %s [-dfx | -COUNT] FILE ...\n" "${0##*/}" >&2
+	printf "usage: %s [-dfx] [-n COUNT] FILE ...\n" "${0##*/}" >&2
 	exit 2
 }
 

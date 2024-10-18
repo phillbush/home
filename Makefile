@@ -40,6 +40,7 @@ MANS = \
 
 BINS = \
 	${BINDIR}/cmpdir \
+	${BINDIR}/fetchmail \
 	${BINDIR}/fetchnews \
 	${BINDIR}/focus \
 	${BINDIR}/img \
@@ -49,6 +50,7 @@ BINS = \
 	${BINDIR}/samedir \
 	${BINDIR}/save \
 	${BINDIR}/searchcode \
+	${BINDIR}/sendmail \
 	${BINDIR}/shodmenu \
 	${BINDIR}/startmenu \
 	${BINDIR}/termdraw \
@@ -59,14 +61,32 @@ BINS = \
 	${BINDIR}/xfilesctl \
 	${BINDIR}/xman
 
+INCS = \
+	/usr/include/crypto/*.h \
+	/usr/include/net/*.h \
+	/usr/include/dev/*.h \
+	/usr/include/dev/*/*.h \
+	/usr/include/sys/*.h \
+	/usr/include/amd64/* \
+	/usr/X11R6/include/*.h \
+	/usr/X11R6/include/*/*.h \
+	/usr/X11R6/include/X11/*/*.h \
+	/usr/X11R6/include/freetype2/*/*.h \
+	/usr/include/*.h
+
 all:
 	@echo no need to build
 
-install: dir man bin lib ico cron
-.PHONY:  dir man bin lib ico cron all install
+install: dir man bin lib ico cron tags
+.PHONY:  dir man bin lib ico cron tags all install
 
 cron: lib/crontab
 	@crontab -l | cmp - lib/crontab >/dev/null || ( set -x ; crontab lib/crontab )
+
+tags: ${HOME}/.tags
+${HOME}/.tags: ${INCS}
+	@echo generate ctags: $@
+	@ctags -d -f $@ ${INCS} 1>/dev/null 2>/dev/null
 
 dir: ${DIRS}
 ${DIRS}: $@

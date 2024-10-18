@@ -9,58 +9,22 @@
 action=
 exitval=0
 
-usage() {
-	printf "usage: %s [-abfin] file...\n" "${0##*/}" >&2
-	exit 2
-}
-
-warn() {
-	fmt="$1"
-	shift
-	printf "%s: $fmt\n" "${0##*/}" "$@" >&2
-}
-
-isvalid() {
-	case "$1" in
-	(""|[[:space:]]*|*[[:space:]])
-		false
-		;;
-	(*)
-		true
-	;;
-	esac
-}
-
-genpath() {
-	basename="${1##*/}"
-	dirname="${1%"$basename"}"
-	body="${basename%.*}"
-	ext="${basename##"$body"}"
-	unset -v i p
-	while test -e "$dirname$body$p$i$ext"
-	do
-		p="_"
-		if test -z "$i"
-		then
-			i=1
-		else
-			i="$((i + 1))"
-		fi
-	done
-	printf "%s" "$dirname$body$p$i$ext"
-}
-
 while getopts abfin opt
 do case "$opt" in
 ([abfin])
 	action="$opt"
 	;;
 (*)
-	usage
+	set --
+	break
 	;;
 esac done
 shift "$((OPTIND - 1))"
-test "$#" -eq 0 && usage
+if test "$#" -eq 0
+then
+	echo "usage: save [-abfin] file..." >&2
+	exit 2
+fi
 
 temp="$(mktemp -p "$(dirname "$1")")" || exit
 trap 'rm -f -- "$temp"' EXIT
@@ -70,18 +34,39 @@ for file
 do
 	shift
 
-	if ! isvalid "$file"
-	then
-		warn "%s: improper file name" "$file"
+	case "$file" in
+	(""|[[:space:]]*|*[[:space:]])
+		printf "save: %s: Invalid argument\n" "$file" >&2
 		exitval=1
-	fi
+		continue
+		;;
+	esac
+
+	unique="$(
+		basename="${1##*/}"
+		dirname="${1%"$basename"}"
+		body="${basename%.*}"
+		ext="${basename##"$body"}"
+		unset -v i p
+		while test -e "$dirname$body$p$i$ext"
+		do
+			p="_"
+			if test -z "$i"
+			then
+				i=1
+			else
+				i="$((i + 1))"
+			fi
+		done
+		printf "%s" "$dirname$body$p$i$ext"
+	)"
 
 	if test -e "$file"
 	then
 		ans="$action"
 		if test -z "$action"
 		then
-			warn "%s: File exists" "$file"
+			printf "save: %s: File exists\n" "$file" >&2
 			exitval=1
 			continue
 		elif test "$action" = "i"
@@ -100,7 +85,7 @@ do
 			;;
 		(b)
 			# backup existing file
-			mv -- "$file" "$(genpath "$file")" || exit
+			mv -- "$file" "$unique" || exit
 			;;
 		(f)
 			# overwrite existing file
@@ -108,7 +93,7 @@ do
 			;;
 		(n)
 			# save as new file, if exists
-			file="$(genpath "$file")"
+			file="$unique"
 			;;
 		(?)
 			continue

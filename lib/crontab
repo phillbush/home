@@ -1,4 +1,6 @@
 SHELL=/bin/sh
 PATH=/bin:/usr/bin:/usr/local/bin
 
-30	*/4	*	*	*	-ns /usr/home/bin/fetchnews
+#0	*/3	*	*	*	-ns /usr/home/bin/fetchnews
+#20	*/3	*	*	*	-ns /usr/home/bin/fetchmail
+#40	*/3	*	*	*	-ns /usr/home/bin/fetchmail Messages "$HOME/var/log"

@@ -116,13 +116,13 @@ app() {
 	case "$class" in
 	(XFiles)
 		cat <<-EOF
-		IMG:star.xpm	Open Random File	xfiles:random
+		Open Random File	xfiles:random
 		:
-		IMG:arrow-up.xpm	Go to Parent		xfiles:up
-		IMG:home.xpm		Go to Home		xfiles:home
-		IMG:arrow-left.xpm	Go to Previous Location	xfiles:prev
-		IMG:arrow-right.xpm	Go to Next Location	xfiles:next
-		IMG:trash.xpm	$(
+		Go to Parent		xfiles:up
+		Go to Home		xfiles:home
+		Go to Previous Location	xfiles:prev
+		Go to Next Location	xfiles:next
+		$(
 			case "$PWD" in
 			("$TRASH/files")
 				printf 'Empty Trash\txfiles:empty'
@@ -140,22 +140,22 @@ app() {
 
 class="$(xprop -notype -id "$WINDOWID" WM_CLASS | sed 's/^.*, "//;s/"$//')"
 exec xmenu -fp "$WINDOWPOS" -t "$WINDOWID" "$@" "${class:-Window} menu" <<EOF | run
-IMG:term.xpm			Open Terminal	term
-IMG:folder.xpm			Open File Browser	xfiles
+Open Terminal	term
+Open File Browser	xfiles
 $(app)
-IMG:window-stick.xpm		Stick		state:y
-IMG:window-shade.xpm		Shade		state:s
-IMG:window-minimize.xpm		Minimize	state:m
-IMG:window-maximize.xpm		Maximize	state:M
-IMG:window-fullscreen.xpm	Fullscreen	state:f
-IMG:window-above.xpm		Above		state:a
-IMG:window-below.xpm		Below		state:b
-IMG:desktop.xpm			Send To
+Stick		state:y
+Shade		state:s
+Minimize	state:m
+Maximize	state:M
+Fullscreen	state:f
+Above		state:a
+Below		state:b
+Send To
 	Desktop 1				sendto:1
 	Desktop 2				sendto:2
 	Desktop 3				sendto:3
 	Desktop 4				sendto:4
 	Desktop 5				sendto:5
 
-IMG:window-close.xpm		Close		close
+Close		close
 EOF

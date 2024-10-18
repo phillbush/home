@@ -47,7 +47,7 @@ picom \
 	--crop-shadow-to-monitor &
 
 # music daemon
-mpd
+pgrep -f '^mpd$' || mpd
 
 # clipboard manager
 xclipd &

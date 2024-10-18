@@ -52,7 +52,34 @@ Login class for higher resources usage.
 .El
 .Pp
 .Pa /etc/doas.conf :
-.Dl permit persist keepenv :wheel
+.Bd -literal
+## Allow wheel by default:
+permit persist setenv { \
+	-DISPLAY -ENV PATH PAGER LESS EDITOR VISUAL \
+} :wheel
+
+## Separate privileges when fetching/building ports:
+permit keepenv nopass :wsrc as _pfetch
+permit keepenv nopass :wobj as _pbuild
+.Ed
+.Pp
+.Bd -literal
+FETCH_PACKAGES =	-Dsnap
+
+## Cache compiled objects for faster recompilation (requires devel/ccache):
+USE_CCACHE =	Yes
+
+## Build ports as ${BUILD_USER} and fetch distfiles as ${FETCH_USER}
+PORTS_PRIVSEP =	Yes
+#SUDO =		/usr/bin/doas
+
+## Set additional warning flags when compiling:
+WARNINGS =	Yes
+#CDIAGFLAGS =	-Wall -Wpointer-arith -Wuninitialized -Wstrict-prototypes \
+#		-Wmissing-prototypes -Wunused -Wsign-compare -Wshadow
+
+.include "/usr/ports/infrastructure/templates/mk.conf.template"
+.Ed
 .Pp
 Installed packages:
 .Bd -literal
@@ -81,9 +108,11 @@ heirloom-doctools       qemu
 .Bd -literal -offset indent
 apmd_flags=-L -z 15
 dhcpd_flags=
-httpd_flags=
+pkg_scripts=mpd
 sndiod_flags=-s default -m play,rec,mon -s mon
 sshd_flags=NO
+unwind_flags=
+vmd_flags=
 xenodm_flags=
 .Ed
 .Pp
@@ -206,7 +235,7 @@ interface and the wireless
 .Xr iwn 4
 interfaces on a
 .Xr trunk 4
-failover interface which connects to the first one which is available.
+failover interface which connects to whichever is available.
 I also create a
 .Xr vether 4
 virtual network for connecting with virtual machines,
@@ -250,13 +279,13 @@ up
 .Pp
 .Pa /etc/hostname.bridge0 :
 .Bd -literal -offset indent
-add trunk0
+add vether0
 up
 .Ed
 .Pp
 .Pa /etc/hostname.bridge1 :
 .Bd -literal -offset indent
-add vether0
+add trunk0
 up
 .Ed
 .Pp
@@ -268,7 +297,44 @@ net.inet6.ip6.forwarding=1
 .Pp
 .Pa /etc/pf.conf :
 .Bd -literal -offset indent
+set block-policy drop
+set skip on lo
+
+# sanitize incoming packets
+match in all scrub (no-df random-id max-mss 1440)
+antispoof quick for egress
+
+# block all incomming traffic
+block all
+pass out all
+
+# allow ICMP (ping) for MTU discovery
+pass in proto icmp
+
+# Port build user does not need network
+block out log proto {tcp udp} user _pbuild
+
+# VMs can talk to the Internet
 match out on egress from vether0:network to any nat-to (egress)
+.Ed
+.Pp
+.Pa /etc/unwind.conf :
+.Bd -literal -offset indent
+forwarder { 194.242.2.4 DoT }
+preference { DoT }
+.Ed
+.Pp
+.Pa /etc/dhcpd.conf :
+.Bd -literal -offset indent
+# vether(4) subnet; used for virtual machines
+# Network:	10.0.0.0/24
+# Addresses:	10.0.0.64 ~ 10.0.0.127
+# Router:	10.0.0.1
+# Name server:	10.0.0.1
+subnet 10.0.0.0 netmask 255.255.255.0 {
+	range 10.0.0.128 10.0.0.254;
+	option routers 10.0.0.1;
+}
 .Ed
 .Sh ENVIRONMENT
 The following environment variables are set by the

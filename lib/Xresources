@@ -10,9 +10,11 @@
 *XmDrawingArea.foreground:              White
 *XmList.background:                     Gray5
 *XmList.foreground:                     White
+XConsole*background:                    Gray5
+XConsole*foreground:                    White
 XTerm*background:                       Gray5
 XTerm*foreground:                       White
-XTerm*cursorColor:                      White
+*cursorColor:                           #EF2929
 XTerm*color0:                           #C5C8C6
 XTerm*color1:                           #EF2929
 XTerm*color2:                           #8AE234
@@ -38,9 +40,11 @@ XTerm*color15:                          #232323
 *XmDrawingArea.foreground:              Black
 *XmList.background:                     FloralWhite
 *XmList.foreground:                     Black
+XConsole*background:                    FloralWhite
+XConsole*foreground:                    Black
 XTerm*background:                       FloralWhite
 XTerm*foreground:                       Black
-XTerm*cursorColor:                      Black
+*cursorColor:                           #CC0000
 XTerm*color0:                           #232323
 XTerm*color1:                           #CC0000
 XTerm*color2:                           #4E9A06
@@ -253,8 +257,12 @@ XTerm.vt100.translations:               #override \
                                         Ctrl<Key>0:     set-vt-font(d) \n\
                                         <Key>Prior:     scroll-back(1, halfpage) \n\
                                         <Key>Next:      scroll-forw(1, halfpage) \n\
-                                        Shift<Key>Up:   scroll-back(1, line) \n\
-                                        Shift<Key>Down: scroll-forw(1, line)
+                                        Shift<Key>Home: scroll-to(begin) \n\
+                                        Shift<Key>End:  scroll-to(end) \n\
+                                        ~Ctrl<Key>Up:   scroll-back(1, line) \n\
+                                        ~Ctrl<Key>Down: scroll-forw(1, line) \n\
+                                        Ctrl<Key>Up:    string("OA") \n\
+                                        Ctrl<Key>Down:  string("OB")
 
 XClock*face:                            Pixel LCD7:size=10
 XClock*analog:                          False

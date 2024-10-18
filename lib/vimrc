@@ -18,8 +18,8 @@ if (!empty($CACHEDIR))
 	set backupdir=$CACHEDIR/vim/backup
 	set undodir=$CACHEDIR/vim/undo
 	set viminfo+=n$CACHEDIR/vim/viminfo
+	set undofile backup writebackup
 endif
-set undofile backup writebackup
 set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
 autocmd BufNewFile,BufReadPre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/* setlocal noswapfile noundofile viminfo=
 
@@ -43,6 +43,9 @@ set nowrap
 set showmatch                           " highlight matching brackets
 set showbreak=↳\                        " what to display when wrapping
 set list listchars=tab:.\ ,trail:.      " display unprintable characters
+
+"" tags
+set tags=./tags,tags,~/.tags
 
 "" automatic text formating and indention
 set nocopyindent noautoindent nopreserveindent
@@ -76,7 +79,7 @@ command Q q
 
 "" complation and behavior of <Tab> in insert mode
 set path=.,/usr/include,/usr/X11R6/include,/usr/local/include,,
-set completeopt=menuone complete=.,k,t,i,d
+set completeopt=menuone complete=.,k,i,d
 function! TabWrapper()
 	let col  = virtcol('.') - 1
 	let end = charcol('.') - 1
@@ -135,23 +138,6 @@ function! MdFolding(lnum)
 	endif
 	return '='
 endfunction
-function! CFolding(lnum)
-	let curline = getline(a:lnum)
-	let prevlvl = foldlevel(a:lnum - 1)
-	if prevlvl < 0
-		let prevlvl = 0
-	endif
-
-	if curline =~# '^}.*{$'         | return '='
-	elseif curline =~# '^%%$'       | return '>1'
-	elseif curline =~# '^%\?}'      | return 's' . 1
-	elseif (curline =~# '^[^	 ].*{$') || (curline =~# '^{$')
-		if getline(a:lnum - 1) =~# '^}' | return '>' . prevlvl
-		else                            | return '>' . (prevlvl + 1)
-		endif
-	endif
-	return '='
-endfunction
 set foldexpr=TxtFolding(v:lnum)
 set foldenable
 set foldlevelstart=99
@@ -159,19 +145,33 @@ set foldminlines=1
 set foldopen=hor,insert,mark,search,undo
 set foldtext=getline(v:foldstart).'\ '
 filetype on
-autocmd FileType c,cpp,yacc,lex,awk,sh,bc set foldexpr=CFolding(v:lnum) foldmethod=expr
-autocmd Bufenter *.md set foldexpr=MdFolding(v:lnum) foldmethod=expr
-autocmd FileType text set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t
+
+"" buffer
+function! Bufcmd()
+	syntax region  Fold   start=+^\([^[:blank:]].*\)\?[{(]$+ end=+^%\?[})]+ skip=+^[})].*[{(]$+ transparent fold contains=ALL
+	syntax region  Ignore start=+“+ skip=+\\\\\|\\”+ end=+”+ oneline
+	syntax region  Ignore start=+"+ skip=+\\\\\|\\"+ end=+"+ oneline
+	syntax region  Ignore start=+'+ skip=+\\\\\|\\'+ end=+'+ oneline
+	syntax region  Ignore start=+\(^\|\s\)\(\* \|#\|//\|\*/\|/\*\|"\)+ end=+$+ oneline
+	syntax match   Ignore "[^[:space:]]*|[^[:space:]]*"
+	syntax sync fromstart
+	if index(["c","cpp","yacc","lex","awk","sh","bc"], &filetype) != -1
+		set foldmethod=syntax
+		syntax match Constant /\<\([_[:upper:][:digit:]]\{3,}\|[[:digit:]]*\)\>/
+	elseif &filetype == "markdown"
+		set foldexpr=MdFolding(v:lnum)
+		set foldmethod=expr
+	elseif &filetype == "text"
+		set foldexpr=TxtFolding(v:lnum)
+		set foldmethod=expr
+		set formatoptions+=t
+	endif
+endfunction
+autocmd BufEnter * eval Bufcmd()
 autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t | endif
 
 "" no syntax highlighting; only highlight interface elements
 "" (vim sucks; need to manually unset every highlight group to remove its shitty default colors)
-syntax region  Ignore start=+“+ skip=+\\\\\|\\”+ end=+”+ oneline
-syntax region  Ignore start=+"+ skip=+\\\\\|\\"+ end=+"+ oneline
-syntax region  Ignore start=+'+ skip=+\\\\\|\\'+ end=+'+ oneline
-syntax region  Ignore start=+\(^\|\s\)\(\* \|#\|//\|\*/\|/\*\|"\)+ end=+$+ oneline
-syntax match   Ignore "[^[:space:]]*|[^[:space:]]*"
-autocmd FileType c,cpp,yacc,lex,awk,sh,bc syntax match Constant /\<[_[:upper:][:digit:]]\{3,}\>/
 hi Ignore       NONE
 hi CursorLine   NONE
 hi Folded       NONE

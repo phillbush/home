@@ -3,7 +3,7 @@
 .Os
 .Sh NAME
 .Nm rember
-.Nd quick reference for stuff I will forgor
+.Nd quick reference for stuff I forgor
 .Sh EXAMPLES
 .Ss Whatsapp
 URLs to force Zapzap® to use its webapp rather than ask for the desktop application:
@@ -74,7 +74,7 @@ text.
 Check
 .Lk "https://www.mediawiki.org/wiki/Help:Export"
 for more information.
-.Bd -literal -offset indent -compact
+.Bd -literal -offset indent
 $ curl "https://en.wikipedia.org/w/index.php" \e
 	--data-urlencode action=raw \e
 	--data-urlencode title="Cock and ball torture"
@@ -91,15 +91,16 @@ parent
 .Pc
 and
 .Ic HEAD :
-.Bd -literal -offset indent -compact
+.Bd -literal -offset indent
 $ git format-patch --stdout HEAD^..HEAD | save file.diff
 .Ed
 .
 .Pp
 Generate patch:
-.Bd -literal -offset indent -compact
+.Bd -literal -offset indent
 $ diff -up path/to/original-dir/ path/to/modified-dir/
 .Ed
+.Pp
 .Bl -tag -width Ds -compact
 .It Fl p
 Prefix sections with header (function prototypes in C).
@@ -124,10 +125,20 @@ for files with the same name and size:
 .Bd -literal -offset indent -compact
 $ mtree -c -k size -p /foo/peepee | mtree -p /bar/poopoo
 .Ed
+.Pp
+.Bl -tag -width "XXXXXXX" -compact
+.It Fl c
+Creates a tree specification
+(without it, compares a tree against a tree specification).
+.It Fl k Cm size
+Specifies what to compare (can be size, cksum, time, etc).
+.It Fl p
+Specifies a directory to use rather than current one.
+.El
 .
 .Ss Using arduino makefile
 I have an Arduino MEGA on my drawer which may never see the light of sun again.
-To play with it (before puting it away for one more year again), install
+To play with it (before puting it away for one more year), install
 .Pa devel/arduino-makefile
 and write this Makefile:
 .Bd -literal -offset indent -compact
@@ -135,5 +146,122 @@ BOARD_TAG = mega
 BOARD_SUB = atmega2560
 include /usr/local/share/arduino-makefile/Arduino.mk
 .Ed
+.
+.Ss Writing port
+.Bl -enum -width "X"
+.It
+Create the port directory and copy into it the template
+.Pa Makefile .
+Fill in descriptional variables
+.Ev CATEGORIES
+and
+.Ev COMMENT .
+.Bd -literal -compact
+install -d -m 644 \e
+/usr/ports/infrastructure/templates/Makefile.template \e
+/usr/ports/<CATEGORY>/<PKGNAME>/Makefile
+.Ed
+.It
+Write a long description at
+.Pa pkg/DESCR .
+.It
+Fill in fetch data.
+Distfile is fetched from
+.Pa "${SITES}${DISTNAME}${EXTRACT_SUFX}" .
+A few special dist sources have special variables:
+.Bl -bullet -compact -width ""
+.It
+Use predefined
+.Ev SITES
+from
+.Pa /usr/ports/infrastructure/db/network.conf .
+For example,
+.Qq Li "SITES = ${SITE_SOURCEFORGE}" .
+.It
+For code forges, define
+.Ev DIST_TUPLE
+like
+.Qq Li "github phillbush xfiles v2.0.0 .\)" .
+.El
+.It
+Create a checksum in
+.Pa distinfo
+and extract
+.Ev DISTFILE :
+.Bd -literal -compact
+make makesum
+make extract
+.Ed
+.It
+Define
+.Ev PERMIT_PACKAGE
+and
+.Ev PERMIT_DISTFILES
+to
+.Qq Li "Yes"
+if license permits redistributing binary/source files.
+.It
+Define configuring and building variables
+.Ev MODULES ,
+.Ev CONFIGURE_ARGS ,
+and
+.Ev MAKE_FLAGS .
+.It
+Try to build.
+Write patches as needed, with a short summary if possible.
+.Bd -literal -compact
+until make build
+do
+	cd `make show=WRKSRC`
+	cp foo/bar.c{,.orig.port}
+	vi foo/bar.c
+	cd -
+	make update-patches
+done
+.Ed
+.It
+If the package needs to create a user or group, choose the lowest free id at
+.Pa /usr/ports/infrastructure/db/user.list .
+.It
+Install the program:
+.Bd -literal -compact
+make fake
+.Ed
+.It
+Generate
+.Pa pkg/PLIST :
+.Bd -literal -compact
+make update-plist
+.Ed
+.It
+Fill in dependention variables
+.Ev TEST_DEPENDS ,
+.Ev RUN_DEPENDS ,
+.Ev LIB_DEPENDS ,
+and
+.Ev WANTLIB .
+Library dependencies can be checked with:
+.Bd -literal -compact
+make port-lib-depends-check
+.Ed
+.It
+Check for regression tests
+.Po
+if the package has no test infrastructure, define
+.Qq Li "NO_TEST=Yes"
+.Pc :
+.Bd -literal -compact
+make test
+.Ed
+.It
+Check for package validation before submitting:
+.Bd -literal -compact
+/usr/ports/infrastructure/bin/portcheck
+.Ed
+.It
+???
+.It
+Profit.
+.El
 .Sh SEE ALSO
 .Xr home 8

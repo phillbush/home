@@ -59,10 +59,10 @@ mime       matches  'video/.*'
 open       with     mpv -- %file
 info       with     mediainfo -- %file
 
-rules      for      external multimedia file
+rules      for      external media file
 protocol   matches  '(gopher|http)s?'
-extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi'
-open       with     mpv -- %data
+extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi|jpe?g|png|gif|xpm|xbm|webp'
+open       with     mpv --loop -- %data
 
 
 # archives
@@ -138,7 +138,6 @@ info       with     sh -c 'anytopnm <"$1" | pnmscalefixed -w 50 | ppmtopgm | pgm
 rules      for      image
 protocol   matches  '(file)?'
 mime       matches  'image/.*'
-#open      with     feh -. --title '%n - feh' -- %file
 open       with     img %file
 edit       with     gimp -- %file
 info       with     sh -c 'anytopnm <"$1" | pnmscalefixed -w 50 | ppmtopgm | pgmtopbm | pbmtoascii' plumb %file
@@ -179,11 +178,6 @@ rules      for      external paged document
 protocol   matches  '(gopher|http)s?'
 extension  imatches 'pdf|eps|ps|djvu'
 open       with     sh -c 'cd /tmp && curl -LOfsm 10 --max-filesize 10M -- "$@" 2>/dev/null && zathura -- "$(basename "$@")"' sh %data
-
-rules      for      image
-protocol   matches  '(gopher|http)s?'
-extension  imatches 'jpe?g|png|gif|xpm|xbm'
-open       with     feh -. --title '%n - feh' -- %data
 
 rules      for      web page
 protocol   matches  'https?'
