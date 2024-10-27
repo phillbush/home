@@ -1,4 +1,4 @@
-BROWSER = 'dillo'
+BROWSER = netsurf-gtk3
 EDITOR = vim
 PAGER = less
 
@@ -58,6 +58,11 @@ rules      for      multimedia
 mime       matches  'video/.*'
 open       with     mpv -- %file
 info       with     mediainfo -- %file
+
+rules      for      external image
+protocol   matches  'gophers?'
+extension  imatches 'jpe?g|png|gif|xpm|xbm|webp'
+open       with     sh -c 'curl -Lfsm 10 -- "$1" | display -' sh %data
 
 rules      for      external media file
 protocol   matches  '(gopher|http)s?'

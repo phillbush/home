@@ -129,7 +129,7 @@ save() (
 	fi
 
 	temp="$(mktemp -p "$(dirname "$1")")" || exit
-	trap 'rm -f -- "$temp"' EXIT
+	trap '\rm -f -- "$temp"' EXIT
 	cat >"$temp" || exit
 
 	for file
@@ -145,8 +145,8 @@ save() (
 		esac
 
 		unique="$(
-			basename="${1##*/}"
-			dirname="${1%"$basename"}"
+			basename="${file##*/}"
+			dirname="${file%"$basename"}"
 			body="${basename%.*}"
 			ext="${basename##"$body"}"
 			unset -v i p
@@ -187,11 +187,11 @@ save() (
 				;;
 			(b)
 				# backup existing file
-				mv -- "$file" "$unique" || exit
+				\mv -f -- "$file" "$unique" || exit
 				;;
 			(f)
 				# overwrite existing file
-				rm -- "$file"
+				\rm -f -- "$file"
 				;;
 			(n)
 				# save as new file, if exists
@@ -204,75 +204,14 @@ save() (
 		fi
 		if test "$#" -eq 0
 		then
-			mv -- "$temp" "$file" || exitval=1
+			\mv -f -- "$temp" "$file" || exitval=1
 		else
-			cp -- "$temp" "$file" || exitval=1
+			\cp -f -- "$temp" "$file" || exitval=1
 		fi
 	done
-	rm -f "$temp"
+	\rm -f "$temp"
 	exit "$exitval"
 )
-
-# colorize output of compilers, builders and diff'ers
-colorize() (
-	test "$#" -eq 0 && return
-	command "$@" 2>&1 | awk -v cmd="$1" '
-	BEGIN {
-		REVERSE = "\x1b[7m"
-		RED = "\x1b[31m"
-		GREEN = "\x1b[32m"
-		YELLOW = "\x1b[33m"
-		BLUE = "\x1b[34m"
-		PURPLE = "\x1b[35m"
-		RESET = "\x1b[0m"
-	}
-	$1 == "@@" && $4 == "@@" {
-		$1 = BLUE "@@"
-		$4 = "@@" RESET
-		print
-		next
-	}
-	$1 == "+++" {
-		$1 = GREEN $1 RESET
-		print
-		next
-	}
-	$1 == "---" {
-		$1 = RED $1 RESET
-		print
-		next
-	}
-	substr($0, 1, 1) == "+" {
-		printf "%s+%s%s\n", GREEN, RESET, substr($0, 2)
-		next
-	}
-	substr($0, 1, 1) == "-" {
-		printf "%s-%s%s\n", RED, RESET, substr($0, 2)
-		next
-	}
-	substr($1, length($1), 1) == ":" && $2 == "error:" {
-		$2 = RED $2 RESET
-		print
-		next
-	}
-	substr($1, length($1), 1) == ":" && $2 == "warning:" {
-		$2 = PURPLE $2 RESET
-		print
-		next
-	}
-	substr($1, length($1), 1) == ":" && $2 == "note:" {
-		$2 = BLUE $2 RESET
-		print
-		next
-	}
-	1'
-)
-
-# these need to be functions; aliases would break when colorize() is not defined
-got() { test "$1" = "diff" && colorize got "$@" || command got "$@" ; }
-make() { colorize make "$@" ; }
-diff() { colorize diff -up "$@" ; }
-cc() { colorize cc "$@" ; }
 
 # completions; ignore error when defining them
 {

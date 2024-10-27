@@ -1,0 +1,72 @@
+# From
+set realname = 'Lucas de Sena'
+set from = "lucas@seninha.org"
+
+# Mailbox
+set folder = "~/var/mail"
+set spoolfile = "~/var/mail"
+set record = "+Sent"
+set trash = "+Trash"
+mailboxes -label mail   ~/var/mail
+mailboxes -label news   ~/var/news
+mailboxes -label system /var/mail/lucas
+mailboxes -label server ~/var/log
+
+# attachments
+auto_view text/html
+alternative_order text/plain text/html
+
+# Send
+set sendmail="ssh mail sendmail"
+set send_charset="utf-8"
+
+# Cache
+set header_cache=~/var/cache/mutt
+set message_cachedir=~/var/cache/mutt
+set mail_check_stats = yes
+
+# Editor
+set edit_headers=yes
+
+# TUI
+set sidebar_visible = yes
+set sidebar_width = 14
+set sidebar_format = "%B%* %N/%S"
+set date_format = "%Y-%m-%d"
+set index_format = "%4C %Z %D %-18.18L %s"
+unset help
+color normal default default
+
+# Mail threads
+set sort = threads
+set sort_aux=last-date-received
+set honor_followup_to = no
+unset hide_thread_subject
+
+# Bindings
+macro index,pager <Tab>     '<sidebar-next><sidebar-open>'
+macro index,pager <Backtab> '<sidebar-prev><sidebar-open>'
+bind index <space>   collapse-thread
+bind index k         noop
+bind index <Up>      previous-entry
+bind index j         noop
+bind index <Down>    next-entry
+bind pager k         noop
+bind pager <Up>      previous-line
+bind pager j         noop
+bind pager <Down>    next-line
+bind index \\ limit
+bind pager   <Left>  exit
+bind pager   <Right> noop
+bind generic <Left>  noop
+bind generic <Right> select-entry
+bind generic z noop
+bind generic zt current-top
+bind generic zz current-middle
+bind generic zb current-bottom
+bind generic,index g first-entry
+bind generic,index G last-entry
+bind index,pager R group-chat-reply
+bind index,pager N search-opposite
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page

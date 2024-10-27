@@ -7,7 +7,7 @@
 " No rights reserved.  Dedicated into Public Domain.  Use as you will.
 " THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-set nocompatible noautochdir nomodeline encoding=utf8
+set nocompatible noautochdir nomodeline encoding=utf-8 fileencodings=utf-8
 
 "" cache directory for swap, backup, undo, etc; except for temporary files
 if (!empty($CACHEDIR))

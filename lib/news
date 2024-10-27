@@ -1,0 +1,142 @@
+# RSS/Atom feeds processed by bin/fetchnews (syntax: "NAME URL\n").
+
+# Nixers
+eyenx           https://eyenx.ch/feed.xml
+josuah          https://josuah.net/blog/atom.xml
+mort            https://mort.coffee/home/feed.rss
+movq            https://www.uninformativ.de/blog/feeds/en.atom
+nixers          https://newsletter.nixers.net/feed.xml
+tudorr          https://tudorr.ro/feed.rss
+venam           https://venam.net/blog/feed.xml
+
+# Bitreichers
+adc             https://adamsgaard.dk/atom.xml
+athas           https://sigkill.dk/atom.xml
+bitreich        gophers://bitreich.org/0/news.atom.xml
+drkhsh          https://drkhsh.at/atom_content.xml
+evilbob         https://codemadness.org/atom_content.xml
+roygbyte        gopher://roygbyte.com/0/rss.xml
+ykm_izuru       https://mirror-world.chaotic.ninja/feed.atom
+
+# OpenBSD Developers
+ibara           https://briancallahan.net/blog/feed.xml
+solene          https://dataswamp.org/~solene/rss-html.xml
+undeadly        https://undeadly.org/cgi?action=rss
+
+# OpenBSD Users
+amodernist      https://amodernist.com/all.atom
+begriffs        https://begriffs.com/atom.xml
+claudiom        https://claudiomiranda.wordpress.com/feed/
+tum'fatig       https://www.tumfatig.net/index.xml
+unixdigest      https://unixdigest.com/feed.rss
+thfr            https://www.youtube.com/feeds/videos.xml?channel_id=UCF2MeFBWJoFZtz0ADX3Us0Q
+openBSDguy      https://www.youtube.com/feeds/videos.xml?channel_id=UCqGmpMaWCpLe7hpnNnU09TA
+iBSD            https://www.youtube.com/feeds/videos.xml?channel_id=UCk9NvmsPBC3lTn_L9kFaylA
+
+# cat-v/plan9
+catv-helpful    https://helpful.cat-v.org/Blog/index.atom
+orib            https://orib.dev/feed.rss
+posixcafe       https://posixcafe.org/blogs/index.atom
+sigrid          https://ftrv.se/posts.atom
+c04tl3-plan9    https://www.youtube.com/feeds/videos.xml?channel_id=UCZ073r7qPBpFZlslLtmt70w
+adventuresin9   https://www.youtube.com/feeds/videos.xml?channel_id=UC7qFfPYl0t8Cq7auyblZqxA
+
+# Interesting personal blogs I found
+seirdy          https://seirdy.one/atom.xml
+computer.rip    https://computer.rip/rss.xml
+hugo-landau     https://www.devever.net/~hl/index.feed
+hereket         https://hereket.com/index.xml
+shallowsky      https://shallowsky.com/blog/index.atom
+dynomax         https://dynomax.neocities.org/blog/feed.xml
+sizeof-cat      https://sizeof.cat/index.xml
+ploum           https://ploum.net/atom_en.xml
+doug-rumbaugh   https://douglasrumbaugh.com/post/index.xml
+aartaka         https://aartaka.me/rss.xml
+maths-and-comp  https://math.andrej.com/feed.xml
+sebastiano      https://sebastiano.tronto.net/blog/feed.xml
+anarc.at        https://anarc.at/blog/index.rss
+nullprogram     https://nullprogram.com/feed/
+flak            https://flak.tedunangst.com/rss
+somanymachines  https://www.somanymachines.com/index.xml
+leah            https://leahneukirchen.org/blog/index.atom
+matt-might      https://matt.might.net/articles/feed.rss
+drewdevault     https://drewdevault.com/blog/index.xml
+bernstein       https://bernsteinbear.com/feed.xml
+fabien          https://fabiensanglard.net/rss.xml
+hirrolot        https://hirrolot.github.io/rss.xml
+jart            https://justine.lol/rss.xml
+norvig          https://www.norvig.com/rss-feed.xml
+jmeiners        https://www.jmeiners.com/feed.xml
+synthcode       https://synthcode.com/feed.xscm
+nerdypepper     https://peppe.rs/index.xml
+icy             https://icyphox.sh/blog/feed.xml
+mckinley        https://mckinley.cc/blog/atom.xml
+neustadt        https://neustadt.fr/rss.xml
+amodernist      https://amodernist.com/all.atom
+public-voit     https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml
+hacktivis       https://hacktivis.me/feed.atom
+trbl            https://her.st/rss.xml
+russ-cox        https://research.swtch.com/feed.atom
+nrk             https://nrk.neocities.org/rss.xml
+joseph-choe     https://josephchoe.com/feed.xml
+tripcode        https://www.youtube.com/feeds/videos.xml?channel_id=UCZrrEuHiQjN2CUo84g5tk7w
+bryce-blog      https://odysee.com/$/rss/@bryce:c
+bryce-vlog      https://brycevandegrift.xyz/rss.xml
+
+# langposting youtubers
+xidnaf          https://www.youtube.com/feeds/videos.xml?channel_id=UCByBOwwOU5tKddYpsrHiUUw
+jan-misali      https://www.youtube.com/feeds/videos.xml?channel_id=UCJOh5FKisc0hUlEeWFBlD-w
+nativlang       https://www.youtube.com/feeds/videos.xml?channel_id=UCMk_WSPy3EE16aK5HLzCJzw
+langfocus       https://www.youtube.com/feeds/videos.xml?channel_id=UCNhX3WQEkraW3VHPyup8jkQ
+connor-quimby   https://www.youtube.com/feeds/videos.xml?channel_id=UCqWDIKOQgGKNJsikOXdS-GQ
+
+# DOOM youtubers
+RomeroGames     https://www.youtube.com/feeds/videos.xml?channel_id=UC-3jkHU1i_cbq7AO6EX1y0w
+JohnRomero      https://www.youtube.com/feeds/videos.xml?channel_id=UCtN2A8bFL_NoxClFyklbMRQ
+nirvana         https://www.youtube.com/feeds/videos.xml?channel_id=UC-S4cza1tgHnHr-KyU9adkQ
+borogk          https://www.youtube.com/feeds/videos.xml?channel_id=UC1N7_GXA3oQo_H8Xq_CcBEg
+dwars           https://www.youtube.com/feeds/videos.xml?channel_id=UCpYnXdkqC3aMyeg8ZDdBKag
+civvie11        https://www.youtube.com/feeds/videos.xml?channel_id=UC21uZkfXpT8rPY-gPgMiCwA
+sobad           https://www.youtube.com/feeds/videos.xml?channel_id=UC5aIjCUK6VWTbeOJu59RCdQ
+decino          https://www.youtube.com/feeds/videos.xml?channel_id=UCJ8V9aiz50m6NVn0ix5v8RQ
+decino2         https://www.youtube.com/feeds/videos.xml?channel_id=UCl99bXcBXS5Vl0e7sTTywtQ
+brendondle      https://www.youtube.com/feeds/videos.xml?channel_id=UCM9dhroAdFEXrqx5DNGwieg
+hutz-fandango   https://www.youtube.com/feeds/videos.xml?channel_id=UCTVwFeOzTlMQyFTDIOQtuRw
+bunker-dweller  https://www.youtube.com/feeds/videos.xml?channel_id=UCdiAAUbenhc7q0Jk5F3LGKQ
+mtpain27        https://www.youtube.com/feeds/videos.xml?channel_id=UCrYr2EMXw976tEpLxHhr1Rg
+
+# YTPBR
+sgt-pombagiro   https://www.youtube.com/feeds/videos.xml?channel_id=UCim5oOqeGy7Z7FK6syLMQLw
+cheddarfactory  https://www.youtube.com/feeds/videos.xml?channel_id=UCedk8j2UHk0gHK9yAm9df1Q
+tecraudio       https://www.youtube.com/feeds/videos.xml?channel_id=UCmYrBt3v0WyuX6t8O6mPBrQ
+hordarural      https://www.youtube.com/feeds/videos.xml?channel_id=UC2ZX-bTXlg7G6R8YOZNO8ZA
+medazzamatt     https://www.youtube.com/feeds/videos.xml?channel_id=UC2aDAiqqmb2IiS4ZoG3sUog
+lucasmobile17   https://www.youtube.com/feeds/videos.xml?channel_id=UCpZ3qz_xT2w13eZLxL1h8qw
+hoorayforfakes  https://www.youtube.com/feeds/videos.xml?channel_id=UClz8M20J7pDYlT9PkJqQDtg
+tiagoangelelli  https://www.youtube.com/feeds/videos.xml?channel_id=UCge2ycqillw1I9m9yCX68JA
+avifor-portuga  https://www.youtube.com/feeds/videos.xml?channel_id=UC-1_Qp9JGfBBXJVXOu2xuGA
+perdovanse      https://www.youtube.com/feeds/videos.xml?channel_id=UCXLXsAcYhjDtCqvzBYzLlwQ
+dedel           https://www.youtube.com/feeds/videos.xml?channel_id=UC-XSPxNFt4Kxy7ZtKqzhKEQ
+trollpuritano   https://www.youtube.com/feeds/videos.xml?channel_id=UC1330z_6SfPQh6jwSxVdDgg
+pedro-paletta   https://www.youtube.com/feeds/videos.xml?channel_id=UC1yU8BKnjT23fbqvKKWVuOg
+poopsbudistas   https://www.youtube.com/feeds/videos.xml?channel_id=UCfjdl1NIJ8mx7uUs-M-m29w
+poopers-br      https://www.youtube.com/feeds/videos.xml?channel_id=UC4N3LXQz34wNWfPlClK-uFQ
+poopers-pt      https://www.youtube.com/feeds/videos.xml?channel_id=UCh-T5hOcUswMZB-0csyjxXg
+PoopTubeBrasil  https://www.youtube.com/feeds/videos.xml?channel_id=UC62Bv5IigDq3XxoMJCFzwGQ
+museu-ytpbr     https://www.youtube.com/feeds/videos.xml?channel_id=UC71HjMjo49SCJWKuNx0UiAA
+leminur         https://www.youtube.com/feeds/videos.xml?channel_id=UC8PlbwQdJJIHRxCXlQo1jpg
+supremesonic    https://www.youtube.com/feeds/videos.xml?channel_id=UCaHBAhxlAjYAvHRoq9glyeA
+brave-fencer    https://www.youtube.com/feeds/videos.xml?channel_id=UCDAqTUqPVdvXgmSTeq4vDYA
+guilhox         https://www.youtube.com/feeds/videos.xml?channel_id=UCZFXPH10vGYxkANLVvFDM0A
+ryuuzakii666    https://www.youtube.com/feeds/videos.xml?channel_id=UCDlKehU3r-4YrJvbywULRcQ
+nothembur       https://www.youtube.com/feeds/videos.xml?channel_id=UCE_-I2lxQUDkQjSJ4zg-GHQ
+tudobesta       https://www.youtube.com/feeds/videos.xml?channel_id=UCP2Tf6bt5qZ1sm5edIxIayg
+joltjolteon     https://www.youtube.com/feeds/videos.xml?channel_id=UCs13TbUQ7-eEKQgVl9HizSA
+axasdas         https://www.youtube.com/feeds/videos.xml?channel_id=UCRGQzpkJC01EKRTG4_TiR_Q
+dodohria        https://www.youtube.com/feeds/videos.xml?channel_id=UCWRib465ZSwvPnocBrRlexA
+therawter160    https://www.youtube.com/feeds/videos.xml?channel_id=UCotRQMkLxc0k66Aj-vsl-8Q
+renolock        https://www.youtube.com/feeds/videos.xml?channel_id=UCeEg7g3hpv3pN_YL-2FVNbA
+paulodias95     https://www.youtube.com/feeds/videos.xml?channel_id=UCWqZ2Wcb0r6nC_7e6lioVXA
+
+# cara que posta vídeos históricos do YTPBR
+# https://yewtu.be/channel/UCn5sCIvoY4uEUteoYY8Jfqw/playlists

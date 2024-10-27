@@ -213,20 +213,25 @@ Xcursor.theme:                          "default"
                                 Ctrl<Key>f:     forward-character()\n\
                                 Ctrl<Key>w:     delete-previous-word()
 
-NetHack*background:                     White
-NetHack*foreground:                     Black
+!NetHack*background:                     White
+!NetHack*foreground:                     Black
+NetHack*fancy_status:                   True
 NetHack*fancy_status*background:        Wheat
+NetHack*fancy_status.skipAdjust:        True
+NetHack*fancy_status.resizeToPreferred: True
 NetHack*fancy_status.status_attributes*background:      Beige
-NetHack*status_info*foreground:         Sienna
+NetHack*fancy_status.status_attributes*foreground:      Black
+NetHack*fancy_status*foreground:         Sienna
 NetHack*textSink*background:            Red
 NetHack*double_tile_size:               True
 NetHack*message_line:                   True
 NetHack*message_lines:                  5
 NetHack*autofocus:                      True
 NetHack*slow:                           True
+NetHack*highlight_prompt:               True
 NetHack*tombstone:                      rip.xpm
-NetHack*map*rows:                       10
-NetHack*map*columns:                    20
+NetHack*map*rows:                       15
+NetHack*map*columns:                    30
 
 XTerm*allowBoldFonts:                   False
 XTerm*faceName:

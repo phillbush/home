@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# Usage: fetchmail [MBOX]
+# Fetch messages from a mailbox at seninha.org (default Maildir)
+# Depends on OpenBSD's openrsync(1).
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+usage() {
+	printf "usage: %s [mbox_from [mbox_save]]\n" "${0##*/}" >&2
+	exit 2
+}
+
+info() {
+	test -t 1 && printf "%s\n" "$@"
+}
+
+exec </dev/null
+
+case "$#" in
+(0)
+	srcdir="mail/new"
+	maildir="$HOME/var/mail"
+	;;
+(1)
+	srcdir="$1/new"
+	maildir="$HOME/var/$1"
+	;;
+(2)
+	srcdir="$1/new"
+	maildir="$2"
+	;;
+(*)
+	usage
+	;;
+esac
+set --
+
+openrsync --rsync-path=openrsync -rt mail:"$srcdir"/ "$maildir"/tmp/ || exit
+
+if test -z "$(ls -- "$maildir"/tmp/)"
+then
+	info "No new message."
+	exit 0
+fi
+
+set -- "$maildir"/tmp/*
+for file
+do
+	shift
+	set -- "$@" "$srcdir/${file##*/}"
+done
+
+info "Fetched $# new messages."
+ssh mail rm -f "$@"
+mv -f "$maildir"/tmp/* "$maildir"/new/

@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# Usage: sendmail TO ...
+# Send messages for seninha.org to relay
+#
+# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+exec ssh mail sendmail "$@"

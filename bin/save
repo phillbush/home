@@ -6,106 +6,106 @@
 # © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
-action=
-exitval=0
+	action=
+	exitval=0
 
-while getopts abfin opt
-do case "$opt" in
-([abfin])
-	action="$opt"
-	;;
-(*)
-	set --
-	break
-	;;
-esac done
-shift "$((OPTIND - 1))"
-if test "$#" -eq 0
-then
-	echo "usage: save [-abfin] file..." >&2
-	exit 2
-fi
-
-temp="$(mktemp -p "$(dirname "$1")")" || exit
-trap 'rm -f -- "$temp"' EXIT
-cat >"$temp" || exit
-
-for file
-do
-	shift
-
-	case "$file" in
-	(""|[[:space:]]*|*[[:space:]])
-		printf "save: %s: Invalid argument\n" "$file" >&2
-		exitval=1
-		continue
+	while getopts abfin opt
+	do case "$opt" in
+	([abfin])
+		action="$opt"
 		;;
-	esac
-
-	unique="$(
-		basename="${1##*/}"
-		dirname="${1%"$basename"}"
-		body="${basename%.*}"
-		ext="${basename##"$body"}"
-		unset -v i p
-		while test -e "$dirname$body$p$i$ext"
-		do
-			p="_"
-			if test -z "$i"
-			then
-				i=1
-			else
-				i="$((i + 1))"
-			fi
-		done
-		printf "%s" "$dirname$body$p$i$ext"
-	)"
-
-	if test -e "$file"
+	(*)
+		set --
+		break
+		;;
+	esac done
+	shift "$((OPTIND - 1))"
+	if test "$#" -eq 0
 	then
-		ans="$action"
-		if test -z "$action"
-		then
-			printf "save: %s: File exists\n" "$file" >&2
+		echo "usage: save [-abfin] file..." >&2
+		exit 2
+	fi
+
+	temp="$(mktemp -p "$(dirname "$1")")" || exit
+	trap 'rm -f -- "$temp"' EXIT
+	cat >"$temp" || exit
+
+	for file
+	do
+		shift
+
+		case "$file" in
+		(""|[[:space:]]*|*[[:space:]])
+			printf "save: %s: Invalid argument\n" "$file" >&2
 			exitval=1
-			continue
-		elif test "$action" = "i"
-		then
-			printf "%s: File exists\n" "$file"
-			printf "\t(B)ackup,"
-			printf " (F)orce overwrite,"
-			printf " or save as (N)ew file?\n"
-			read -r ans </dev/tty
-		fi >&2
-		case "$ans" in
-		(a)
-			# append into existing file
-			cat <"$temp" >>"$file"
-			continue
-			;;
-		(b)
-			# backup existing file
-			mv -- "$file" "$unique" || exit
-			;;
-		(f)
-			# overwrite existing file
-			rm -- "$file"
-			;;
-		(n)
-			# save as new file, if exists
-			file="$unique"
-			;;
-		(?)
 			continue
 			;;
 		esac
-	fi
-	if test "$#" -eq 0
-	then
-		mv -- "$temp" "$file" || exitval=1
-	else
-		cp -- "$temp" "$file" || exitval=1
-	fi
-done
-rm -f "$temp"
-exit "$exitval"
+
+		unique="$(
+			basename="${file##*/}"
+			dirname="${file%"$basename"}"
+			body="${basename%.*}"
+			ext="${basename##"$body"}"
+			unset -v i p
+			while test -e "$dirname$body$p$i$ext"
+			do
+				p="_"
+				if test -z "$i"
+				then
+					i=1
+				else
+					i="$((i + 1))"
+				fi
+			done
+			printf "%s" "$dirname$body$p$i$ext"
+		)"
+
+		if test -e "$file"
+		then
+			ans="$action"
+			if test -z "$action"
+			then
+				printf "save: %s: File exists\n" "$file" >&2
+				exitval=1
+				continue
+			elif test "$action" = "i"
+			then
+				printf "%s: File exists\n" "$file"
+				printf "\t(B)ackup,"
+				printf " (F)orce overwrite,"
+				printf " or save as (N)ew file?\n"
+				read -r ans </dev/tty
+			fi >&2
+			case "$ans" in
+			(a)
+				# append into existing file
+				cat <"$temp" >>"$file"
+				continue
+				;;
+			(b)
+				# backup existing file
+				mv -- "$file" "$unique" || exit
+				;;
+			(f)
+				# overwrite existing file
+				rm -- "$file"
+				;;
+			(n)
+				# save as new file, if exists
+				file="$unique"
+				;;
+			(?)
+				continue
+				;;
+			esac
+		fi
+		if test "$#" -eq 0
+		then
+			mv -- "$temp" "$file" || exitval=1
+		else
+			cp -- "$temp" "$file" || exitval=1
+		fi
+	done
+	rm -f "$temp"
+	exit "$exitval"
