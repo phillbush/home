@@ -1,0 +1,90 @@
+#!/usr/bin/awk BEGIN{srand()}NF>=1&&substr($1,1,1)!="#"&&rand()*++n<=1{l=$0}END{sub(/\t--.*/,"\n&",l);print""l}
+A language that doesn't affect the way you think about programming is not worth knowing.
+All governments lie.
+Any interesting program has at least: one loop; one I/O statement; and one bug.
+GNOME does not care about your experience or convenience. They care about Allan Day's acid trip ideas and Red Hat money.
+Great Britain is a republic with a hereditary president; while the United States is a monarchy with an elective king.
+I am having a mixed feeling of deja vú and amnesia.  I think I also had forgotten this before.
+I've alerted the social credit system admins, they have temporarily degraded your rating to 2.9 stars.  You can no longer purchase food for the next 72 hours.
+It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures.
+It is easier to change the specification to fit the program than vice versa.
+Standards dictate 90% of new systems.
+The best argument against democracy is a five-minute conversation with the average voter.
+The best code is no code at all.
+The only difference between Shakespeare and you was the size of his idiom list, not the size of his vocabulary.
+Wherever there is modularity there is the potential for misunderstanding: Hiding information implies a need to check communication.
+XML combines the efficiency of text files with the readability of binary files
+An assault on large problems employs a succession of programs, most of which spring into existance in course.	-- Abelson & Sussman, SICP
+Computational processes are abstract beings that inhabit computers.  As they evolve, processes manipulate other abstract things called data. The evolution of a process is directed by a pattern of rules called a program. People create programs to direct processes. In effect, we conjure the spirits of the computer with our spells.	-- Abelson & Sussman, SICP
+Educators, generals, dieticians, psychologists, and parents program.  Armies, students, and some societies are programmed.	-- Abelson & Sussman, SICP
+Every computer program is a model, hatched in the mind, of a real or mental process. These processes, arising from human experience and thought, are huge in number, intricate in detail, and at any time only partially understood. They are modeled to our permanent satisfaction rarely by our computer programs.	-- Abelson & Sussman, SICP
+Expert programmers know how to choose the level of abstraction appropriate to their task.	-- Abelson & Sussman, SICP
+Mathematics provides a framework for dealing precisely with notions of “what is.” Computation provides a framework for dealing precisely with notions of “how to”
+Programs must be written for people to read, and only incidentally for machines to execute.	-- Abelson & Sussman, SICP
+The programmer must seek both perfection of part and adequacy of collection.	-- Abelson & Sussman, SICP
+Unfortunately, as programs get large and complicated, as they almost always do, the adequacy, consistency, and correctness of the specifications themselves become open to doubt, so that complete formal arguments of correctness seldom accompany large programs.	-- Abelson & Sussman, SICP
+It has been said that the great scientific disciplines are examples of giants standing on the shoulders of other giants. It has also been said that the software industry is an example of midgets standing on the toes of other midgets.	-- Alan Cooper, About Face.
+Lisp programmers know the value of everything and the cost of nothing.	-- Alan Perlis.
+Syntactic sugar causes cancer of the semicolon.	-- Alan Perlis.
+Computers make it easier to do a lot of things, but most of the things they make it easier to do don't need to be done.	-- Andy Rooney.
+Life is too short to run proprietary software.	-- Bdale Garbee.
+They who can give up essential liberty for temporary safety, deserve neither liberty nor safety.	-- Benjamin Franklin.
+Incorrect documentation is often worse than no documentation.	-- Bertrand Meyer.
+I have always wished that my computer would be as easy to use as my telephone. My wish has come true. I no longer know how to use my telephone.	-- Bjarne Stroustrup.
+The most important single aspect of software development is to be clear about what you are trying to build.	-- Bjarne Stroustrup.
+Don't include a sentence in documentation if its negation is obviously false.	-- Bob Martin, AT&T Technologies.
+Controlling complexity is the essence of computer programming.	-- Brian Kernighan.
+Debugging is twice as hard as writing the code in the first place.  Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.	-- Brian W' Kernighan and P'J' Plauger in The Elements of.  Programming Style.
+There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies and the other way is to make it so complicated that there are no obvious deficiencies.	-- C'A'R' Hoare, The 1980 ACM Turing Award Lecture.
+Nobody who uses XML knows what they are doing.	-- Chris Wenham.
+So-called “smart” software usually is the worst you can imagine.	-- Christian Neukirchen.
+If you have too many special cases, you are doing it wrong.	-- Craig Zerouni
+Unix is a junk OS designed by a committee of PhDs.	-- Dave Cutler.
+Beauty is more important in computing than anywhere else in technology because software is so complicated. Beauty is the ultimate defence against complexity.	-- David Gelernter.
+Get your data structures correct first, and the rest of the program will write itself.	-- David Jones.
+If you give someone a program, you will frustrate them for a day; if you teach them how to program, you will frustrate them for a lifetime.	-- David Leinweber (NOWS).
+When explaining a command, or language feature, or hardware widget, first describe the problem it is designed to solve.	-- David Martin
+Compatibility means deliberately repeating other people's mistakes.	-- David Wheeler.
+Unix has retarded OS research by 10 years and linux has retarded it by 20.	-- Dennis Ritchie.
+I would rather write programs to help me write programs than write programs.	-- Dick Sites.
+You're bound to be unhappy if you optimize everything.	-- Donald Knuth.
+As a programmer, it is your job to put yourself out of business. What you do today can be automated tomorrow.	-- Doug McIlroy.
+I […] am rarely happier than when spending an entire day programming my computer to perform automatically a task that would otherwise take me a good ten seconds to do by hand.	-- Douglas Adams, Last Chance to See.
+The computing scientist's main challenge is not to get confused by the complexities of his own making.	-- E'W' Dijkstra.
+Simplicity is prerequisite for reliability.	-- Edsger W. Dijkstra.
+Good judgement comes from experience, and experience comes from bad judgement.	-- Fred Brooks.
+Plan to throw a prototype away, you will anyhow.	-- Fred Brooks.
+The central enemy of reliability is complexity.	-- Geer &al.
+Programming graphics in X is like finding the square root of PI using Roman numerals.	-- Henry Spencer.
+It always takes longer than you expect, even when you take into account Hofstadter's Law.	-- Hofstadter's Law.
+Deleted code is debugged code.	-- Jeff Sickel.
+Revolution is the opium of the intellectuals.	-- Jerzy Peterkiewicz.
+The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.	-- Joe Armstrong.
+If you're willing to restrict the flexibility of your approach, you can almost always do something better.	-- John Carmack.
+One of my most productive days was throwing away 1000 lines of code.	-- Ken Thompson.
+When in doubt, use brute force.	-- Ken Thompson.
+You can't trust code that you did not totally create yourself.	-- Ken Thompson.
+Trying to outsmart a compiler defeats much of the purpose of using one.	-- Kernighan and Plauger, The Elements of Programming Style.
+I will, in fact, claim that the difference between a bad programmer and a good one is whether he considers his code or his data structures more important. Bad programmers worry about the code. Good programmers worry about data structures and their relationships.	-- Linus Torvalds.
+This “users are idiots, and are confused by functionality” mentality of Gnome is a disease. If you think your users are idiots, only idiots will use it.	-- Linus Torvalds.
+Never let your schooling interfere with your education.	-- Mark Twain.
+Software efficiency halves every 18 months, compensating Moore's Law.	-- May's Law.
+Security is a state of mind.	-- NSA Security Manual.
+Always forgive your enemies; nothing annoys them so much.	-- Oscar Wilde.
+The whole point of getting things done is knowing what to leave undone.	-- Oswald Chambers.
+Work expands so as to fill the time available for its completion.	-- Parkinson's Law.
+In programming the hard part isn't solving problems, but deciding what problems to solve.	-- Paul Graham.
+True glory consists in doing what deserves to be written; in writing what deserves to be read.	-- Pliny the Elder.
+A data structure is just a stupid programming language.	-- R' Wm' Gosper.
+Mathematicians stand on each others' shoulders and computer scientists stand on each others' toes.	-- Richard Hamming.
+Don't use the computer to do things that can be efficiently done by hand.	-- Richard Hill.
+Programming languages should be designed not by piling feature on top of feature, but by removing the weaknesses and restrictions that make additional features appear necessary.	-- RnRS.
+Not only is UNIX dead, it's starting to smell really bad.	-- Rob Pike.
+Do you want to be a bloat detective? It's easy; just pick any executable. There! You found some!	-- Rolf van Widenfelt
+Structure and Interpretation of Computer Programs, by Harold Abelson & Gerald Jay Sussman, is the most quotable programming book i have read.
+I can't give you a brain, but I can give you a diploma.	-- The Wizard of Oz.
+Don't use hands to do things that can be efficiently done by the computer.	-- Tom Duff.
+The first step in fixing a broken program is getting it to fail repeatably.	-- Tom Duff.
+Whenever possible, steal code.	-- Tom Duff.
+Software gets slower faster than hardware gets faster.	-- Wirth's law.
+动态网自由门 天安門 天安门 法輪功 李洪志 Free Tibet 六四天安門事件 The Tiananmen Square protests of 1989 天安門大屠殺 The Tiananmen Square Massacre 反右派鬥爭 The Anti-Rightist Struggle 大躍進政策 The Great Leap Forward 文化大革命 The Great Proletarian Cultural Revolution 人權 Human Rights 民運 Democratization 自由 Freedom 獨立 Independence 多黨制 Multi-party system 台灣 臺灣 Taiwan Formosa 中華民國 Republic of China 西藏 土伯特 唐古特 Tibet 達賴喇嘛 Dalai Lama 法輪功 Falun Dafa 新疆維吾爾自治區 The Xinjiang Uyghur Autonomous Region 諾貝爾和平獎 Nobel Peace Prize 劉暁波 Liu Xiaobo 民主 言論 思想 反共 反革命 抗議 運動 騷亂 暴亂 騷擾 擾亂 抗暴 平反 維權 示威游行 李洪志 法輪大法 大法弟子 強制斷種 強制堕胎 民族淨化 人體實驗 肅清 胡耀邦 趙紫陽 魏京生 王丹 還政於民 和平演變 激流中國 北京之春 大紀元時報 九評論共産黨 獨裁 專制 壓制 統一 監視 鎮壓 迫害 侵略 掠奪 破壞 拷問 屠殺 活摘器官 誘拐 買賣人口 遊進 走私 毒品 賣淫 春畫 賭博 六合彩 天安門 天安门 法輪功 李洪志 Winnie the Pooh 劉曉波动态网自由门

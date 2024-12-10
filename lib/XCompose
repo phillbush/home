@@ -80,6 +80,7 @@
 <Multi_key> <asterisk> <C>: "Ξ"
 <Multi_key> <asterisk> <O>: "Ο"
 <Multi_key> <asterisk> <P>: "Π"
+<Multi_key> <asterisk> <R>: "Ρ"
 <Multi_key> <asterisk> <S>: "Σ"
 <Multi_key> <asterisk> <T>: "Τ"
 <Multi_key> <asterisk> <U>: "Υ"
@@ -93,7 +94,7 @@
 
 <dead_acute> <s>                        : "§"
 <dead_acute> <p>                        : "•"
-<dead_grabe> <P>                        : "¶"
+<dead_grave> <P>                        : "¶"
 <Multi_key> <b> <k>                     : "␣"
 <Multi_key> <exclam> <question>         : "‽"
 <Multi_key> <exclam> <exclam>           : "¡"
@@ -271,9 +272,9 @@
 <Multi_key> <r> <d> : "┌"
 <Multi_key> <d> <l> : "┐"
 <Multi_key> <l> <d> : "┐"
-<Multi_key> <h> <k> : "╯"
 
 # Arc drawing
+<Multi_key> <h> <k> : "╯"
 <Multi_key> <k> <h> : "╯"
 <Multi_key> <h> <j> : "╮"
 <Multi_key> <j> <h> : "╮"
@@ -327,6 +328,34 @@
 <Multi_key> <v> <H> : "╪"
 <Multi_key> <h> <V> : "╫"
 <Multi_key> <V> <h> : "╫"
+
+<Multi_key> <D> <R> : "╔"
+<Multi_key> <R> <D> : "╔"
+<Multi_key> <D> <r> : "╓"
+<Multi_key> <r> <D> : "╓"
+<Multi_key> <d> <R> : "╒"
+<Multi_key> <R> <d> : "╒"
+
+<Multi_key> <U> <R> : "╚"
+<Multi_key> <R> <U> : "╚"
+<Multi_key> <U> <r> : "╙"
+<Multi_key> <r> <U> : "╙"
+<Multi_key> <u> <R> : "╘"
+<Multi_key> <R> <u> : "╘"
+
+<Multi_key> <D> <L> : "╗"
+<Multi_key> <L> <D> : "╗"
+<Multi_key> <D> <l> : "╖"
+<Multi_key> <l> <D> : "╖"
+<Multi_key> <d> <L> : "╕"
+<Multi_key> <L> <d> : "╕"
+
+<Multi_key> <U> <L> : "╝"
+<Multi_key> <L> <U> : "╝"
+<Multi_key> <U> <l> : "╛"
+<Multi_key> <l> <U> : "╛"
+<Multi_key> <u> <L> : "╛"
+<Multi_key> <L> <u> : "╛"
 
 # diagonals
 <Multi_key> <D> <F> : "╱"

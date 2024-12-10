@@ -29,6 +29,8 @@ set mail_check_stats = yes
 set edit_headers=yes
 
 # TUI
+macro index,pager <Tab>     '<sidebar-next><sidebar-open>'
+macro index,pager <Backtab> '<sidebar-prev><sidebar-open>'
 set sidebar_visible = yes
 set sidebar_width = 14
 set sidebar_format = "%B%* %N/%S"
@@ -44,8 +46,6 @@ set honor_followup_to = no
 unset hide_thread_subject
 
 # Bindings
-macro index,pager <Tab>     '<sidebar-next><sidebar-open>'
-macro index,pager <Backtab> '<sidebar-prev><sidebar-open>'
 bind index <space>   collapse-thread
 bind index k         noop
 bind index <Up>      previous-entry

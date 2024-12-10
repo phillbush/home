@@ -45,7 +45,7 @@ set showbreak=↳\                        " what to display when wrapping
 set list listchars=tab:.\ ,trail:.      " display unprintable characters
 
 "" tags
-set tags=./tags,tags,~/.tags
+set tags=./tags,tags,~/.tags,/usr/src/lib/*/tags,/usr/xenocara/lib/*/src/tags
 
 "" automatic text formating and indention
 set nocopyindent noautoindent nopreserveindent
@@ -67,13 +67,23 @@ noremap Y y$|    " if <SHIFT-ANY> does <ANY> until end of line, why <SHIFT-Y> do
 noremap U <C-R>| " if <U> undoes, <SHIFT-U> should redo
 noremap gu U
 
-"" macros; I never use them, set them to <B>, as I can mistype <Q> for quiting
+"" macros (i never use them tho)
 noremap b @
 noremap B q
-noremap q :bn<C-M>
-noremap Q :bp<C-M>
 
-"" typos
+"" buffer
+function! DelBuffer()
+	if !buflisted(bufnr()) || len(getbufinfo({'buflisted':1})) == 1
+		return "quit"
+	else
+		return "bdelete"
+	endif
+endfunction
+noremap q :bn!<C-M>
+noremap Q :bp!<C-M>
+command! -bang Quit execute DelBuffer() . "<bang>"
+cabbrev quit Quit
+cabbrev q Quit
 command W w
 command Q q
 

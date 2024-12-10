@@ -2,32 +2,49 @@
 .Dt HOME 8
 .Os
 .Sh NAME
-.Nm home
+.Nm home ,
+.Nm sabia
 .Nd introduction to maintenance and operation of seninha's personal computer
 .Sh SYNOPSIS
 .Bd -literal
-OpenBSD sabia amd64 ThinkPad T430 23501M2
+kern.ostype=OpenBSD
+kern.hostname=sabia
+hw.machine=amd64
+hw.model=Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+hw.vendor=LENOVO
+hw.version=ThinkPad T430
+hw.product=23501M2
 .Ed
 .Sh DESCRIPTION
+.Nm sabia
+is the OpenBSD system on my ThinkPad T430.
+It is my main personal computer.
+.Pp
+Hostnames for my machines are chosen after native brazilian birds.
+.Qq Em Sabiá
+.Pq Em Turdus rufiventris
+is the official national bird symbol of Brazil.
 .Ss Hardware
-On the T430,
-a serial Ultrabay Enhanced HDD Adapter was installed in place of the original DVD optical drive
-.Pq https://thinkwiki.org/wiki/Ultrabay .
+.Nm sabia
+runs on a LENOVO ThinkPad T430 model 23501M2,
+with i5-3320M (@2.60GHz) amd64 CPU.
 .Pp
-On the T430,
-a classic (xx20) keyboard was installed in place of the original chiclete-style keyboard,
-by sanding down the nubs to fit in the palmrest
-.Pq https://thinkwiki.org/wiki/Upgrading_T430_Keyboard .
-I have not flashed the BIOS to make the keyboard work from boot yet;
-but I use xkbcomp(1) to set the keymap on X11.
+It features the following modifications.
+.Bl -bullet -compact -width ""
+.It
+A serial Ultrabay Enhanced HDD Adapter installed in place of the original DVD optical drive.
+.It
+A classic (xx20) keyboard installed in place of the original chiclete-style keyboard
 .Po
-NOTE:
-The classic keyboard died;
-I had to move back to the chiclete one
+by sanding down the nubs to fit in the palmrest
 .Pc .
-.Pp
-On the T430,
-a black faux leather vinyl adhesive was wrapped around the top lid.
+I have not flashed the BIOS to make the keyboard work from boot;
+but I use xkbcomp(1) to set the keymap on X11.
+.It
+A black faux leather vinyl adhesive wrapped around the top lid.
+.It
+A KingSener battery in place of the original battery.
+.El
 .Ss Operating system
 The administrator user, created at instalation,
 must be in the following groups and login class.
@@ -52,10 +69,10 @@ Login class for higher resources usage.
 .El
 .Pp
 .Pa /etc/doas.conf :
-.Bd -literal
+.Bd -literal -offset indent
 ## Allow wheel by default:
-permit persist setenv { \
-	-DISPLAY -ENV PATH PAGER LESS EDITOR VISUAL \
+permit persist setenv { \e
+	-DISPLAY -ENV PATH PAGER LESS EDITOR VISUAL \e
 } :wheel
 
 ## Separate privileges when fetching/building ports:
@@ -63,18 +80,17 @@ permit keepenv nopass :wsrc as _pfetch
 permit keepenv nopass :wobj as _pbuild
 .Ed
 .Pp
-.Bd -literal
-FETCH_PACKAGES =	-Dsnap
-
+.Pa /etc/mk.conf :
+.Bd -literal -offset indent
 ## Cache compiled objects for faster recompilation (requires devel/ccache):
 USE_CCACHE =	Yes
 
 ## Build ports as ${BUILD_USER} and fetch distfiles as ${FETCH_USER}
 PORTS_PRIVSEP =	Yes
-#SUDO =		/usr/bin/doas
+SUDO =		/usr/bin/doas
 
 ## Set additional warning flags when compiling:
-WARNINGS =	Yes
+#WARNINGS =	Yes
 #CDIAGFLAGS =	-Wall -Wpointer-arith -Wuninitialized -Wstrict-prototypes \
 #		-Wmissing-prototypes -Wunused -Wsign-compare -Wshadow
 
@@ -82,7 +98,7 @@ WARNINGS =	Yes
 .Ed
 .Pp
 Installed packages:
-.Bd -literal
+.Bd -literal -offset indent
 ImageMagick             hexchat                 quirks
 armagetronad            isync                   rlwrap
 bubblemon-dockapp       keepassxc               sfeed
@@ -118,10 +134,13 @@ xenodm_flags=
 .Pp
 .Pa /etc/sysctl.conf :
 .Bd -literal -offset indent
-kern.audio.record=1
-kern.video.record=1
+#kern.audio.record=1
+#kern.video.record=1
 net.inet.ip.forwarding=1
 net.inet6.ip6.forwarding=1
+
+# enable simultaneous multithreading (+performance, -security)
+hw.smt=1
 .Ed
 .Ss Interactive shell
 I use
@@ -300,13 +319,17 @@ net.inet6.ip6.forwarding=1
 set block-policy drop
 set skip on lo
 
+# block stateless traffic; establish keep-state
+block return
+pass
+
 # sanitize incoming packets
 match in all scrub (no-df random-id max-mss 1440)
-antispoof quick for egress
+antispoof log quick for egress
 
-# block all incomming traffic
-block all
-pass out all
+# block all egress incomming traffic
+block in log on egress proto { tcp udp }
+pass in on egress from egress:network to egress:broadcast
 
 # allow ICMP (ping) for MTU discovery
 pass in proto icmp
@@ -315,7 +338,15 @@ pass in proto icmp
 block out log proto {tcp udp} user _pbuild
 
 # VMs can talk to the Internet
-match out on egress from vether0:network to any nat-to (egress)
+match out on egress from vport0:network to any nat-to (egress)
+
+# VMs can resolve names with unwind(8)
+pass in proto { tcp udp } from vport0:network to any port domain \
+	rdr-to localhost port domain
+
+# allow reaching the outside (IPv4 + IPv6)
+pass out inet
+pass out inet6
 .Ed
 .Pp
 .Pa /etc/unwind.conf :

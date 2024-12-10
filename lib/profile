@@ -55,6 +55,7 @@ export TERMCMD="xterm"
 export MENUCMD="pmenu"
 export BROWSER="dillo"
 export PROMPTCMD="xprompt"
+export SFEED_HTMLCONV="webdump"
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"

@@ -94,8 +94,8 @@ shod.dockBorder:                        #C5C8C6
 !! General widgets
 Xcursor.theme:                          "default"
 *menuCursor:                            left_ptr
-*font:                                  -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
-*faceName:                              -misc-tadepe-bold-r-normal--16-150-75-75-c-80-iso10646-1
+*font:                                  -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
+*faceName:                              -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
 *shadowThickness:                       2
 *highlightThickness:                    1
 *selectColor:                           #3465A4
@@ -254,12 +254,17 @@ XTerm*eightBitInput:                    False
 XTerm*on2Clicks:                        word
 XTerm*on3Clicks:                        line
 XTerm*fullscreen:                       never
+XTerm*cutNewline:                       false
+XTerm*trimSelection:                    true
+XTerm*allowPasteControls:               false
+XTerm*disallowedPasteControls:          C0,DEL,NL,STTY
 XTerm*alternateScroll:                  True
 XTerm.vt100.translations:               #override \
                                         Ctrl<Key>minus: smaller-vt-font() \n\
                                         Ctrl<Key>plus:  larger-vt-font() \n\
                                         <Key>Delete:    string(0x1b) string("[3~") \n\
                                         Ctrl<Key>0:     set-vt-font(d) \n\
+                                        Ctrl<Key>Tab:   set-altscreen(toggle) \n\
                                         <Key>Prior:     scroll-back(1, halfpage) \n\
                                         <Key>Next:      scroll-forw(1, halfpage) \n\
                                         Shift<Key>Home: scroll-to(begin) \n\

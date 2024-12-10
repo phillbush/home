@@ -43,12 +43,14 @@ BINS = \
 	${BINDIR}/fetchmail \
 	${BINDIR}/fetchnews \
 	${BINDIR}/focus \
+	${BINDIR}/fortune \
 	${BINDIR}/img \
 	${BINDIR}/meme \
 	${BINDIR}/open \
 	${BINDIR}/record \
 	${BINDIR}/samedir \
 	${BINDIR}/save \
+	${BINDIR}/scrot \
 	${BINDIR}/searchcode \
 	${BINDIR}/sendmail \
 	${BINDIR}/shodmenu \
@@ -94,11 +96,11 @@ ${DIRS}: $@
 
 lib: ${LIBS}
 ${LIBS}: lib/${@:T:.%=%}
-	install -m 644 lib/${@:T:.%=%} $@
+	install -D -m 644 lib/${@:T:.%=%} $@
 
 ico: ${ICOS}
 ${ICOS}: ico/${@:T}
-	install -m 644 ico/${@:T} $@
+	install -D -m 644 ico/${@:T} $@
 
 man: ${MANS}
 ${MANS}: doc/${@:T}

@@ -106,113 +106,6 @@ pee() (
 	cat >"$temp" && "$@" "$temp" <>/dev/tty >&0 2>&0 && cat "$temp"
 )
 
-# saves stdin into FILE; flags tells what to do when FILE exists.
-save() (
-	action=
-	exitval=0
-
-	while getopts abfin opt
-	do case "$opt" in
-	([abfin])
-		action="$opt"
-		;;
-	(*)
-		set --
-		break
-		;;
-	esac done
-	shift "$((OPTIND - 1))"
-	if test "$#" -eq 0
-	then
-		echo "usage: save [-abfin] file..." >&2
-		exit 2
-	fi
-
-	temp="$(mktemp -p "$(dirname "$1")")" || exit
-	trap '\rm -f -- "$temp"' EXIT
-	cat >"$temp" || exit
-
-	for file
-	do
-		shift
-
-		case "$file" in
-		(""|[[:space:]]*|*[[:space:]])
-			printf "save: %s: Invalid argument\n" "$file" >&2
-			exitval=1
-			continue
-			;;
-		esac
-
-		unique="$(
-			basename="${file##*/}"
-			dirname="${file%"$basename"}"
-			body="${basename%.*}"
-			ext="${basename##"$body"}"
-			unset -v i p
-			while test -e "$dirname$body$p$i$ext"
-			do
-				p="_"
-				if test -z "$i"
-				then
-					i=1
-				else
-					i="$((i + 1))"
-				fi
-			done
-			printf "%s" "$dirname$body$p$i$ext"
-		)"
-
-		if test -e "$file"
-		then
-			ans="$action"
-			if test -z "$action"
-			then
-				printf "save: %s: File exists\n" "$file" >&2
-				exitval=1
-				continue
-			elif test "$action" = "i"
-			then
-				printf "%s: File exists\n" "$file"
-				printf "\t(B)ackup,"
-				printf " (F)orce overwrite,"
-				printf " or save as (N)ew file?\n"
-				read -r ans </dev/tty
-			fi >&2
-			case "$ans" in
-			(a)
-				# append into existing file
-				cat <"$temp" >>"$file"
-				continue
-				;;
-			(b)
-				# backup existing file
-				\mv -f -- "$file" "$unique" || exit
-				;;
-			(f)
-				# overwrite existing file
-				\rm -f -- "$file"
-				;;
-			(n)
-				# save as new file, if exists
-				file="$unique"
-				;;
-			(?)
-				continue
-				;;
-			esac
-		fi
-		if test "$#" -eq 0
-		then
-			\mv -f -- "$temp" "$file" || exitval=1
-		else
-			\cp -f -- "$temp" "$file" || exitval=1
-		fi
-	done
-	\rm -f "$temp"
-	exit "$exitval"
-)
-
 # completions; ignore error when defining them
 {
 	set -A complete_sysctl \
@@ -251,6 +144,7 @@ save() (
 set -o emacs
 set -o braceexpand
 bind '^H'=delete-word-backward
+stty status '^T'
 
 # history
 FCEDIT="${VISUAL:-${EDITOR:-"vi"}}"
@@ -274,12 +168,13 @@ alias od='od -cAx'
 # human-readable sizes
 alias df='df -h'
 alias du='du -hc'
-alias ls='ls -1Fh'
+alias ls='ls -1ph'
 alias disklabel='disklabel -h'
 
 # lazyman aliases
 alias lc='ls -C'
 alias ll='ls -l'
+alias la='lc -A'
 alias calc='bc -l'
 
 # commands with command as argument (for futher alias expension)

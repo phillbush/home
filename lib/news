@@ -41,7 +41,20 @@ sigrid          https://ftrv.se/posts.atom
 c04tl3-plan9    https://www.youtube.com/feeds/videos.xml?channel_id=UCZ073r7qPBpFZlslLtmt70w
 adventuresin9   https://www.youtube.com/feeds/videos.xml?channel_id=UC7qFfPYl0t8Cq7auyblZqxA
 
+# eventos
+flisol-df       https://flisoldf.blog.br/feed/
+d30rpg          https://www.d30rpg.com.br/feed/
+
+# eclesia
+vatican-pt      https://www.vatican.va/content/francesco/pt.rss.xml
+vatican-en      https://www.vatican.va/content/francesco/en.rss.xml
+
 # Interesting personal blogs I found
+gianmarco-video https://gianmarco.gg/videos/rss.xml
+gianmarco-blog  https://gianmarco.gg/blog/rss.xml
+gianmarco-other https://gianmarco.gg/other/rss.xml
+robert-blinov   https://robertblinov.net/blog/rss/
+alex-schroeder  https://alexschroeder.ch/view/index.rss
 seirdy          https://seirdy.one/atom.xml
 computer.rip    https://computer.rip/rss.xml
 hugo-landau     https://www.devever.net/~hl/index.feed
@@ -82,6 +95,13 @@ joseph-choe     https://josephchoe.com/feed.xml
 tripcode        https://www.youtube.com/feeds/videos.xml?channel_id=UCZrrEuHiQjN2CUo84g5tk7w
 bryce-blog      https://odysee.com/$/rss/@bryce:c
 bryce-vlog      https://brycevandegrift.xyz/rss.xml
+
+# tegrelam channels
+Cs-books        tg://vimvimvimvimvimvimvimvimvim
+catolicismo     tg://catolicismoposting
+math-memes      tg://mathschan
+good-ideas      tg://ministryofgoodideas
+zlib            tg://zlibrary_official
 
 # langposting youtubers
 xidnaf          https://www.youtube.com/feeds/videos.xml?channel_id=UCByBOwwOU5tKddYpsrHiUUw

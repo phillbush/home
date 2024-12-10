@@ -1,9 +1,9 @@
-BROWSER = netsurf-gtk3
+BROWSER = dillo
 EDITOR = vim
 PAGER = less
 
 data       matches  '(([A-Za-z]+):(//)?)? *(.*)' into _ protocol _ file
-file       matches  '.*(\.([A-Za-z0-9]+))' into _ extension
+file       matches  '.*(\.([A-Za-z0-9]+))(\?[^#]*)?(#.*)?' into _ extension query section
 file       types    mime
 file       at       path
 
@@ -66,7 +66,7 @@ open       with     sh -c 'curl -Lfsm 10 -- "$1" | display -' sh %data
 
 rules      for      external media file
 protocol   matches  '(gopher|http)s?'
-extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|mp3|mkv|avi|jpe?g|png|gif|xpm|xbm|webp'
+extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|m4a|mp3|mkv|avi|jpe?g|png|gif|xpm|xbm|webp'
 open       with     mpv --loop -- %data
 
 
@@ -160,12 +160,14 @@ open       with     $TERMCMD -e sh -c 'cat "$@" | webdump | less' plumb %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 
 rules      for      text file
+protocol   matches  '(file)?'
 mime       matches  '(text/.*)|(.*/(x-empty|x-shellscript))'
 open       with     $TERMCMD -e $PAGER -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file
 info       with     cat -- %file
 
 rules      for      text file
+protocol   matches  '(file)?'
 extension  imatches 'txt|md|awk|sh|json'
 open       with     $TERMCMD -e $PAGER -- %file
 edit       with     $TERMCMD -e $EDITOR -- %file

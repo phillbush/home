@@ -48,6 +48,12 @@ picom \
 
 # music daemon
 pgrep -f '^mpd$' || mpd
+sndioctl output.level=1
+sndioctl app/mpd0.level=0.4
+
+# screen
+redshift -l -15.8:-47.9 &
+xbacklight -set 77 -steps 1 -time 1 &
 
 # clipboard manager
 xclipd &

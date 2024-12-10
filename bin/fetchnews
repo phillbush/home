@@ -19,6 +19,128 @@ err() {
 	exit 1
 }
 
+telegram2sfeed() {
+	awk '
+	function gottag(tag, class) {
+		if (index($0, tag) != 1)
+			return 0
+		if (class == "")
+			return 1
+		if (substr($0, length(tag) + 1, 1) != " ")
+			return 0
+		if (!match($0, /class="[^"]+"/))
+			return 0
+		if (!index(substr($0, RSTART, RLENGTH), class))
+			return 0
+		return 1
+	}
+
+	function show(i) {
+		if (!got)
+			return
+
+		gsub(/\t+/, " ", post["time"])
+		gsub(/\t+/, " ", post["id"])
+		gsub(/\t+/, " ", post["link"])
+		gsub(/\t+/, " ", post["author"])
+		gsub(/\t+/, " ", post["content"])
+
+		gsub(/\n/, "", post["time"])
+		gsub(/\n/, "", post["id"])
+		gsub(/\n/, "", post["link"])
+		gsub(/\n/, "", post["author"])
+		gsub(/\n/, "\\n", post["content"])
+
+		printf "%s\t", post["time"]
+		printf "%s\t", post["id"]
+		printf "%s\t", post["link"]
+		printf "%s\t", post["content"]
+		printf "%s\t", "html"
+		printf "%s\t", post["id"]
+		printf "%s\t", post["author"]
+		printf "%s\t", ""
+		printf "%s\n", ""
+
+		delete post
+		got = 0
+	}
+
+	BEGIN {
+		RS = "<"
+	}
+
+	END {
+		show()
+	}
+
+	gottag("div", "tgme_widget_message_bubble") {
+		show()
+		got = 1
+		next
+	}
+
+	!got {
+		next
+	}
+
+	gottag("time", "time") {
+		if (!match($0, /datetime="[^"]+"/))
+			next
+		post["time"] = substr($0, RSTART + 10, RLENGTH - 11)
+		gsub(/[-:T]/, " ", post["time"])
+		sub(/\+.*/, "", post["time"])
+		post["time"] = mktime(post["time"])
+		next
+	}
+
+	gottag("a", "tgme_widget_message_date") {
+		if (!match($0, /href="[^"]+"/))
+			next
+		post["link"] = substr($0, RSTART + 6, RLENGTH - 7)
+		post["id"] = post["link"]
+		sub(/.*\//, "", post["id"])
+	}
+
+	gottag("div", "tgme_widget_message_author") {
+		post["author"] = "<" $0
+		while (getline > 0 && !gottag("/div"))
+			post["author"] = post["author"] "<" $0
+		gsub(/<[^>]*>/, "", post["author"])
+	}
+
+	gottag("div", "tgme_widget_message_text") {
+		post["content"] = post["content"] "<p><" $0
+		while (getline > 0 && !gottag("/div"))
+			post["content"] = post["content"] "<" $0
+		post["content"] = post["content"] "<" $0 "</p>"
+	}
+
+	gottag("a", "tgme_widget_message_photo_wrap") {
+		if (!match($0, /style="[^"]+"/))
+			next
+		$0 = substr($0, RSTART, RLENGTH)
+		if (!match($0, /background-image:url([^)]+)/))
+			next
+		post["content"] = post["content"] "<p><img src=\"" \
+			substr($0, RSTART + 22, RLENGTH - 23) \
+			"\"></p>"
+		next
+	}
+
+	gottag("video", "tgme_widget_message_video") {
+		if (match($0, /class="[^"]*blured[^"]*"/))
+			next
+		if (!match($0, /src="[^"]+"/))
+			next
+		post["content"] = post["content"] \
+			"<p>video: <video controls=\"\"><source src=\"" \
+			substr($0, RSTART + 5, RLENGTH - 6) \
+			"\"></video></p>"
+		next
+	}
+	'
+}
+
 test "$#" -le 1 || usage
 
 newsdir="${NEWSDIR:-$HOME/var/news}"
@@ -33,18 +155,32 @@ touch "$newsdir/newstime"
 
 egrep -v '^[[:space:]]*(#.*)?$' <"${newsfile}" | while read -r source url
 do
-	time=0
-	fgrep -q -- "$source" <"$newsfile" && time="$newstime"
 	printf '%s: ' "$source"
+	case "$url" in
+	("")
+		echo "could not fetch from this source (no url given)"
+		continue
+		;;
+	("tg:"*)
+		url="${url#tg:}"
+		url="${url#//}"
+		url="https://t.me/s/${url}?embed=1&single"
+		postfilter="telegram2sfeed"
+		;;
+	(*)
+		postfilter="sfeed"
+		;;
+	esac
+	curl -LSs --http1.1 --fail --max-time 10 --max-filesize 8M "$url" |\
 	{
-		curl -LSs --http1.1 --fail --max-time 10 --max-filesize 8M "$url" |\
-		sfeed "${url%%/*}" |\
-		awk -v time="$time" -v author="$source" '
+		"$postfilter" "${url%%/*}" |\
+		awk -v newstime="$newstime" -v author="$source" '
 		BEGIN {
 			FS = OFS = "\t"
 		}
-		$1 >= time {
-			$7 = author
+		$1 >= newstime {
+			if ($7 ~ /^[[:space:]]*$/)
+				$7 = author
 			print
 		}' |\
 		SFEED_MBOX_CONTENT=1 sfeed_mbox |\
