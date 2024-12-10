@@ -16,7 +16,7 @@ bitreich        gophers://bitreich.org/0/news.atom.xml
 drkhsh          https://drkhsh.at/atom_content.xml
 evilbob         https://codemadness.org/atom_content.xml
 roygbyte        gopher://roygbyte.com/0/rss.xml
-ykm_izuru       https://mirror-world.chaotic.ninja/feed.atom
+ykm_izuru       https://mirror-world.yakumo.dev/feed.atom
 
 # OpenBSD Developers
 ibara           https://briancallahan.net/blog/feed.xml
@@ -48,6 +48,7 @@ d30rpg          https://www.d30rpg.com.br/feed/
 # eclesia
 vatican-pt      https://www.vatican.va/content/francesco/pt.rss.xml
 vatican-en      https://www.vatican.va/content/francesco/en.rss.xml
+popeposting     tg://catolicismoposting
 
 # Interesting personal blogs I found
 gianmarco-video https://gianmarco.gg/videos/rss.xml
@@ -98,7 +99,6 @@ bryce-vlog      https://brycevandegrift.xyz/rss.xml
 
 # tegrelam channels
 Cs-books        tg://vimvimvimvimvimvimvimvimvim
-catolicismo     tg://catolicismoposting
 math-memes      tg://mathschan
 good-ideas      tg://ministryofgoodideas
 zlib            tg://zlibrary_official

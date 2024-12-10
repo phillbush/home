@@ -29,6 +29,7 @@ set mail_check_stats = yes
 set edit_headers=yes
 
 # TUI
+macro pager <Return>   |urlview\n
 macro index,pager <Tab>     '<sidebar-next><sidebar-open>'
 macro index,pager <Backtab> '<sidebar-prev><sidebar-open>'
 set sidebar_visible = yes

@@ -19,6 +19,10 @@ err() {
 	exit 1
 }
 
+info() {
+	printf "$@" >&2
+}
+
 telegram2sfeed() {
 	awk '
 	function gottag(tag, class) {
@@ -155,7 +159,7 @@ touch "$newsdir/newstime"
 
 egrep -v '^[[:space:]]*(#.*)?$' <"${newsfile}" | while read -r source url
 do
-	printf '%s: ' "$source"
+	info '%s: ' "$source"
 	case "$url" in
 	("")
 		echo "could not fetch from this source (no url given)"
@@ -171,8 +175,11 @@ do
 		postfilter="sfeed"
 		;;
 	esac
-	curl -LSs --http1.1 --fail --max-time 10 --max-filesize 8M "$url" |\
 	{
+		curl --location --silent --show-error --http1.1 --fail \
+		--max-time 10 --max-filesize 8M "$url" && \
+		info "OK\n"
+	} | {
 		"$postfilter" "${url%%/*}" |\
 		awk -v newstime="$newstime" -v author="$source" '
 		BEGIN {
@@ -185,5 +192,6 @@ do
 		}' |\
 		SFEED_MBOX_CONTENT=1 sfeed_mbox |\
 		mdeliver -M "$newsdir" 2>/dev/null
-	} 2>&1 >/dev/null | ifne -n echo "OK"
+	} 2>&1 >/dev/null
 done
+exit 0
