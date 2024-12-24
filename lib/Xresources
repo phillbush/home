@@ -92,7 +92,7 @@ shod.dockBorder:                        #C5C8C6
 #endif
 
 !! General widgets
-Xcursor.theme:                          retrosmart-xcursor-white-color-shadow
+Xcursor.theme:                          retrosmart-xcursor-white-shadow
 Xcursor.size:                           32
 *menuCursor:                            left_ptr
 *font:                                  -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
