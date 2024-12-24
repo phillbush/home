@@ -6,7 +6,7 @@
 # © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-PATH="/usr/home/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/ports/infrastructure/bin:/usr/local/bin:/usr/local/heirloom-doctools/bin:/usr/games"
+PATH="/usr/home/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/ports/infrastructure/bin:/usr/local/bin:/usr/local/sbin:/usr/local/heirloom-doctools/bin:/usr/games"
 MANPATH="/usr/home/man:/usr/share/man:/usr/X11R6/man:/usr/local/man:/usr/local/heirloom-doctools/man"
 export PATH HOME TERM MANPATH
 

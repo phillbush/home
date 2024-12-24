@@ -178,8 +178,13 @@ info       with     cat -- %file
 
 rules      for      youtube video
 protocol   matches  'ytdl|https?'
-file       matches  '((.+\.)?y(ew|ou)tu\.?be(\.com)?/.*)?([A-Za-z0-9_-]{11,})([&?].*)?'
+file       matches  '((.+\.)?y(ew|ou)tu\.?be(\.com)?/.*)?(.*/watch\?v=)?([A-Za-z0-9_-]{11,})([&?].*)?'
 open       with     mpv --ytdl-format=mp4+ba -- ytdl://%file
+
+rules      for      instagram media
+protocol   matches  '(https?)?'
+file       matches  '(www\.)?instagram\.com/.*'
+open       with     mpv -- ytdl://%file
 
 rules      for      external paged document
 protocol   matches  '(gopher|http)s?'

@@ -92,9 +92,11 @@ shod.dockBorder:                        #C5C8C6
 #endif
 
 !! General widgets
-Xcursor.theme:                          "default"
+Xcursor.theme:                          retrosmart-xcursor-white-color-shadow
+Xcursor.size:                           32
 *menuCursor:                            left_ptr
 *font:                                  -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
+*boldFont:                              -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
 *faceName:                              -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
 *shadowThickness:                       2
 *highlightThickness:                    1
@@ -131,7 +133,7 @@ Xcursor.theme:                          "default"
 *Scrollbar.scrollVCursor:               left_ptr
 *Scrollbar.translations:                <Btn4Down>:     StartScroll(Backward) \n\
                                         <Btn5Down>:     StartScroll(Forward) \n\
-                                        <Btn1Down>:     StartScroll(Continuous) \n\
+                                        <Btn1Down>:     StartScroll(Continuous) MoveThumb() NotifyThumb() \n\
                                         <Btn1Motion>:   MoveThumb() NotifyThumb() \n\
                                         <BtnUp>:        NotifyScroll(Proportional) EndScroll()
 *Viewport.useBottom:                    True
@@ -233,7 +235,7 @@ NetHack*tombstone:                      rip.xpm
 NetHack*map*rows:                       15
 NetHack*map*columns:                    30
 
-XTerm*allowBoldFonts:                   False
+XTerm*boldMode:                         False
 XTerm*faceName:
 XTerm*cursorBar:                        True
 XTerm*cursorBlink:                      True

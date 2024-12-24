@@ -5,6 +5,7 @@ Read the manual at `./doc/home.8` for more information.
 ## Theme
 
 Bitmap font is [tadepe](https://github.com/phillbush/tadepe/).  
+Scalable font is InputMono and Source Code Pro.  
 Cursor is [Simp1e-Adw](https://gitlab.com/cursors/simp1e).  
 Color scheme is [tango](https://en.wikipedia.org/wiki/Tango_Desktop_Project#Palette).  
 Icons are created by me (plus a few Haiku icons).

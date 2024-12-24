@@ -68,6 +68,11 @@ Group for building privileges.
 Login class for higher resources usage.
 .El
 .Pp
+.Pa crontab :
+.Bd -literal -offset indent
+@reboot -ns /usr/local/sbin/anacron -ds
+.Ed
+.Pp
 .Pa /etc/doas.conf :
 .Bd -literal -offset indent
 ## Allow wheel by default:
