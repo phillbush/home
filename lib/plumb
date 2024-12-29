@@ -103,6 +103,11 @@ unzip      with     sh -c  $ZIPBEG'7z x -o"$dir" "$file"'$ZIPEND plumb %file
 
 # local file rules
 
+rules      for      bitmap font
+protocol   matches  '(file)?'
+extension  imatches bdf
+open       with     gbdfed %file
+
 rules      for      youtube link
 extension  imatches 'yt(dlp)?'
 path       matches  $HOME/var/news/.*
@@ -181,6 +186,10 @@ protocol   matches  'ytdl|https?'
 file       matches  '((.+\.)?y(ew|ou)tu\.?be(\.com)?/.*)?(.*/watch\?v=)?([A-Za-z0-9_-]{11,})([&?].*)?'
 open       with     mpv --ytdl-format=mp4+ba -- ytdl://%file
 
+rules      for      youtube video
+data       matches  '(.+\.)?y(ew|ou)tu\.?be(\.com)?/.*(.*/watch\?v=)?([A-Za-z0-9_-]{11,})([&?].*)?'
+open       with     mpv --ytdl-format=mp4+ba -- ytdl://%file
+
 rules      for      instagram media
 protocol   matches  '(https?)?'
 file       matches  '(www\.)?instagram\.com/.*'
@@ -192,7 +201,7 @@ extension  imatches 'pdf|eps|ps|djvu'
 open       with     sh -c 'cd /tmp && curl -LOfsm 10 --max-filesize 10M -- "$@" 2>/dev/null && zathura -- "$(basename "$@")"' sh %data
 
 rules      for      web page
-protocol   matches  'https?'
+protocol   matches  '(gopher|http)s?'
 open       with     $BROWSER -- %data
 
 HOST = '([A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*)'

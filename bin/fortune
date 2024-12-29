@@ -79,6 +79,7 @@ True glory consists in doing what deserves to be written; in writing what deserv
 A data structure is just a stupid programming language.	-- R' Wm' Gosper.
 Mathematicians stand on each others' shoulders and computer scientists stand on each others' toes.	-- Richard Hamming.
 Don't use the computer to do things that can be efficiently done by hand.	-- Richard Hill.
+I'd just like to interject for a moment. What you're referring to as Linux, is in fact, GNU/Linux, or as I've recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.	-- Richard Stallman
 Programming languages should be designed not by piling feature on top of feature, but by removing the weaknesses and restrictions that make additional features appear necessary.	-- RnRS.
 Not only is UNIX dead, it's starting to smell really bad.	-- Rob Pike.
 Do you want to be a bloat detective? It's easy; just pick any executable. There! You found some!	-- Rolf van Widenfelt
