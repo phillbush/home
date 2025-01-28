@@ -1,125 +1,138 @@
 #!/bin/sh
 #
-# Usage: CMD | save [-abfint] FILE ...
+# Usage: CMD | save [-abfin] FILE
 # Saves stdin into FILE; flags tells what to do when FILE exists.
 #
 # © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
-action=
-tee=false
-exitval=0
+usage() {
+	printf "usage: %s [-abfin] file\n" "${0##*/}" >&2
+	exit 2
+}
 
 msg() {
 	printf "$@" >&2
 }
 
-usage() {
-	msg "usage: %s [-abfint] file..." "${0##*/}"
-	exit 2
+warn() {
+	fmt="$1"
+	shift
+	msg "%s: $fmt\n" "${0##*/}" "$@"
 }
 
-while getopts abfint opt
-do case "$opt" in
-([abfin])
-	action="$opt"
+err() {
+	warn "$@"
+	exit 1
+}
+
+unique() (
+	basename="${1##*/}"
+	dirname="${1%"$basename"}"
+	body="${basename%.*}"
+	ext="${basename##"$body"}"
+	unset -v i p
+	while test -e "$dirname$body$p$i$ext"
+	do
+		p="_"
+		if test -z "$i"
+		then
+			i=1
+		else
+			i="$((i + 1))"
+		fi
+	done
+	printf "%s" "$dirname$body$p$i$ext"
+)
+
+if test "$#" -eq 3 && test "$2" = "--"
+then
+	# called as `save -opt -- file`
+	set --"$1" "$3"
+fi
+
+case "$#" in
+(2)
+	case "$1" in
+	(-a|-append)
+		action=a ;;
+	(-b|-backup)
+		action=b ;;
+	(-f|-force|-overwrite)
+		action=f ;;
+	(-i|-inter|-interactive|-ask)
+		action=i ;;
+	(-n|-new)
+		action=n ;;
+	(*)
+		usage ;;
+	esac
+	file="$2"
 	;;
-(t)
-	tee=true
+(1)
+	action=
+	file="$1"
 	;;
 (*)
 	usage
 	;;
-esac done
-shift "$((OPTIND - 1))"
-test "$#" -eq 0 && usage
+esac
 
-temp="$(mktemp -p "$(dirname "$1")")" || exit
-trap 'rm -f -- "$temp"' EXIT
-cat >"$temp" || exit
+case "$file" in
+(""|[[:space:]]*|*[[:space:]])
+	err "%s: Invalid argument" "$file"
+	;;
+esac
 
-
-"$tee" && cat "$temp"
-exec >&-
-
-for file
-do
-	shift
-
-	case "$file" in
-	(""|[[:space:]]*|*[[:space:]])
-		msg "save: %s: Invalid argument\n" "$file"
-		exitval=1
-		continue
-		;;
-	esac
-
-	unique="$(
-		basename="${file##*/}"
-		dirname="${file%"$basename"}"
-		body="${basename%.*}"
-		ext="${basename##"$body"}"
-		unset -v i p
-		while test -e "$dirname$body$p$i$ext"
-		do
-			p="_"
-			if test -z "$i"
-			then
-				i=1
-			else
-				i="$((i + 1))"
-			fi
-		done
-		printf "%s" "$dirname$body$p$i$ext"
-	)"
-
-	if test -e "$file"
-	then
-		ans="$action"
-		if test -z "$action"
-		then
-			msg "save: %s: File exists\n" "$file"
-			exitval=1
-			continue
-		elif test "$action" = "i"
-		then
-			msg "%s: File exists\n" "$file"
-			msg "\t(B)ackup,"
-			msg " (F)orce overwrite,"
-			msg " (A)ppend,"
-			msg " or save as (N)ew file?\n"
-			read -r ans </dev/tty
-		fi >&2
-		case "$ans" in
-		(a)
-			# append into existing file
-			cat <"$temp" >>"$file"
+if test -d "$file"
+then
+	err "%s: Is a directory" "$file"
+elif ! test -f "$file"
+then
+	action=f
+elif test -z "$action"
+then
+	err "%s: File exists" "$file"
+elif test "$action" = "i"
+then
+	msg "%s: File exists\n" "$file"
+	while true
+	do
+		msg "\t(B)ackup,"
+		msg " (F)orce overwrite,"
+		msg " (A)ppend,"
+		msg " or save as (N)ew file? "
+		read -r action </dev/tty
+		case "$action" in
+		([abfn])
+			break
+			;;
+		("")
 			continue
 			;;
-		(b)
-			# backup existing file
-			mv -f -- "$file" "$unique" || exit
-			;;
-		(f)
-			# overwrite existing file
-			rm -f -- "$file"
-			;;
-		(n)
-			# save as new file, if exists
-			file="$unique"
-			;;
-		(?)
-			continue
+		(*)
+			msg "\tUnknown action\n"
+			exit 1
 			;;
 		esac
-	fi
-	if test "$#" -eq 0
-	then
-		mv -f -- "$temp" "$file" || exitval=1
-	else
-		cp -f -- "$temp" "$file" || exitval=1
-	fi
-done
+	done
+fi
 
-rm -f "$temp"
-exit "$exitval"
+new="$(unique "$file")"
+
+case "$action" in
+(a)
+	# append into existing file
+	cat >>"$file"
+	exit
+	;;
+(b)
+	# backup existing file
+	mv -f -- "$file" "$new" || exit
+	;;
+(n)
+	# save as new file, if exists
+	file="$new"
+	;;
+esac
+cat >"$file"
