@@ -4,16 +4,15 @@
 # Opens xterm(1) with given ARGUMENTs inside user-drawn rectangle.
 # Depends on slop(1) and xterm(1).  X11 only.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.
-# No rights reserved (dedicated into Public Domain; use as you will).
-# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™).
 
 GLYPH_WIDTH=8
 GLYPH_HEIGHT=16
 MIN_WIDTH=320
 MIN_HEIGHT=240
 
-slop -t 0 -f '%w %h %x %y' 2>&- | {
+slop --noopengl --tolerance=0 --format='%w %h %x %y' 2>&- | {
 	read -r w h x y 
 	test "$w" -lt "$MIN_WIDTH" && exit
 	test "$h" -lt "$MIN_HEIGHT" && exit

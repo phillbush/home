@@ -4,7 +4,7 @@
 # Runs COMMAND in active window's working directory.
 # Depends on cwdof (or any utility to get process' working directory).
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
 err() {

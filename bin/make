@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Usage: make [ARGS ... TARGETS ...]
+# make(1) wrapper with custom variables if running on projects directory
+#
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
+
+PROJDIR="${PROJDIR:-"$HOME/prj"}"
+PREFIX="/usr/local/llvm19"
+
+case "$PWD" in
+("$PROJDIR"*)
+	export AR="$PREFIX/bin/llvm-ar"
+	export AS="$PREFIX/bin/llvm-as"
+	export CC="$PREFIX/bin/clang"
+	export CXX="$PREFIX/bin/clang++"
+	export CPP="$PREFIX/bin/clang-cpp"
+	export LD="$PREFIX/bin/lld"
+	export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}/usr/local/llvm19/lib"
+	;;
+esac
+exec /usr/bin/make "${@}"

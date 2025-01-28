@@ -4,7 +4,7 @@
 # Saves in maildir posts from RSS/Atom feeds listed in FILE (~/.news by default).
 # Depends on curl, sfeed, mblaze, moreutils' ifne, and UNIX utils (grep, awk, etc).
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
 usage() {
@@ -24,7 +24,7 @@ info() {
 }
 
 telegram2sfeed() {
-	awk '
+	TZ="UTC" LC_CTYPE="C.UTF-8" awk '
 	function gottag(tag, class) {
 		if (index($0, tag) != 1)
 			return 0
@@ -177,7 +177,7 @@ do
 	esac
 	{
 		curl --location --silent --show-error --http1.1 --fail \
-		--max-time 10 --max-filesize 8M "$url" && \
+		--connect-timeout 8 --max-filesize 10M "$url" && \
 		info "OK\n"
 	} | {
 		"$postfilter" "${url%%/*}" |\

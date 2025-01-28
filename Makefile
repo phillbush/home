@@ -45,11 +45,13 @@ BINS = \
 	${BINDIR}/focus \
 	${BINDIR}/fortune \
 	${BINDIR}/img \
+	${BINDIR}/make \
 	${BINDIR}/meme \
 	${BINDIR}/open \
 	${BINDIR}/record \
 	${BINDIR}/samedir \
 	${BINDIR}/save \
+	${BINDIR}/search \
 	${BINDIR}/scrot \
 	${BINDIR}/searchcode \
 	${BINDIR}/sendmail \

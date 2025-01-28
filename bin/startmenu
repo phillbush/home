@@ -4,7 +4,7 @@
 # Invoked by start button dockapp to create a desktop menu.
 # Depends on πmenu.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
 pmenu <<EOF | sh &

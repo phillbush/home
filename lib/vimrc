@@ -3,8 +3,7 @@
 " Initialization script for vim.
 " Vim sucks. I want to move to something else.
 "
-" © 2024 Lucas de Sena <lucas at seninha dot org>.
-" No rights reserved.  Dedicated into Public Domain.  Use as you will.
+" © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 " THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
 set nocompatible noautochdir nomodeline encoding=utf-8 fileencodings=utf-8
@@ -22,6 +21,13 @@ if (!empty($CACHEDIR))
 endif
 set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
 autocmd BufNewFile,BufReadPre /tmp/*,$TMPDIR/*,$TMP/*,$TEMP/* setlocal noswapfile noundofile viminfo=
+
+"" shut the fsck up
+set hidden
+
+"" synchronize simultaneous sessions on the same file
+set autoread
+set scrollbind
 
 "" status interface; document identification; etc
 set laststatus=0 title showcmd showmode

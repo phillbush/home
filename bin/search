@@ -1,14 +1,13 @@
 #!/bin/sh
 #
-# Usage: open [FILE ...]
-# Plumb FILEs with "open" action.
+# Usage: search [FILE ...]
+# Plumb FILEs with "search" action.
 # Depends on seninha's plumb.
 #
 # © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
 set -o monitor
-exec 0</dev/null
-test -t 1 || exec 1>/dev/null
-plumb -open -- "$@" &
-wait
+exec 0</dev/null 1>/dev/null
+set -- "$(printf "$*" | tr ' ' '+')"
+plumb -search -- "$*" &

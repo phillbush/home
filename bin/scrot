@@ -4,13 +4,12 @@
 # Save screenshot into FILE (default /tmp/scrot.png) and clipboard.
 # Depends on maim(1), save(1) and xcliputils' xclipin(1).  X11 only.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.
-# No rights reserved (dedicated into Public Domain; use as you will).
-# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™).
 
 test $# -gt 1 && {
 	printf "usage: %s [-abfint] file..." "${0##*/}" >&2
 	exit 2
 }
 file="${1-/tmp/scrot.png}"
-maim --select --hidecursor -- "$file" && xclipin -t image/png "$file"
+maim --noopengl --select --hidecursor -- "$file" && xclipin -t image/png "$file"

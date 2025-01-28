@@ -97,7 +97,7 @@ Xcursor.size:                           32
 *menuCursor:                            left_ptr
 *font:                                  -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
 *boldFont:                              -misc-tadepe-bold-r-normal--16-160-75-75-c-80-iso10646-1
-*faceName:                              Tadepe:style=bold:pixelsize=16
+*faceName:                              Tadepe:style=bold:size=16
 *shadowThickness:                       2
 *highlightThickness:                    1
 *selectColor:                           #3465A4
@@ -260,14 +260,14 @@ XTerm*trimSelection:                    true
 XTerm*allowPasteControls:               false
 XTerm*disallowedPasteControls:          C0,DEL,NL,STTY
 XTerm*alternateScroll:                  True
-XTerm*faceName:                         Tadepe:style=bold:size=12
-XTerm*faceSize1:                        12
-XTerm*faceSize2:                        12
-XTerm*faceSize3:                        12
-XTerm*faceSize4:                        12
-XTerm*faceSize5:                        28
-XTerm*faceSize6:                        28
-XTerm*faceSize7:                        56
+XTerm*faceSize:                         16
+XTerm*faceSize1:                        16
+XTerm*faceSize2:                        16
+XTerm*faceSize3:                        16
+XTerm*faceSize4:                        16
+XTerm*faceSize5:                        32
+XTerm*faceSize6:                        32
+XTerm*faceSize7:                        64
 XTerm.vt100.translations:               #override \
                                         Ctrl<Key>minus: smaller-vt-font() \n\
                                         Ctrl<Key>plus:  larger-vt-font() \n\

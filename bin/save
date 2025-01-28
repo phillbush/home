@@ -3,7 +3,7 @@
 # Usage: CMD | save [-abfint] FILE ...
 # Saves stdin into FILE; flags tells what to do when FILE exists.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
 action=

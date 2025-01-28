@@ -3,9 +3,6 @@
 # requires zathura, troff (heirloom-doctools), ps2pdf (ghostscript),
 #          entr, sponge (moreutils)
 
-TIMEOUT=8
-PDFOPEN=zathura
-
 # get roff file
 case "$#" in
 (1)
@@ -43,10 +40,13 @@ trap '
 ' EXIT
 
 # postpone opening pdf file until it is converted once
-printf "%s\n" "$pdf" | entr -npz true && exec "$PDFOPEN" "$pdf" &
-pid="$!"
+printf "%s\n" "$pdf" | if entr -npz true
+then
+	exec zathura -- "$pdf"
+fi &
+reader_pid="$!"
 
-# convert roff to pdf; rerun whenever roff file changes
+# convert manpage to pdf; rerun whenever manpage file changes
 printf '%s\n' "$man" | entr -nrs "
 	{
 		printf '.fp 5 CW DejaVuSansMono\n'
@@ -59,6 +59,10 @@ printf '%s\n' "$man" | entr -nrs "
 	ps2pdf -sPAPERSIZE=letter - |
 	sponge \"$pdf\"
 " &
+troff_pid="$!"
 
-# wait for pdf viewer to close
-wait "$pid" || exit $?
+# wait for pdf reader to close; then terminate troff conversor
+wait "$reader_pid"
+status="$?"
+kill "$troff_pid"
+exit "$status"

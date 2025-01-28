@@ -3,11 +3,31 @@
 # Initialization script for login sessions.
 # It mostly set environment variables.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-PATH="/usr/home/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/ports/infrastructure/bin:/usr/local/bin:/usr/local/sbin:/usr/local/heirloom-doctools/bin:/usr/games"
-MANPATH="/usr/home/man:/usr/share/man:/usr/X11R6/man:/usr/local/man:/usr/local/heirloom-doctools/man"
+PATH="/bin:/sbin"
+for dir in \
+	/usr/home/bin /usr/local/llvm19/bin \
+	/usr/bin /usr/sbin /usr/X11R6/bin   \
+	/usr/ports/infrastructure/bin       \
+	/usr/local/bin /usr/local/sbin      \
+	/usr/local/heirloom-doctools/bin    \
+	/usr/games
+do
+	PATH="$PATH:$dir"
+done
+
+MANPATH=/usr/home/man
+for dir in \
+	/usr/share/man /usr/X11R6/man /usr/local/man \
+	/usr/local/heirloom-doctools/man
+do
+	MANPATH="$MANPATH:$dir"
+done
+
+unset dir
+
 export PATH HOME TERM MANPATH
 
 # rc files

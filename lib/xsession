@@ -1,14 +1,13 @@
 #!/bin/sh
 #
 # Initialization script for X11 sessions.
-# Depends on, OpenBSD's Xenocara, xwallpaper, picom, etc.
+# Depends on xwallpaper, unclutter, picom, redshift, shod and various dockapps.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.
-# No rights reserved.  Dedicated into Public Domain.  Use as you will.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
 # necessary for X 21.1.1
-xrandr --dpi 96
+xrandr --dpi 75
 
 # Load environment variables and xresources
 . ~/.profile
@@ -53,7 +52,7 @@ sndioctl app/mpd0.level=0.4
 
 # screen
 redshift -l -15.8:-47.9 &
-xbacklight -set 77 -steps 1 -time 1 &
+#xbacklight -set 77 -steps 1 -time 1 &
 
 # clipboard manager
 xclipd &

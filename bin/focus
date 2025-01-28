@@ -4,7 +4,7 @@
 # Focus window running APPLICATION; or launches it if no window is found.
 # Depends on xprop and shod.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
 
 if test "$#" -eq 0

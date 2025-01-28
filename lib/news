@@ -1,5 +1,8 @@
 # RSS/Atom feeds processed by bin/fetchnews (syntax: "NAME URL\n").
 
+# frens
+waltr           http://glassnerves.sdf.org/feed.xml
+
 # Nixers
 eyenx           https://eyenx.ch/feed.xml
 josuah          https://josuah.net/blog/atom.xml
@@ -17,6 +20,7 @@ drkhsh          https://drkhsh.at/atom_content.xml
 evilbob         https://codemadness.org/atom_content.xml
 roygbyte        gopher://roygbyte.com/0/rss.xml
 ykm_izuru       https://mirror-world.yakumo.dev/feed.atom
+someodd         gopher://gopher.someodd.zip/0/phlog/atom.xml
 
 # OpenBSD Developers
 ibara           https://briancallahan.net/blog/feed.xml
@@ -40,6 +44,7 @@ posixcafe       https://posixcafe.org/blogs/index.atom
 sigrid          https://ftrv.se/posts.atom
 c04tl3-plan9    https://www.youtube.com/feeds/videos.xml?channel_id=UCZ073r7qPBpFZlslLtmt70w
 adventuresin9   https://www.youtube.com/feeds/videos.xml?channel_id=UC7qFfPYl0t8Cq7auyblZqxA
+prahou          https://triapul.cz/feed/english.xml
 
 # eventos
 flisol-df       https://flisoldf.blog.br/feed/
@@ -50,21 +55,23 @@ vatican-pt      https://www.vatican.va/content/francesco/pt.rss.xml
 vatican-en      https://www.vatican.va/content/francesco/en.rss.xml
 
 # Interesting personal blogs I found
+netmeister      https://www.netmeister.org/blog/rss.xml
+box.matto       https://box.matto.nl/gopherindex.rss
+yossarian       https://blog.yossarian.net/feed.xml
 thedorkweb      https://thedorkweb.bearblog.dev/feed/
 gianmarco-video https://gianmarco.gg/videos/rss.xml
 gianmarco-blog  https://gianmarco.gg/blog/rss.xml
 gianmarco-other https://gianmarco.gg/other/rss.xml
 robert-blinov   https://robertblinov.net/blog/rss/
-alex-schroeder  https://alexschroeder.ch/view/index.rss
 seirdy          https://seirdy.one/atom.xml
 computer.rip    https://computer.rip/rss.xml
 hugo-landau     https://www.devever.net/~hl/index.feed
 hereket         https://hereket.com/index.xml
 shallowsky      https://shallowsky.com/blog/index.atom
 dynomax         https://dynomax.neocities.org/blog/feed.xml
-sizeof-cat      https://sizeof.cat/index.xml
+sizeof-cat      https://sizeof.cat/atom.xml
 ploum           https://ploum.net/atom_en.xml
-doug-rumbaugh   https://douglasrumbaugh.com/post/index.xml
+doug-rumbaugh   https://douglasrumbaugh.com/feed.xml
 aartaka         https://aartaka.me/rss.xml
 maths-and-comp  https://math.andrej.com/feed.xml
 sebastiano      https://sebastiano.tronto.net/blog/feed.xml

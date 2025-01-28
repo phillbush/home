@@ -4,7 +4,7 @@
 # Invoked by shod(1) on user interaction; should open a context menu.
 # Depends on shod, xmenu.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
 IFS=

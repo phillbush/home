@@ -218,16 +218,16 @@ open       with     $BROWSER -- https://%file
 # web search rules
 
 rules      for      youtube search
-protocol   matches  'y'
-search     with     $BROWSER -- https://yewtu.be/search?q=%file
+protocol   matches  'y(tdl|outube)?'
+search     with     $BROWSER -- https://inv.nadeko.net/search?q=%file
 
 rules      for      wikipedia search
-protocol   matches  'w'
-search     with     $BROWSER -- https://en.wikipedia.org/wiki/%file
+protocol   matches  'w(iki)?'
+search     with     $BROWSER -- https://en.wikipedia.org/w/index.php?go=Go&search=%file
 
 rules      for      wiktionary search
-protocol   matches  'd'
-search     with     $BROWSER -- https://en.wiktionary.org/wiki/%file
+protocol   matches  'd(ict)?'
+search     with     $BROWSER -- https://en.wiktionary.org/w/index.php?go=Go&search=%file
 
 rules      for      web search
-search     with     $BROWSER -- https://duckduckgo.com/?q=%file
+search     with     $BROWSER -- https://duckduckgo.com/lite/?kp=-1&kd=-1&q=%file

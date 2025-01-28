@@ -3,7 +3,7 @@
 # Usage: walk [-adfx | -n COUNT] FILE ... |  CMD
 # Walk recursively list FILE (default ./)
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
 usage() {

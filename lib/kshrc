@@ -3,7 +3,7 @@
 # Initialization script for interactive ksh(1) sessions.
 # Depends only on OpenBSD base utilities.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.
 # No rights reserved.  Dedicated into Public Domain.  Use as you will.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
@@ -201,6 +201,9 @@ alias lee='pee "${PAGER:-"less"}" --'
 # typos
 alias mkae='make'
 alias makemake='make'
+
+# etc
+alias diff='diff -up'
 
 # prompt is "\n HOST ❯ " (red if root; HOST if ssh; also set window title)
 PS1='$(

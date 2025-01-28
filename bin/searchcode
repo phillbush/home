@@ -5,7 +5,7 @@
 # Depends on curl(1), json2tsv(1), POSIX awk(1), moreutils' ifne(1).
 # Depends on availability of searchcode.com's web API.
 #
-# © 2024 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
 isallnum() {
