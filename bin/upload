@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# Usage: upload FILE ...
+# Uploads file to seninha.org
+#
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
+
+host="seninha.org"
+
+
+test "$#" -lt 1 && {
+	printf "usage: %s file\n" "${0##*/}" >&2
+	exit 2
+}
+
+for file
+do
+	case "$file" in
+	(/*) ;;
+	(*)
+		file="$PWD/$file"
+		;;
+	esac
+	shift
+	set -- "$@" "$file"
+done
+
+scp "$@" "www:/var/www/seninha.org/files" || exit
+
+for file
+do
+	file="${file##*/}"
+	printf "https://%s/%s/%s\n" "$host" "files" "$file"
+	case "$file" in
+		(*.gif)              type=g ;;
+		(*.png|*.jpg|*.jpeg) type=I ;;
+		(*)                  type=9 ;;
+	esac
+	printf "gopher://%s/%s/%s/%s\n" "$host" "$type" "files" "$file"
+	shift
+	test "$#" -eq 0 || printf "\n"
+done | sed "s, ,%20,g"

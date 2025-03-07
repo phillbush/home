@@ -190,9 +190,9 @@ rules      for      youtube video
 data       matches  '(.+\.)?y(ew|ou)tu\.?be(\.com)?/.*(.*/watch\?v=)?([A-Za-z0-9_-]{11,})([&?].*)?'
 open       with     mpv --ytdl-format=mp4+ba -- ytdl://%file
 
-rules      for      instagram media
+rules      for      web media
 protocol   matches  '(https?)?'
-file       matches  '(www\.)?instagram\.com/.*'
+file       matches  '(www\.)?(instagram\.com|v\.redd\.it)/.*'
 open       with     mpv -- ytdl://%file
 
 rules      for      external paged document

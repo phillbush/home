@@ -176,6 +176,7 @@ alias lc='ls -C'
 alias ll='ls -l'
 alias la='lc -A'
 alias calc='bc -l'
+alias igrep='fgrep -i'
 
 # commands with command as argument (for futher alias expension)
 alias xargs='tr "\n" "\0" | xargs -0 '

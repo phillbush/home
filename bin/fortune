@@ -37,6 +37,7 @@ I […] am rarely happier than when spending an entire day programming my comput
 I am having a mixed feeling of deja vú and amnesia.  I think I also had forgotten this before.
 I can't give you a brain, but I can give you a diploma.	-- The Wizard of Oz.
 I have always wished that my computer would be as easy to use as my telephone. My wish has come true. I no longer know how to use my telephone.	-- Bjarne Stroustrup.
+I love the comics medium.  I pretty much detest the comics industry.	-- Alan Moore (or myself if s/comics/software/g).
 I will, in fact, claim that the difference between a bad programmer and a good one is whether he considers his code or his data structures more important. Bad programmers worry about the code. Good programmers worry about data structures and their relationships.	-- Linus Torvalds.
 I would rather write programs to help me write programs than write programs.	-- Dick Sites.
 I'd just like to interject for a moment. What you're referring to as Linux, is in fact, GNU/Linux, or as I've recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.	-- Richard Stallman
@@ -51,6 +52,7 @@ It has been said that the great scientific disciplines are examples of giants st
 It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures.	-- Alan Perlis.
 It is easier to change the specification to fit the program than vice versa.	-- Alan Perlis.
 Life is too short to run proprietary software.	-- Bdale Garbee.
+Like most systemd replacements for important services (ntp, dns, cron, etc) systemd-resolved is a half-arsed implementation that is only suitable for desktop machines that happen to be a lot like Lennart Poettering's desktop machine.	-- <https://unix.stackexchange.com/a/542146>
 Mathematicians stand on each others' shoulders and computer scientists stand on each others' toes.	-- Richard Hamming.
 Mathematics provides a framework for dealing precisely with notions of “what is.” Computation provides a framework for dealing precisely with notions of “how to”
 Never let your schooling interfere with your education.	-- Mark Twain.
@@ -72,6 +74,7 @@ Structure and Interpretation of Computer Programs, by Harold Abelson & Gerald Ja
 Syntactic sugar causes cancer of the semicolon.	-- Alan Perlis.
 The best argument against democracy is a five-minute conversation with the average voter.
 The best code is no code at all.
+The best programs are the ones written when the programmer is supposed to be working on something else.	-- Melinda Varian.
 The central enemy of reliability is complexity.	-- Geer &al.
 The computing scientist's main challenge is not to get confused by the complexities of his own making.	-- E'W' Dijkstra.
 The first step in fixing a broken program is getting it to fail repeatably.	-- Tom Duff.
@@ -79,6 +82,7 @@ The most important single aspect of software development is to be clear about wh
 The only difference between Shakespeare and you was the size of his idiom list, not the size of his vocabulary.	-- Alan Perlis.
 The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.	-- Joe Armstrong.
 The programmer must seek both perfection of part and adequacy of collection.	-- Abelson & Sussman, SICP
+The smart way to keep people passive and obedient is to strictly limit the spectrum of acceptable opinion, but allow very lively debate within that spectrum.
 The whole point of getting things done is knowing what to leave undone.	-- Oswald Chambers.
 There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies and the other way is to make it so complicated that there are no obvious deficiencies.	-- C'A'R' Hoare, The 1980 ACM Turing Award Lecture.
 They who can give up essential liberty for temporary safety, deserve neither liberty nor safety.	-- Benjamin Franklin.

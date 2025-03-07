@@ -183,7 +183,7 @@ function! Bufcmd()
 		set formatoptions+=t
 	endif
 endfunction
-autocmd BufEnter * eval Bufcmd()
+autocmd BufNewFile,BufRead * eval Bufcmd()
 autocmd BufNewFile,BufRead * if empty(&filetype) | set foldexpr=TxtFolding(v:lnum) foldmethod=expr formatoptions+=t | endif
 
 "" no syntax highlighting; only highlight interface elements

@@ -8,17 +8,18 @@
 # © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
 
+curl() {
+	command curl --silent --show-error --location "$@"
+}
+
 isallnum() {
 	test "$#" -ne 1 && return 1
 	case "$1" in (*[!0-9]*) return 1 ;; esac
 	return 0
 }
 
-isallnum "$@" && {
-	# number argument; fetch code rather than search code
-	exec curl --silent --location --url "https://searchcode.com/codesearch/raw/$1/"
-	exit "$?"
-}
+# number argument; fetch code rather than search code
+isallnum "$@" && exec curl --url "https://searchcode.com/codesearch/raw/$1/"
 
 unset l
 for arg do
@@ -38,9 +39,8 @@ test "$#" -eq 0 && {
 	exit 2
 }
 
-curl --silent --location \
-	--url "https://searchcode.com/api/codesearch_I/" \
-	--url-query "q=$*$l" | json2tsv | awk -F '\t' '
+curl --url "https://searchcode.com/api/codesearch_I/" --url-query "q=$*$l" |\
+	json2tsv | awk -F '\t' '
 	function show() {
 		if (id == "")
 			return 0

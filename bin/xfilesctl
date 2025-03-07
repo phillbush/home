@@ -500,7 +500,7 @@ filemenu() {
 		;;
 	(*)
 		cat <<-EOF
-		rename
+		upload
 		snarf
 		$(case "$1$#" in
 		(*.core1)
@@ -541,6 +541,11 @@ filemenu() {
 		("unzip")
 			plumb -unzip -- "$@" &
 			;;
+		("upload") {
+			url="$(upload "$@" | sed '1!d')"
+			printf "%s\n" "$url" | xclipin
+			xsetroot -name "file uploaded; url in clipboard"
+			}& ;;
 		("edit")
 			plumb -e -- "$@" &
 			;;

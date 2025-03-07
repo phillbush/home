@@ -2,6 +2,7 @@
 #
 # Usage: CMD | save [-abfin] FILE
 # Saves stdin into FILE; flags tells what to do when FILE exists.
+# Depends on moreutils' ifne(1) and moreutils' sponge(1).
 #
 # © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine™)
@@ -120,11 +121,11 @@ fi
 
 new="$(unique "$file")"
 
+cmd="sponge"
 case "$action" in
 (a)
 	# append into existing file
-	cat >>"$file"
-	exit
+	cmd="sponge -a"
 	;;
 (b)
 	# backup existing file
@@ -135,4 +136,4 @@ case "$action" in
 	file="$new"
 	;;
 esac
-cat >"$file"
+ifne $cmd -- "$file"

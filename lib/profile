@@ -7,20 +7,19 @@
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
 PATH="/bin:/sbin"
-for dir in \
-	/usr/home/bin /usr/local/llvm19/bin \
+for dir in /usr/home/bin                    \
 	/usr/bin /usr/sbin /usr/X11R6/bin   \
 	/usr/ports/infrastructure/bin       \
 	/usr/local/bin /usr/local/sbin      \
 	/usr/local/heirloom-doctools/bin    \
-	/usr/games
+	/usr/local/llvm19/bin /usr/games
 do
 	PATH="$PATH:$dir"
 done
 
 MANPATH=/usr/home/man
-for dir in \
-	/usr/share/man /usr/X11R6/man /usr/local/man \
+for dir in /usr/share/man                   \
+	/usr/X11R6/man /usr/local/man       \
 	/usr/local/heirloom-doctools/man
 do
 	MANPATH="$MANPATH:$dir"
@@ -76,6 +75,9 @@ export MENUCMD="pmenu"
 export BROWSER="dillo"
 export PROMPTCMD="xprompt"
 export SFEED_HTMLCONV="webdump"
+
+# default settings
+export NO_COLOR=1
 
 # Theme
 #export XENVIRONMENT="$HOME/theme/xresources"

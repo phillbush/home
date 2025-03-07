@@ -15,6 +15,8 @@ XConsole*foreground:                    White
 XTerm*background:                       Gray5
 XTerm*foreground:                       White
 *cursorColor:                           #EF2929
+XTerm*colorBD:                          #EF2929
+XTerm*colorIT:                          #EF2929
 XTerm*color0:                           #C5C8C6
 XTerm*color1:                           #EF2929
 XTerm*color2:                           #8AE234
@@ -45,6 +47,8 @@ XConsole*foreground:                    Black
 XTerm*background:                       FloralWhite
 XTerm*foreground:                       Black
 *cursorColor:                           #CC0000
+XTerm*colorBD:                          #CC0000
+XTerm*colorIT:                          #CC0000
 XTerm*color0:                           #232323
 XTerm*color1:                           #CC0000
 XTerm*color2:                           #4E9A06
@@ -107,7 +111,6 @@ Xcursor.size:                           32
 *urgentBackground:                      #CC0000
 *urgentTopShadowColor:                  #EF2929
 *urgentBottomShadowColor:               #A40000
-*scrollTtyOutput:                       True
 
 !! Athena widgets
 #define SHADOW_3D                       foreground gray30;draw-lines +1,-1,-1,-1,-1,+1;\
@@ -140,12 +143,12 @@ Xcursor.size:                           32
 *Viewport.useRight:                     True
 
 !! Motif widgets
-*renderTable:                           variable
+*renderTable:                           mono
 *renderTable.variable.fontName:         FreeSans
 *renderTable.variable.fontSize:         10
 *renderTable.variable.fontType:         FONT_IS_XFT
-*renderTable.mono.fontName:             InputMonoNarrow
-*renderTable.mono.fontSize:             9
+*renderTable.mono.fontName:             Tadepe
+*renderTable.mono.fontSize:             16
 *renderTable.mono.fontStyle:            Regular
 *renderTable.mono.fontType:             FONT_IS_XFT
 *enableBtn1Transfer:                    button2_adjust
@@ -236,6 +239,7 @@ NetHack*map*rows:                       15
 NetHack*map*columns:                    30
 
 XTerm*boldMode:                         False
+XTerm*colorBDMode:                      True
 XTerm*cursorBar:                        True
 XTerm*cursorBlink:                      True
 XTerm*locale:                           UTF-8
@@ -243,6 +247,9 @@ XTerm*termName:                         xterm-256color
 XTerm*visualBell:                       False
 XTerm*bellIsUrgent:                     False
 XTerm*scrollBar:                        False
+XTerm*scrollTtyOutput:                  False
+XTerm*scrollKey:                        True
+XTerm*autoScrollLock:                   True
 XTerm*rightScrollBar:                   True
 XTerm*allowMouseOps:                    True
 XTerm*forceBoxChars:                    False
@@ -301,9 +308,10 @@ XNotify.shrink:                         true
 XNotify.wrap:                           true
 XNotify.opacity:                        0.8
 
-XFiles.enableStatusBar:                 False
-XFiles.background:                      Gray5
-XFiles.opacity:                         0.8
+XFiles.enableStatusBar:                 True
+XFiles.background:                      FloralWhite
+XFiles.foreground:                      Black
+!XFiles.opacity:                         0.8
 XFiles.fileIcons:                       \n\
 	*.c=code\n\
 	*.h=code\n\

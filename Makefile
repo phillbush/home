@@ -45,20 +45,20 @@ BINS = \
 	${BINDIR}/focus \
 	${BINDIR}/fortune \
 	${BINDIR}/img \
-	${BINDIR}/make \
 	${BINDIR}/meme \
 	${BINDIR}/open \
 	${BINDIR}/record \
 	${BINDIR}/samedir \
 	${BINDIR}/save \
-	${BINDIR}/search \
 	${BINDIR}/scrot \
 	${BINDIR}/searchcode \
+	${BINDIR}/searchweb \
 	${BINDIR}/sendmail \
 	${BINDIR}/shodmenu \
 	${BINDIR}/startmenu \
 	${BINDIR}/termdraw \
 	${BINDIR}/termbin \
+	${BINDIR}/upload \
 	${BINDIR}/vidtogif \
 	${BINDIR}/walk \
 	${BINDIR}/xdg-open \
@@ -111,3 +111,7 @@ ${MANS}: doc/${@:T}
 bin: ${BINS}
 ${BINS}: bin/${@:T}
 	install -m 755 bin/${@:T} $@
+
+remote: lib/kshrc lib/vimrc bin/walk bin/save
+	pax -w -s ,lib/,., lib/kshrc lib/vimrc bin/walk bin/save 2>/dev/null |\
+	ssh seninha.org pax -r -uv
