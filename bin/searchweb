@@ -40,9 +40,10 @@ htmlfmt() {
 
 	function printtag(name)
 	{
+		sub(/.*>[[:space:]]*/, "")
 		do {
-			sub(/.*>[[:space:]]*/, "")
-			gsub("&nbsp;", "")
+			sub(/.*>/, "")
+			gsub("(&nbsp;)+", " ")
 			if (NR == 0) continue
 			gsub(/&#x20;/, " ")
 			gsub(/&#x21;/, "!")

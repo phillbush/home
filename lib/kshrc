@@ -7,7 +7,6 @@
 # No rights reserved.  Dedicated into Public Domain.  Use as you will.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (works on my machine™)
 
-. /etc/ksh.kshrc
 . "$HOME/.profile"
 
 # reload a running shell session
@@ -156,13 +155,14 @@ alias redo="fc -e :"
 alias reset="tput reset"
 
 # file management (be verbose and interactive)
-alias rm='rm -vi'
+#alias rm='rm -vi'
+alias rm='trash'
 alias mv='mv -vi'
 alias cp='cp -viR'
 alias mkdir='mkdir -p'
 
 # binary file dump
-alias hex='hexdump -C'
+alias hexdump='hexdump -C'
 alias od='od -cAx'
 
 # human-readable sizes

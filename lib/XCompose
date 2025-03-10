@@ -118,6 +118,8 @@
 <Multi_key> <greater> <greater>         : "⟩"
 <Multi_key> <o> <k>                     : "✓"
 <Multi_key> <n> <o>                     : "✕"
+<Multi_key> <b> <o> <x>                 : "☠"
+<Multi_key> <b> <o> <k>                 : "☡"
 <Multi_key> <minus> <n>                 : "–"   # EN DASH
 <Multi_key> <minus> <m>                 : "—"   # EM DASH
 <Multi_key> <o> <o>                     : "°"
