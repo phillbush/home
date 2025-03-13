@@ -44,6 +44,7 @@ BINS = \
 	${BINDIR}/fetchnews \
 	${BINDIR}/focus \
 	${BINDIR}/fortune \
+	${BINDIR}/got \
 	${BINDIR}/img \
 	${BINDIR}/meme \
 	${BINDIR}/open \

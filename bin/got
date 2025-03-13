@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# Usage: got ACTION [ARG]
+# got wrapper
+#
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
+
+got() /usr/local/bin/got "$@"
+
+case "$*" in
+(send|fetch)
+	got ref -l |\
+	sed -En '\,^refs/remotes/,{s,,,;s,/.*,,;\,(origin|codeberg|shithub),p;}' |\
+	while read -r remote
+	do
+		got "$1" "$remote"
+	done
+	;;
+(diff*)
+	got "$@" | awk '
+		BEGIN {
+			REVERSE = "\x1b[7m"
+			RED = "\x1b[31m"
+			GREEN = "\x1b[32m"
+			YELLOW = "\x1b[33m"
+			BLUE = "\x1b[34m"
+			PURPLE = "\x1b[35m"
+			RESET = "\x1b[0m"
+		}
+		$1 == "@@" && $4 == "@@" {
+			$1 = BLUE "@@"
+			$4 = "@@" RESET
+			print
+			next
+		}
+		$1 == "+++" {
+			print GREEN $0 RESET
+			next
+		}
+		$1 == "---" {
+			print RED $0 RESET
+			next
+		}
+		substr($0, 1, 1) == "+" {
+			printf "%s+%s%s\n", GREEN, RESET, substr($0, 2)
+			next
+		}
+		substr($0, 1, 1) == "-" {
+			printf "%s-%s%s\n", RED, RESET, substr($0, 2)
+			next
+		}
+		1
+	'
+	;;
+(*)
+	got "$@"
+	;;
+esac

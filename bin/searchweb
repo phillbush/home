@@ -125,6 +125,7 @@ htmlfmt() {
 #set -- "$@" \
 #	-site:w3schools.com \
 #	-site:geeksforgeeks.com \
+#	-site:https://www.freecodecamp.org \
 #	-site:fandom.com
 
 curl --silent --location --get \
