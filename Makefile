@@ -52,6 +52,7 @@ BINS = \
 	${BINDIR}/samedir \
 	${BINDIR}/save \
 	${BINDIR}/scrot \
+	${BINDIR}/searchdict \
 	${BINDIR}/searchcode \
 	${BINDIR}/searchweb \
 	${BINDIR}/sendmail \

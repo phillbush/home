@@ -69,6 +69,11 @@ protocol   matches  '(gopher|http)s?'
 extension  imatches 'mp4|webm|ogv|ogg|opus|mpg|mpeg|mov|flac|wav|m4a|mp3|mkv|avi|jpe?g|png|gif|xpm|xbm|webp'
 open       with     mpv --loop -- %data
 
+rules      for      telegram media file
+protocol   matches  '(http)s?'
+file       matches  'cobaia.vm/tg/.*'
+open       with     sh -c 'for file ; do set -- "$@" "$file." ; shift ; done ; mpv --loop -- "$@"' sh %data
+
 
 # archives
 

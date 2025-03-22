@@ -12,7 +12,7 @@ case "$*" in
 (send|fetch)
 	got ref -l |\
 	sed -En '\,^refs/remotes/,{s,,,;s,/.*,,;\,(origin|codeberg|shithub),p;}' |\
-	while read -r remote
+	sort -u | while read -r remote
 	do
 		got "$1" "$remote"
 	done

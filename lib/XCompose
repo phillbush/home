@@ -294,8 +294,8 @@
 <Multi_key> <v> <3> : "┆"
 
 # Arrowhead
-<Multi_key> <a> <h> : "⮜"
-<Multi_key> <a> <l> : "⮞"
+<Multi_key> <a> <h> : "◄"
+<Multi_key> <a> <l> : "►"
 
 # Double drawings
 <Multi_key> <H> <H> : "═"

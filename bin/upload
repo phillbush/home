@@ -28,7 +28,7 @@ done
 
 {
 	pax -w -s '/ /-/g' -- "$@" | ssh www "
-		cd /var/www/seninha.org/files && pax -r -uvs ',.*/,,'
+		cd /var/www/seninha.org/files && pax -r -vs ',.*/,,'
 	" || exit
 	echo
 } >&2

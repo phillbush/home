@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# Usage: searchdict [[-DICTIONARY] [QUERY]]
+# Search QUERY in DICTIONARY.
+# Depends on curl(1), webdump(1), less(1), ifne(1) and awk(1).
+#
+# © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
+# THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
+
+usage() {
+	printf 'usage: %s [[-dictionary] query] ...\n' "${0##*/}"
+	printf '       Available dictionaries: "-english" (default), "-jargon",\n'
+	printf '       "-tech", "thesaurus", "-XXX-YYY" (from language XXX to YYY)\n'
+	exit 2
+} >&2
+
+case "$#" in
+(1)
+	exec curl --silent "https://en.wiktionary.org/w/index.php" \
+	--data-urlencode action=render \
+	--data-urlencode title="$1" | webdump -il | ifne less
+	;;
+(2)
+	case "$1" in
+	("-en"|"-english")
+		set -- "$2" "gcide"
+		;;
+	(-jargon)
+		set -- "$2" "jargon"
+		;;
+	(-th|-thesaurus)
+		set -- "$2" "moby-thesaurus"
+		;;
+	(-tech|-comp*)
+		set -- "$2" "foldoc"
+		;;
+	(-[a-z][a-z][a-z]-[a-z][a-z][a-z])
+		set -- "$2" "fd$1"
+		;;
+	(*)
+		usage
+		;;
+	esac
+	exec curl --silent "dict://dict.org/define:$1:$2" | tr -d "\r" | awk '
+		/^[12][[:digit:]]{2} / { next }
+		/^5[[:digit:]]{2} / {
+			sub(/^..../, "")
+			sub(/\[[^]]*\]$/, "")
+			print >"/dev/stderr"
+			EXITVAL = 1
+			exit
+		}
+		$0 == "." {
+			print ""
+			next
+		}
+		{
+			print
+		}
+		END {
+			exit EXITVAL
+		}
+	' | ifne less
+	;;
+(*)
+	usage
+	;;
+esac
