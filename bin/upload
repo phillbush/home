@@ -8,9 +8,8 @@
 
 host="seninha.org"
 
-
 test "$#" -lt 1 && {
-	printf "usage: %s file\n" "${0##*/}" >&2
+	printf "usage: %s file...\n" "${0##*/}" >&2
 	exit 2
 }
 
@@ -27,9 +26,7 @@ do
 done
 
 {
-	pax -w -s '/ /-/g' -- "$@" | ssh www "
-		cd /var/www/seninha.org/files && pax -r -vs ',.*/,,'
-	" || exit
+	scp "$@" www:/seninha.org/files/ || exit
 	echo
 } >&2
 
@@ -45,4 +42,4 @@ do
 	printf "gopher://%s/%s/%s/%s\n" "$host" "$type" "files" "$file"
 	shift
 	test "$#" -eq 0 || printf "\n"
-done | sed "s, ,-,g"
+done

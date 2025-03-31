@@ -11,5 +11,5 @@ test $# -gt 1 && {
 	printf "usage: %s [-abfint] file..." "${0##*/}" >&2
 	exit 2
 }
-file="${1-/tmp/scrot.png}"
-maim --noopengl --select --hidecursor -- "$file" && xclipin -t image/png "$file"
+file="${1-/tmp/scrot-"$(date +%s)".png}"
+maim --noopengl --select --hidecursor -- "$file" && xclipin image/png "$file"

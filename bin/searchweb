@@ -2,7 +2,7 @@
 #
 # Usage: search [QUERY ...]
 # Search QUERYs in duckduckgo.
-# Depends on curl(1), awk(1).
+# Depends on curl(1), awk(1), ifne(1).
 #
 # © 2025 Lucas de Sena <lucas at seninha dot org>.  No rights reserved.
 # THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY (Works On My Machine).
@@ -14,9 +14,22 @@ test "$#" -lt 1 && {
 	exit 2
 }
 
-## I could use webdump(1) here; but
-htmlfmt() {
-	TZ="UTC" LC_CTYPE="C.UTF-8" awk '
+_curl() {
+	url="$1"
+	shift
+	curl --silent --location --data "kp=-1" --data "kd=-1" --data-urlencode "q=$*" --get "$url" \
+	#--user-agent 'Dillo/3.2.0' \
+	#--header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+	#--header 'Accept-Encoding: gzip, deflate' \
+	#--header 'DNT: 1' \
+	#--header 'Referer: https://duckduckgo.com/' \
+	#--header 'Connection: keep-alive' \
+	#--cookie ''
+	## uncomment the lines above if ddg gets angry
+}
+
+_awk() {
+	tr -d '[:cntrl:]' | TZ="UTC" LC_CTYPE="C.UTF-8" awk -vRS="<" '
 	function gottag(tag, class) {
 		if (index($0, tag) != 1)
 			return 0
@@ -31,60 +44,106 @@ htmlfmt() {
 		return 1
 	}
 
-	function gethref(a)
-	{
+	function unescape_percent(str) {
+		gsub(/%20/, " ", str)
+		gsub(/%21/, "!", str)
+		gsub(/%22/, "\"", str)
+		gsub(/%23/, "#", str)
+		gsub(/%24/, "$", str)
+		gsub(/%25/, "%", str)
+		gsub(/%26/, "\\&", str)
+		gsub(/%27/, "'\''", str)
+		gsub(/%28/, "(", str)
+		gsub(/%29/, ")", str)
+		gsub(/%2[Aa]/, "*", str)
+		gsub(/%2[Bb]/, "+", str)
+		gsub(/%2[Cc]/, ",", str)
+		gsub(/%2[Dd]/, "-", str)
+		gsub(/%2[Ee]/, ".", str)
+		gsub(/%2[Ff]/, "/", str)
+		gsub(/%3[Aa]/, ":", str)
+		gsub(/%3[Bb]/, ";", str)
+		gsub(/%3[Cc]/, "<", str)
+		gsub(/%3[Dd]/, "=", str)
+		gsub(/%3[Ee]/, ">", str)
+		gsub(/%3[Ff]/, "?", str)
+		gsub(/%40/, "@", str)
+		gsub(/%5[Bb]/, "[", str)
+		gsub(/%5[Cc]/, "\\", str)
+		gsub(/%5[Dd]/, "]", str)
+		gsub(/%5[Ee]/, "^", str)
+		gsub(/%5[Ff]/, "_", str)
+		gsub(/%60/, "`", str)
+		gsub(/%7[Bb]/, "{", str)
+		gsub(/%7[Cc]/, "|", str)
+		gsub(/%7[Dd]/, "}", str)
+		gsub(/%7[Ee]/, "~", str)
+		return str
+	}
+
+	function unescape_html(str) {
+		gsub(/&#x20;/, " ", str)
+		gsub(/&#x21;/, "!", str)
+		gsub(/&(#x22|quot);/, "\"", str)
+		gsub(/&#x23;/, "#", str)
+		gsub(/&#x24;/, "$", str)
+		gsub(/&#x25;/, "%", str)
+		gsub(/&(#x26|amp);/, "\\&", str)
+		gsub(/&#x27;/, "'\''", str)
+		gsub(/&#x28;/, "(", str)
+		gsub(/&#x29;/, ")", str)
+		gsub(/&#x2[Aa];/, "*", str)
+		gsub(/&#x2[Bb];/, "+", str)
+		gsub(/&#x2[Cc];/, ",", str)
+		gsub(/&#x2[Dd];/, "-", str)
+		gsub(/&#x2[Ee];/, ".", str)
+		gsub(/&#x2[Ff];/, "/", str)
+		gsub(/&#x3[Aa];/, ":", str)
+		gsub(/&#x3[Bb];/, ";", str)
+		gsub(/&(#x3[Cc]|lt);/, "<", str)
+		gsub(/&#x3[Dd];/, "=", str)
+		gsub(/&(#x3[Ee]|gt);/, ">", str)
+		gsub(/&#x3[Ff];/, "?", str)
+		gsub(/&#x40;/, "@", str)
+		gsub(/&#x5[Bb];/, "[", str)
+		gsub(/&#x5[Cc];/, "\\", str)
+		gsub(/&#x5[Dd];/, "]", str)
+		gsub(/&#x5[Ee];/, "^", str)
+		gsub(/&#x5[Ff];/, "_", str)
+		gsub(/&#x60;/, "`", str)
+		gsub(/&#x7[Bb];/, "{", str)
+		gsub(/&#x7[Cc];/, "|", str)
+		gsub(/&#x7[Dd];/, "}", str)
+		gsub(/&#x7[Ee];/, "~", str)
+		return str
+	}
+
+	function printbody() {
+		sub(/.*>/, "")
+		gsub("(&nbsp;)+", " ")
+		printf "%s", unescape_html($0)
+	}
+
+	function printtag(name) {
+		sub(/.*>[[:space:]]*/, "")
+		do {
+			printbody()
+		} while (getline > 0 && !gottag("/" name))
+	}
+
+	function gethref(a) {
 		if (!match(a, /href=["'\''][^"'\'']+["'\'']/))
 			return
 		return substr(a, RSTART + 6, RLENGTH - 7)
 	}
+	'"$@"
+}
 
-	function printtag(name)
-	{
-		sub(/.*>[[:space:]]*/, "")
-		do {
-			sub(/.*>/, "")
-			gsub("(&nbsp;)+", " ")
-			if (NR == 0) continue
-			gsub(/&#x20;/, " ")
-			gsub(/&#x21;/, "!")
-			gsub(/&(#x22|quot);/, "\"")
-			gsub(/&#x23;/, "#")
-			gsub(/&#x24;/, "$")
-			gsub(/&#x25;/, "%")
-			gsub(/&(#x26|amp);/, "\\&")
-			gsub(/&#x27;/, "'\''")
-			gsub(/&#x28;/, "(")
-			gsub(/&#x29;/, ")")
-			gsub(/&#x2[Aa];/, "*")
-			gsub(/&#x2[Bb];/, "+")
-			gsub(/&#x2[Cc];/, ",")
-			gsub(/&#x2[Dd];/, "-")
-			gsub(/&#x2[Ee];/, ".")
-			gsub(/&#x2[Ff];/, "/")
-			gsub(/&#x3[Aa];/, ":")
-			gsub(/&#x3[Bb];/, ";")
-			gsub(/&(#x3[Cc]|lt);/, "<")
-			gsub(/&#x3[Dd];/, "=")
-			gsub(/&(#x3[Ee]|gt);/, ">")
-			gsub(/&#x3[Ff];/, "?")
-			gsub(/&#x40;/, "@")
-			gsub(/&#x5[Bb];/, "[")
-			gsub(/&#x5[Cc];/, "\\")
-			gsub(/&#x5[Dd];/, "]")
-			gsub(/&#x5[Ee];/, "^")
-			gsub(/&#x5[Ff];/, "_")
-			gsub(/&#x60;/, "`")
-			gsub(/&#x7[Bb];/, "{")
-			gsub(/&#x7[Cc];/, "|")
-			gsub(/&#x7[Dd];/, "}")
-			gsub(/&#x7[Ee];/, "~")
-			printf "%s", $0
-		} while (getline > 0 && !gottag("/" name))
-	}
-
-	BEGIN {
-		RS = "<"
-		step=0
+## I could use webdump(1) here; but
+htmlfmt_ddg() {
+	_awk '
+	NR == 0 {
+		next
 	}
 
 	gottag("a", "result-link") {
@@ -121,6 +180,38 @@ htmlfmt() {
 	'
 }
 
+htmlfmt_occ() {
+	sed -En '/<hr>/h;${x;p;}' | _awk '
+	gottag("a") {
+		link = gethref($0)
+		sub(/[^=]*=/, "", link)
+		sub(/&.*/, "", link)
+		link = unescape_percent(link)
+		if (link)
+			print link
+		next
+	}
+
+	gottag("br") {
+		print ""
+		next
+	}
+
+	{
+		printbody()
+	}
+	' | awk -v"RS=" -v"FS=\n" -v"OFS=" 'NF > 0 {
+		print $2
+		print $1
+		$1=""
+		$2=""
+		$3=""
+		$0=$0
+		print
+		print ""
+	}'
+}
+
 ## ignore shity saits
 #set -- "$@" \
 #	-site:w3schools.com \
@@ -128,16 +219,8 @@ htmlfmt() {
 #	-site:https://www.freecodecamp.org \
 #	-site:fandom.com
 
-curl --silent --location --get \
---data-urlencode "q=$*" \
---data "kp=-1" --data "kd=-1" \
-"https://duckduckgo.com/lite/" | tr -d '[:cntrl:]' | htmlfmt
-
-## uncomment and move these below the curl line above if ddg gets angry
-#--user-agent 'Dillo/3.2.0' \
-#--header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
-#--header 'Accept-Encoding: gzip, deflate' \
-#--header 'DNT: 1' \
-#--header 'Referer: https://duckduckgo.com/' \
-#--header 'Connection: keep-alive' \
-#--cookie '' \
+{
+	## uncomment one of the duckduckgo frontends below
+	_curl "https://duckduckgo.com/lite/" "$@"	| htmlfmt_ddg
+	#_curl "https://deadnet.se/occs/" "$@"		| htmlfmt_occ
+}

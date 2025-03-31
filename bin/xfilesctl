@@ -543,7 +543,7 @@ filemenu() {
 			;;
 		("upload") {
 			url="$(upload "$@" | sed '1!d')"
-			printf "%s\n" "$url" | xclipin
+			printf "%s" "$url" | xclipin
 			xsetroot -name "file uploaded; url in clipboard"
 			}& ;;
 		("edit")

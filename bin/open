@@ -9,6 +9,7 @@
 
 set -o monitor
 exec 0</dev/null
+exec 2>/dev/null
 test -t 1 || exec 1>/dev/null
-plumb -open -- "$@" &
+plumb -open -- "$@" 2>/dev/stderr &
 wait
